@@ -1,0 +1,26 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1574660284669.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "869F6759",
+    "lastKnownWriteTime" : 1574666011,
+    "last_content_update" : 1574666011599,
+    "path" : "/Volumes/HD/iMACdropbox/Dropbox (Sydney Uni)/Single Cell Reserach (1)/SCProj-CITEseq/package/CiteFuse/vignettes/CiteFuse.Rmd",
+    "project_path" : "vignettes/CiteFuse.Rmd",
+    "properties" : {
+        "cursorPosition" : "173,0",
+        "last_setup_crc32" : "91CABEDEc7e2e05c",
+        "scrollLine" : "156"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 7,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}

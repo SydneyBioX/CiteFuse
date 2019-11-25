@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1574650800733.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "D229C8C2",
+    "lastKnownWriteTime" : 1568854081,
+    "last_content_update" : 1568854081,
+    "path" : "/Volumes/HD/iMACdropbox/Dropbox (Sydney Uni)/Single Cell Reserach (1)/SCProj-CITEseq/package/CiteFuse/src/rcppFunctions.cpp",
+    "project_path" : "src/rcppFunctions.cpp",
+    "properties" : {
+        "cursorPosition" : "6,0",
+        "scrollLine" : "0"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "cpp"
+}

@@ -1,0 +1,50 @@
+Package: CiteFuse
+Type: Package
+Title: What the Package Does (Title Case)
+Version: 0.1.0
+Author: Yingxin Lin, Hani Kim
+Maintainer: Yingxin Lin <yingxin.lin@sydney.edu.au>
+Description: The package for multi-modal analysis of CITE-seq data.
+License: GPL-3
+Encoding: UTF-8
+Depends: R (>= 3.6)
+Imports:
+    Rcpp (>= 1.0.2),
+    RcppEigen (>= 0.3.3.5.0),
+    SingleCellExperiment (>= 1.8.0),
+    SummarizedExperiment (>= 1.16.0),
+    Matrix,
+    mixtools,
+    cowplot,
+    ggplot2,
+    gridExtra,
+    grid,
+    dbscan,
+    SNFtool,
+    scater (>= 1.14.1),
+    propr,
+    uwot,
+    Rtsne,
+    S4Vectors (>= 0.24.0),
+    igraph,
+    scales,
+    scran (>= 1.14.1),
+    graphics,
+    methods,
+    stats,
+    utils,
+    reshape2,
+    ggridges,
+    randomForest,
+    pheatmap,
+    ggraph,
+    grDevices
+LinkingTo: Rcpp, RcppEigen
+RoxygenNote: 6.1.1
+Suggests: 
+    knitr,
+    rmarkdown,
+    DT,
+    mclust
+VignetteBuilder: knitr
+

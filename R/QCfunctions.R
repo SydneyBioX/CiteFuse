@@ -1,0 +1,585 @@
+#' A function to preprocess the list of expression matrix
+#' 
+#' @description  This function will keep the samples that are common across the list of expression matrix,
+#' and filter the features that are all zeros across samples, and finally construct a \code{SingleCellExperiment} 
+#' object
+#' 
+#' @param exprsMat A list or a matrix indicates the expression matrices of the 
+#' testing datasets (each matrix must be \code{matrix} or \code{dgCMatrix} class)
+#' @param return_sce A logical input indicates whether a \code{SingleCellExperiment} 
+#' object will be return
+#' @param assay_matrix A integer indicates which list will be used as `assay` input of `SingleCellExperiment`
+#' 
+#' @importFrom SingleCellExperiment SingleCellExperiment
+#' @importFrom Matrix rowSums
+#' @importFrom SummarizedExperiment SummarizedExperiment
+#' @importFrom methods as
+#' @export
+
+
+
+preprocessing <- function(exprsMat = NULL, 
+                          return_sce = TRUE,
+                          assay_matrix = 1) {
+  
+  if(!class(exprsMat) %in% c("matrix", "list")) {
+    stop("exprsMat need to be a matrix or a list")
+  }
+  
+  if (class(exprsMat) == "matrix") {
+    exprsMat <- list(exprsMat)
+  } 
+  
+  common_cells <- Reduce(intersect, lapply(exprsMat, colnames))
+  
+  if (length(common_cells) == 0) {
+    stop("There is no common cells in this list... please check the matrix input")
+  }
+  
+  
+  
+  
+  # only keep the samples that are common across the list of exprsMat
+  exprsMat <- lapply(exprsMat, function(exprs) {
+    exprs <- exprs[, common_cells]
+    if (class(exprs) == "matrix") {
+      exprs <- methods::as(exprs, "dgCMatrix")
+    }
+    exprs
+  })
+  
+  # filter the features with all zeros
+  exprsMat <- lapply(exprsMat, function(exprs) {
+    if (class(exprs) == "dgCMatrix") {
+      rowsums <- Matrix::rowSums(exprs)
+      exprs <- exprs[rowsums !=0, ]
+      
+    }
+    exprs
+  })
+  
+  
+  if (return_sce) {
+    sce <- SingleCellExperiment::SingleCellExperiment(assays = list(counts = exprsMat[[assay_matrix]]))
+    
+    list_idx <- seq_len(length(exprsMat))[-assay_matrix]
+    for (i in list_idx) {
+      if (is.null(names(exprsMat)[i])) {
+        name_exprs <- paste("altExp", i, sep = "_")
+      } else {
+        name_exprs <- names(exprsMat)[i]
+      }
+      SingleCellExperiment::altExp(sce, name_exprs) <- SummarizedExperiment::SummarizedExperiment(assays = list(counts = exprsMat[[i]]))
+    }
+    
+    return(sce)
+    
+  } else {
+    return(exprsMat)
+  }
+  
+}
+
+
+
+
+#' A function that perform normalisation for alternative expression
+#' 
+#' @param sce A \code{SingleCellExperiment} object
+#' @param altExp_name Name of alternative expression that will be used to perform normalisation
+#' @param exprs_value A character indicates which expression value in assayNames is used.
+#' @param transform type of transformation, either log or clr (Centered log ratio transform)
+#' @param log_offset Numeric scalar specifying the pseudo-count to add when log-transforming expression values. Default is 1
+#' 
+#' @importFrom SummarizedExperiment assay assayNames
+#' @importFrom SingleCellExperiment altExpNames altExp
+#' @importFrom Matrix rowMeans
+#' @export
+
+normaliseExprs <- function(sce,
+                           altExp_name = NULL,
+                           exprs_value = "counts",
+                           transform = c("log", "clr", "zi_minMax", "minMax"),
+                           log_offset = NULL
+                           
+) {
+  
+  transform <- match.arg(transform, c("log", "clr", "zi_minMax", "minMax"), several.ok = TRUE)
+  
+  if (altExp_name != "none") {
+    if (!altExp_name %in% SingleCellExperiment::altExpNames(sce)) {
+      stop("sce does not contain altExp_name as altExpNames")
+    }
+    
+    assaynames <- SummarizedExperiment::assayNames(SingleCellExperiment::altExp(sce, altExp_name))
+    if (!exprs_value %in% assaynames) {
+      stop("sce does not contain exprs_value as assayNames for altExp")
+    }
+    
+    exprs <- SummarizedExperiment::assay(SingleCellExperiment::altExp(sce, altExp_name), exprs_value)
+    
+  } else {
+    
+    # if altExp_name is "none", then the assay in SingleCellExperiment is extracted (RNA in most of the cases)
+    
+    assaynames <- SummarizedExperiment::assayNames(sce)
+    if (!exprs_value %in% assaynames) {
+      stop("sce does not contain exprs_value as assayNames")
+    }
+    
+    exprs <- SummarizedExperiment::assay(sce, exprs_value)
+  }
+  
+  if (is.null(log_offset)) {
+    log_offset <- 1
+  }
+  
+  if (transform %in% "log") {
+    
+    exprs_norm <- log(exprs + log_offset)
+    
+  } 
+  
+  if (transform %in% "clr") {
+    
+    exprs_norm <- .clr(exprs)
+  
+  }
+  
+  if (transform %in% "zi_minMax") {
+    
+    # if (!"logcounts" %in% SummarizedExperiment::assayNames(SingleCellExperiment::altExp(sce, altExp_name))) {
+    #   exprs_log <- log(exprs + log_offset)
+    # } else {
+    #   exprs_log <- SummarizedExperiment::assay(SingleCellExperiment::altExp(sce, altExp_name), "logcounts")
+    # }
+    # 
+    exprs_norm <- apply(exprs, 1, .ziMinMax)
+    exprs_norm <- t(exprs_norm)
+  
+  }
+  
+  if (transform %in% "minMax") {
+    
+    # if (!"logcounts" %in% assaynames) {
+    #   exprs_log <- log(exprs + log_offset)
+    # } else {
+    #   exprs_log <- SummarizedExperiment::assay(SingleCellExperiment::altExp(sce, altExp_name), "logcounts")
+    # }
+    
+    exprs_norm <- apply(exprs, 1, .minMax)
+    exprs_norm <- t(exprs_norm)
+    
+  }
+  
+  
+  if (transform == "log") {
+    new_assay_name <- "logcounts"
+  } else {
+    new_assay_name <- transform
+  }
+  
+  
+  if (altExp_name != "none") {
+    SummarizedExperiment::assay(SingleCellExperiment::altExp(sce, altExp_name), new_assay_name) <- exprs_norm
+  } else {
+    SummarizedExperiment::assay(sce, new_assay_name) <- exprs_norm
+  }
+  
+  return(sce)
+}
+
+  
+.minMax <- function(x) {
+  if (max(x) != 0) {
+    res <- (x - min(x))/(max(x) - min(x))
+  } else {
+    res <- rep(0, length(x))
+  }
+  return(res)
+}
+
+.ziMinMax <- function(x) {
+  res <- .minMax(x)
+  res <- ifelse(res < 0.5, 0, res)
+  return(res)
+}
+
+.clr <- function(X) {
+  
+  X[X == 0] <- min(X[X != 0])
+  logX <- log(X)
+  logSet <- logX[, 1:ncol(X), drop = FALSE]
+  ref <- Matrix::rowMeans(logSet)
+  res <- sweep(logX, 1, ref, "-")
+  
+  return(res)
+}
+
+
+#' A function that perform normalisation for alternative expression
+#' 
+#' @param sce A \code{SingleCellExperiment} object
+#' @param altExp_name Name of alternative expression that will be used to perform normalisation.
+#' If it is NULL, it will set to HTO.
+#' @param totalExp_threshold the threshold indicates for the HTO less than this threshold 
+#' will be filtered from the analysis
+#' 
+#' @importFrom SummarizedExperiment assay assayNames
+#' @importFrom SingleCellExperiment altExpNames altExp
+#' @importFrom Matrix rowSums
+#' @importFrom mixtools normalmixEM
+#' @importFrom S4Vectors metadata
+#' @importFrom stats kmeans
+#' @export
+#' 
+#' 
+
+crossSampleDoublets <- function(sce, 
+                            altExp_name = NULL,
+                            totalExp_threshold = 10) {
+  
+  if (is.null(altExp_name)) {
+    if (!"HTO" %in% SingleCellExperiment::altExpNames(sce)) {
+      stop("There is no HTO data in the object")
+    } else {
+      altExp_name <- "HTO"
+    }
+  }
+  
+  if (!"logcounts" %in% SummarizedExperiment::assayNames(altExp(sce, altExp_name))) {
+    warning("HTO does not contain logcounts... we will perform normaliseExprs() to get logcounts")
+    sce <- normaliseExprs(sce, altExp_name, "log")
+  }
+  
+  hto_cellHash_log <- SummarizedExperiment::assay(SingleCellExperiment::altExp(sce, altExp_name), "logcounts")
+  
+  hto_cellHash_log <- hto_cellHash_log[Matrix::rowSums(hto_cellHash_log) > totalExp_threshold, ]
+  
+  hto_threshold <- list()
+  for (i in 1:nrow(hto_cellHash_log)) {
+    
+    vec <- hto_cellHash_log[i,][hto_cellHash_log[i,] > 0]
+    mixmdl <- try(mixtools::normalmixEM(vec, 
+                                        fast = T, maxrestarts = 1000,
+                                        k = 2, maxit = 10000,
+                                        mu = c(0, 8),
+                                        ECM = TRUE, verb = F),
+                  silent = T)
+    
+    
+    
+    if (class(mixmdl) == "try-error") {
+      km <- stats::kmeans(vec, centers = 2)
+      hto_threshold[[i]] <- min(max(vec[km$cluster == 1]), max(vec[km$cluster == 2]))
+    } else {
+      hto_threshold[[i]] <- getThreshold(mixmdl)
+    }
+  }
+  
+  names(hto_threshold) <- NULL
+  hto_threshold <- unlist(hto_threshold)
+  
+  
+  
+  hto_cellHash_pass <- sapply(1:nrow(hto_cellHash_log), function(x) {
+    hto_cellHash_log[x,] > hto_threshold[x]
+  })
+  
+  
+  colnames(hto_cellHash_pass) <- rownames(hto_cellHash_log)
+  
+  
+  hto_cellHash_mix_label <- apply(hto_cellHash_pass, 1, function(x) {
+    if (sum(x) == 0) {
+      "negative"
+    } else if (sum(x) == 1) {
+      which(x)
+    } else {
+      "doublet/multiplet"
+    }
+  })
+  
+  doubletClassify_between_class <- ifelse(!hto_cellHash_mix_label %in% c("negative", "doublet/multiplet"), 
+                                         "Singlet", hto_cellHash_mix_label)
+  
+  
+  sce$doubletClassify_between_label <- hto_cellHash_mix_label
+  sce$doubletClassify_between_class <- doubletClassify_between_class
+  
+  S4Vectors::metadata(sce) <- c(S4Vectors::metadata(sce), 
+                                list(doubletClassify_between_threshold = hto_threshold,
+                                     doubletClassify_between_resultsMat = hto_cellHash_pass))
+  
+  
+  return(sce)
+  
+}
+
+
+
+#' A function to plot HTO expression 
+#' 
+#' @param sce sce
+#' @param which_idx which_idx
+#' @param altExp_name altExp_name
+#' @param ncol ncol
+#' 
+#' @importFrom SummarizedExperiment assay assayNames
+#' @importFrom SingleCellExperiment altExpNames altExp
+#' @importFrom gridExtra grid.arrange
+#' @importFrom cowplot axis_canvas insert_xaxis_grob insert_yaxis_grob
+#' @importFrom grid unit
+#' @importFrom utils combn
+#' @import ggplot2
+#' 
+#' @export
+
+
+plotHTO <- function(sce, 
+                    which_idx = 1:2,
+                    altExp_name = NULL,
+                    ncol = 2) {
+  
+  combination <- utils::combn(which_idx, 2)
+  
+  ggList <- apply(combination, 2, function(x) {
+    plotHTOSingle(sce, which_idx = x, altExp_name = altExp_name)
+  })
+  
+  
+  
+  do.call(gridExtra::grid.arrange, c(ggList, ncol = min(length(ggList), ncol)))
+}
+
+
+#' A function to plot HTO expression 
+#' 
+#' @param sce sce
+#' @param which_idx which_idx
+#' @param altExp_name altExp_name
+#' 
+#' @importFrom SummarizedExperiment assay assayNames
+#' @importFrom SingleCellExperiment altExpNames altExp
+#' @importFrom cowplot axis_canvas insert_xaxis_grob insert_yaxis_grob
+#' @importFrom grid unit
+
+
+
+
+plotHTOSingle <- function(sce, 
+                          which_idx = 1:2,
+                          altExp_name = NULL
+) {
+  
+  if (is.null(altExp_name)) {
+    if (!"HTO" %in% altExpNames(sce)) {
+      stop("There is no HTO data in the object")
+    } else {
+      altExp_name <- "HTO"
+    }
+  }
+  
+  if (!"logcounts" %in% SummarizedExperiment::assayNames(altExp(sce, altExp_name))) {
+    warning("HTO does not contain logcounts... we will perform normaliseExprs() to get logcounts")
+    sce <- normaliseExprs(sce, altExp_name, "log")
+  }
+  
+  noThreshold <- FALSE
+  if (!"doubletClassify_between_label" %in% colnames(SummarizedExperiment::colData(sce))) {
+    warning("Haven't performed doubletClassify() yet!")
+    noThreshold <- TRUE
+  }
+  
+  hto_cellHash_log <- assay(SingleCellExperiment::altExp(sce, altExp_name), "logcounts")
+  
+  
+  df <- data.frame(t(as.matrix(hto_cellHash_log[which_idx, ])))
+  
+  colnames(df) <- lapply(strsplit(rownames(hto_cellHash_log[which_idx, ]), "\\."), "[[", 1)
+  
+  
+  if (!noThreshold) {
+    hto_cellHash_pass <- metadata(sce)[["doubletClassify_between_resultsMat"]]
+    
+    doublets <- hto_cellHash_pass[, which_idx[1]] & hto_cellHash_pass[, which_idx[2]]
+    
+    hto_threshold <- metadata(sce)[["doubletClassify_between_threshold"]]
+    
+  } else {
+    doublets <- rep(FALSE, ncol(sce))
+    hto_threshold <- rep(NULL, 2)
+    hto_cellHash_pass <- NULL
+  }
+  
+  
+  pmain <- ggplot(df, aes(x = df[, 1], y = df[, 2], color = doublets)) +
+    geom_point(alpha = 0.5) +
+    # geom_density2d(bins = 10) +
+    # stat_density2d(aes(alpha = ..level.., fill = ..level..), geom = "polygon", n = 100, bins = 10) +
+    geom_hline(yintercept = hto_threshold[which_idx[2]], col = "red", linetype = 2, size = 1) +
+    geom_vline(xintercept = hto_threshold[which_idx[1]], col = "red", linetype = 2, size = 1) +
+    scale_color_manual(values = c("#377EB8", "#E41A1C")) +
+    theme_bw() +
+    theme(aspect.ratio = 1) +
+    xlab(colnames(df)[1]) +
+    ylab(colnames(df)[2])
+  
+  
+  
+  
+  xdens <- cowplot::axis_canvas(pmain, axis = "x") +
+    geom_density(data = df, aes(x = df[, 1], fill = hto_cellHash_pass[, which_idx[1]], alpha = 0.5)) +
+    scale_fill_manual(values = c("#377EB8", "#E41A1C")) +
+    NULL
+  
+  ydens <- cowplot::axis_canvas(pmain, axis = "y", coord_flip = TRUE) +
+    geom_density(data = df, aes(x = df[, 2], fill = hto_cellHash_pass[, which_idx[2]], alpha = 0.5)) +
+    coord_flip() +
+    scale_fill_manual(values = c("#377EB8", "#E41A1C")) +
+    NULL
+  
+  p1 <- cowplot::insert_xaxis_grob(pmain, xdens, grid::unit(.2, "null"), position = "top")
+  
+  p2 <- cowplot::insert_yaxis_grob(p1, ydens,
+                          grid::unit(.2, "null"), position = "right")
+  
+  # ggdraw(p2)
+  return(p2)
+}
+
+
+
+
+#' doublet identification within batch
+#' 
+#' @param sce a SingleCellExperiment
+#' @param altExp_name expression name of HTO matrix
+#' @param eps eps of DBSCAN
+#' @param minPts minPts of DBSCAN
+#' 
+#' @importFrom SummarizedExperiment assay assayNames
+#' @importFrom SingleCellExperiment altExpNames altExp counts
+#' @importFrom dbscan dbscan
+#' @export
+
+
+withinSampleDoublets <- function(sce,
+                                   altExp_name = NULL,
+                                   eps = 200,
+                                   minPts = 50) {
+  sce$nUMI <- Matrix::colSums(SingleCellExperiment::counts(sce))
+  
+  if (is.null(altExp_name)) {
+    if (!"HTO" %in% SingleCellExperiment::altExpNames(sce)) {
+      stop("There is no HTO data in the object")
+    } else {
+      altExp_name <- "HTO"
+    }
+  }
+  
+  
+  if (!"logcounts" %in% SummarizedExperiment::assayNames(altExp(sce, altExp_name))) {
+    warning("HTO does not contain logcounts... we will perform normaliseExprs() to get logcounts")
+    sce <- normaliseExprs(sce, altExp_name, "log")
+  }
+  
+  if (!"doubletClassify_between_label" %in% colnames(SummarizedExperiment::colData(sce))) {
+    stop("Haven't performed doubletClassify_between() yet!")
+  }
+  
+  hto_threshold <- metadata(sce)[["doubletClassify_between_threshold"]]
+  
+  
+  hto_cellHash_log <- SummarizedExperiment::assay(SingleCellExperiment::altExp(sce, altExp_name), "logcounts")
+  
+  hto_cellHash_mix_label <- sce$doubletClassify_between_label
+    
+  nUMI <- sce$nUMI
+  
+  batch_doublets_list <- lapply(1:nrow(hto_cellHash_log), function(i) {
+    
+    db_cluster <- dbscan::dbscan(cbind(nUMI, hto_cellHash_log[i,]), eps = eps, minPts = minPts)
+    batch_doublets <- (db_cluster$cluster == 0 & hto_cellHash_log[i,] > hto_threshold[i] & hto_cellHash_mix_label != "doublet/multiplet")
+    
+  })
+  
+  batch_doublets_mat <- do.call(cbind, batch_doublets_list)
+  
+  
+  doubletClassify_within_label <- apply(batch_doublets_mat, 1, function(res) {
+    if (sum(res) == 0) {
+      "NotDoublets(Within)"
+    } else {
+      paste("Doublets(Within)", which(res), sep = "_")
+    }
+  })
+  
+  doubletClassify_within_class <- ifelse(doubletClassify_within_label == "NotDoublets(Within)", "Singlet", "Doublet")
+  
+  sce$doubletClassify_within_label <- doubletClassify_within_label
+  sce$doubletClassify_within_class <- doubletClassify_within_class
+  
+  S4Vectors::metadata(sce) <- c(S4Vectors::metadata(sce), 
+                                list(doubletClassify_within_resultsMat = batch_doublets_mat))
+  
+  return(sce)
+  
+}
+
+
+#' @importFrom stats uniroot 
+
+
+getThreshold <- function(mixmdl, verbose = FALSE){
+  
+  # if (verbose) {
+  #   plot(mixmdl, which = 2)
+  # }
+  
+  membership <- apply(mixmdl$posterior, 1, which.max)
+  m_list <- sort(unique(membership))
+  
+  mu_list <- mixmdl$mu
+  names(mu_list) <- c(1:length(mu_list))
+  mu_list <- mu_list[m_list]
+  
+  if (length(mu_list) > 1) {
+    idx1 <- as.numeric(names(mu_list)[order(mu_list)][1])
+    idx2 <- as.numeric(names(mu_list)[order(mu_list)][2])
+    
+    root <- try(stats::uniroot(funMixModel, 
+                               interval = c(mixmdl$mu[idx1] - mixmdl$sigma[idx1], mixmdl$mu[idx2] + mixmdl$sigma[idx2]),
+                               mu1 = mixmdl$mu[idx1], mu2 = mixmdl$mu[idx2],
+                               sd1 = mixmdl$sigma[idx1], sd2 = mixmdl$sigma[idx2],
+                               rho1 = mixmdl$lambda[idx1], rho2 = mixmdl$lambda[idx2]),
+                silent = T)
+    
+    
+    if (class(root) != "try-error") {
+      # if (verbose) {
+      #   abline(v = root$root, col = "red")
+      #   abline(v = mixmdl$mu[idx1] + qnorm(0.99) * mixmdl$sigma[idx1], col = "blue")
+      # }
+      t <- root$root
+    }else{
+      t <- 0
+    }
+    
+  }else{
+    t <- 0
+  }
+  
+  return(t)
+}
+
+
+#' @importFrom stats dnorm 
+
+funMixModel <- function(x, mu1, mu2, sd1, sd2, rho1, rho2) {
+  
+  stats::dnorm(x, mean = mu1, sd = sd1) * rho1 - stats::dnorm(x, mean = mu2, sd = sd2) * rho2
+  
+  
+}
+  
