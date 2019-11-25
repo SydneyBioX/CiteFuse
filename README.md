@@ -15,7 +15,7 @@ install(version = "3.10")
 
 
 ```r
-BiocManager::install("")
+BiocManager::install(c("SummarizedExperiment", "S4Vectors", "SingleCellExperiment", "scater", "scran"))
 ```
 
 ```r
