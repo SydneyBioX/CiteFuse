@@ -120,9 +120,13 @@
     <p>A function that perform normalisation for alternative expression</p>
     </div>
 
-    <pre class="usage"><span class='fu'>normaliseExprs</span>(<span class='no'>sce</span>, <span class='kw'>altExp_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>exprs_value</span> <span class='kw'>=</span> <span class='st'>"counts"</span>,
+    <pre class="usage"><span class='fu'>normaliseExprs</span>(
+  <span class='no'>sce</span>,
+  <span class='kw'>altExp_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>exprs_value</span> <span class='kw'>=</span> <span class='st'>"counts"</span>,
   <span class='kw'>transform</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"log"</span>, <span class='st'>"clr"</span>, <span class='st'>"zi_minMax"</span>, <span class='st'>"minMax"</span>),
-  <span class='kw'>log_offset</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+  <span class='kw'>log_offset</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">

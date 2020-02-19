@@ -37,7 +37,7 @@
 
 <meta property="og:title" content="A function to preprocess the list of expression matrix — preprocessing" />
 <meta property="og:description" content="This function will keep the samples that are common across the list of expression matrix,
-and filter the features that are all zeros across samples, and finally construct a SingleCellExperiment 
+and filter the features that are all zeros across samples, and finally construct a SingleCellExperiment
 object" />
 <meta name="twitter:card" content="summary" />
 
@@ -120,28 +120,47 @@ object" />
 
     <div class="ref-description">
     <p>This function will keep the samples that are common across the list of expression matrix,
-and filter the features that are all zeros across samples, and finally construct a <code>SingleCellExperiment</code> 
+and filter the features that are all zeros across samples, and finally construct a <code>SingleCellExperiment</code>
 object</p>
     </div>
 
-    <pre class="usage"><span class='fu'>preprocessing</span>(<span class='kw'>exprsMat</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>return_sce</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>assay_matrix</span> <span class='kw'>=</span> <span class='fl'>1</span>)</pre>
+    <pre class="usage"><span class='fu'>preprocessing</span>(
+  <span class='kw'>exprsMat</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>return_sce</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>assay_matrix</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+  <span class='kw'>filter_features</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>rowData</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>colData</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>exprsMat</th>
-      <td><p>A list or a matrix indicates the expression matrices of the 
+      <td><p>A list or a matrix indicates the expression matrices of the
 testing datasets (each matrix must be <code>matrix</code> or <code>dgCMatrix</code> class)</p></td>
     </tr>
     <tr>
       <th>return_sce</th>
-      <td><p>A logical input indicates whether a <code>SingleCellExperiment</code> 
+      <td><p>A logical input indicates whether a <code>SingleCellExperiment</code>
 object will be return</p></td>
     </tr>
     <tr>
       <th>assay_matrix</th>
       <td><p>A integer indicates which list will be used as `assay` input of `SingleCellExperiment`</p></td>
+    </tr>
+    <tr>
+      <th>filter_features</th>
+      <td><p>A logical input indicates whether the features with all zeros will be removed</p></td>
+    </tr>
+    <tr>
+      <th>rowData</th>
+      <td><p>A DataFrame indicates the rowData to be stored in the sce object</p></td>
+    </tr>
+    <tr>
+      <th>colData</th>
+      <td><p>A DataFrame indicates the colData to be stored in the sce object</p></td>
     </tr>
     </table>
 

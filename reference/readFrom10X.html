@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>A function to visualise the reduced dimension — visualiseDim • CiteFuse</title>
+<title>A function to read the data from 10X — readFrom10X • CiteFuse</title>
 
 
 <!-- jquery -->
@@ -35,8 +35,8 @@
 
 
 
-<meta property="og:title" content="A function to visualise the reduced dimension — visualiseDim" />
-<meta property="og:description" content="A function to visualise the reduced dimension" />
+<meta property="og:title" content="A function to read the data from 10X — readFrom10X" />
+<meta property="og:description" content="A function to read the data from 10X" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -111,45 +111,40 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>A function to visualise the reduced dimension</h1>
+    <h1>A function to read the data from 10X</h1>
     
-    <div class="hidden name"><code>visualiseDim.Rd</code></div>
+    <div class="hidden name"><code>readFrom10X.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>A function to visualise the reduced dimension</p>
+    <p>A function to read the data from 10X</p>
     </div>
 
-    <pre class="usage"><span class='fu'>visualiseDim</span>(
-  <span class='no'>sce</span>,
-  <span class='kw'>dimNames</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>colour_by</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>shape_by</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>dim</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>
+    <pre class="usage"><span class='fu'>readFrom10X</span>(
+  <span class='no'>dir</span>,
+  <span class='kw'>type</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"auto"</span>, <span class='st'>"sparse"</span>, <span class='st'>"HDF5"</span>),
+  <span class='kw'>feature_named_by</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"gene_id"</span>, <span class='st'>"gene_symbol"</span>),
+  <span class='kw'>filter_features</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>sce</th>
-      <td><p>A singlecellexperiment object</p></td>
+      <th>dir</th>
+      <td><p>A character indicates the directory of the 10X files</p></td>
     </tr>
     <tr>
-      <th>dimNames</th>
-      <td><p>indicates the name of the reduced dimension results.</p></td>
+      <th>type</th>
+      <td><p>A character indicates the format of the data, sparse or HDF5</p></td>
     </tr>
     <tr>
-      <th>colour_by</th>
-      <td><p>the method of visualisation, which can be UMAP, tSNE and diffusion map</p></td>
+      <th>feature_named_by</th>
+      <td><p>A character indicates whehter the genes will be named by gene_id or gene_symbol</p></td>
     </tr>
     <tr>
-      <th>shape_by</th>
-      <td><p>the method of visualisation, which can be UMAP, tSNE and diffusion map</p></td>
-    </tr>
-    <tr>
-      <th>dim</th>
-      <td><p>a vector of numeric with length of 2 indicates which component is being plot</p></td>
+      <th>filter_features</th>
+      <td><p>A logical input indicates whether the features with all zeros will be removed</p></td>
     </tr>
     </table>
 
