@@ -4,19 +4,32 @@
 \alias{preprocessing}
 \title{A function to preprocess the list of expression matrix}
 \usage{
-preprocessing(exprsMat = NULL, return_sce = TRUE, assay_matrix = 1)
+preprocessing(
+  exprsMat = NULL,
+  return_sce = TRUE,
+  assay_matrix = 1,
+  filter_features = TRUE,
+  rowData = NULL,
+  colData = NULL
+)
 }
 \arguments{
-\item{exprsMat}{A list or a matrix indicates the expression matrices of the 
+\item{exprsMat}{A list or a matrix indicates the expression matrices of the
 testing datasets (each matrix must be \code{matrix} or \code{dgCMatrix} class)}
 
-\item{return_sce}{A logical input indicates whether a \code{SingleCellExperiment} 
+\item{return_sce}{A logical input indicates whether a \code{SingleCellExperiment}
 object will be return}
 
 \item{assay_matrix}{A integer indicates which list will be used as `assay` input of `SingleCellExperiment`}
+
+\item{filter_features}{A logical input indicates whether the features with all zeros will be removed}
+
+\item{rowData}{A DataFrame indicates the rowData to be stored in the sce object}
+
+\item{colData}{A DataFrame indicates the colData to be stored in the sce object}
 }
 \description{
 This function will keep the samples that are common across the list of expression matrix,
-and filter the features that are all zeros across samples, and finally construct a \code{SingleCellExperiment} 
+and filter the features that are all zeros across samples, and finally construct a \code{SingleCellExperiment}
 object
 }

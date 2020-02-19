@@ -4,10 +4,17 @@
 \alias{ligandReceptorTest}
 \title{A function to perform ligand receptor analysis}
 \usage{
-ligandReceptorTest(sce, ligandReceptor_list, cluster,
-  RNA_exprs_value = "minMax", altExp_name = "ADT",
-  altExp_exprs_value = "zi_minMax", num_permute = 1000, p_sig = 0.05,
-  ncores = 1)
+ligandReceptorTest(
+  sce,
+  ligandReceptor_list,
+  cluster,
+  RNA_exprs_value = "minMax",
+  altExp_name = "ADT",
+  altExp_exprs_value = "zi_minMax",
+  num_permute = 1000,
+  p_sig = 0.05,
+  ncores = 1
+)
 }
 \arguments{
 \item{sce}{A singlecellexperiment object}

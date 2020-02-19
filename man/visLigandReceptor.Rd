@@ -4,8 +4,11 @@
 \alias{visLigandReceptor}
 \title{A function to visualise ligand receptor analysis}
 \usage{
-visLigandReceptor(sce, type = c("pval_heatmap", "pval_dotplot",
-  "group_network", "group_heatmap", "lr_network"))
+visLigandReceptor(
+  sce,
+  type = c("pval_heatmap", "pval_dotplot", "group_network", "group_heatmap",
+    "lr_network")
+)
 }
 \arguments{
 \item{sce}{A singlecellexperiment object}

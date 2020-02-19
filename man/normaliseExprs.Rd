@@ -4,9 +4,13 @@
 \alias{normaliseExprs}
 \title{A function that perform normalisation for alternative expression}
 \usage{
-normaliseExprs(sce, altExp_name = NULL, exprs_value = "counts",
+normaliseExprs(
+  sce,
+  altExp_name = NULL,
+  exprs_value = "counts",
   transform = c("log", "clr", "zi_minMax", "minMax"),
-  log_offset = NULL)
+  log_offset = NULL
+)
 }
 \arguments{
 \item{sce}{A \code{SingleCellExperiment} object}

@@ -4,8 +4,13 @@
 \alias{selectDEgenes}
 \title{A function to select DE genes}
 \usage{
-selectDEgenes(de_res, pval_adj = 0.05, mean_diff = 0, pct_diff = 0.1,
-  topN = 10)
+selectDEgenes(
+  de_res,
+  pval_adj = 0.05,
+  mean_diff = 0,
+  pct_diff = 0.1,
+  topN = 10
+)
 }
 \arguments{
 \item{de_res}{The de results returned by `DEgenes()``}

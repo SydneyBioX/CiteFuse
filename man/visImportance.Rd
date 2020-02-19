@@ -4,8 +4,12 @@
 \alias{visImportance}
 \title{A function to visualise the features distribtuion}
 \usage{
-visImportance(sce, plot = c("boxplot", "heatmap"), altExp_name = "ADT",
-  exprs_value = "logcounts")
+visImportance(
+  sce,
+  plot = c("boxplot", "heatmap"),
+  altExp_name = "ADT",
+  exprs_value = "logcounts"
+)
 }
 \arguments{
 \item{sce}{A singlecellexperiment object}

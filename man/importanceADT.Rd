@@ -4,8 +4,16 @@
 \alias{importanceADT}
 \title{A function to calculate the importance score of ADT}
 \usage{
-importanceADT(sce, altExp_name = "ADT", exprs_value = "logcounts",
-  group = NULL, subsample = TRUE, times = 10, prop = 0.8, ...)
+importanceADT(
+  sce,
+  altExp_name = "ADT",
+  exprs_value = "logcounts",
+  group = NULL,
+  subsample = TRUE,
+  times = 10,
+  prop = 0.8,
+  ...
+)
 }
 \arguments{
 \item{sce}{A singlecellexperiment object}

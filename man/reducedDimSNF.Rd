@@ -4,8 +4,7 @@
 \alias{reducedDimSNF}
 \title{A function to reduce the dimension of the similarity matrix}
 \usage{
-reducedDimSNF(sce, metadata = "SNF_W", method = "UMAP",
-  dimNames = NULL, ...)
+reducedDimSNF(sce, metadata = "SNF_W", method = "UMAP", dimNames = NULL, ...)
 }
 \arguments{
 \item{sce}{A singlecellexperiment object}

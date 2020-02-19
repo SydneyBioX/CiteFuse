@@ -4,10 +4,16 @@
 \alias{visualiseExprs}
 \title{A function to visualise the features distribtuion}
 \usage{
-visualiseExprs(sce, plot = c("boxplot", "violin", "jitter", "density",
-  "pairwise"), altExp_name = c("none"), exprs_value = "logcounts",
-  feature_subset = NULL, cell_subset = NULL, n = NULL,
-  threshold = NULL)
+visualiseExprs(
+  sce,
+  plot = c("boxplot", "violin", "jitter", "density", "pairwise"),
+  altExp_name = c("none"),
+  exprs_value = "logcounts",
+  feature_subset = NULL,
+  cell_subset = NULL,
+  n = NULL,
+  threshold = NULL
+)
 }
 \arguments{
 \item{sce}{A singlecellexperiment object}

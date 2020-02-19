@@ -4,10 +4,20 @@
 \alias{DEgenes}
 \title{A function to perform DE analysis on CITE seq data}
 \usage{
-DEgenes(sce, altExp_name = "none", exprs_value = "logcounts",
-  group = NULL, method = "wilcox", exprs_pct = 0.1,
-  exprs_threshold = 0, return_all = FALSE, pval_adj = 0.05,
-  mean_diff = 0, pct_diff = 0.1, topN = 10)
+DEgenes(
+  sce,
+  altExp_name = "none",
+  exprs_value = "logcounts",
+  group = NULL,
+  method = "wilcox",
+  exprs_pct = 0.1,
+  exprs_threshold = 0,
+  return_all = FALSE,
+  pval_adj = 0.05,
+  mean_diff = 0,
+  pct_diff = 0.1,
+  topN = 10
+)
 }
 \arguments{
 \item{sce}{A singlecellexperiment object}

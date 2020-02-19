@@ -1,6 +1,6 @@
 #' A function to visualise the features distribtuion
-#' 
-#' 
+#'
+#'
 #' @param sce A singlecellexperiment object
 #' @param plot Type of plot, includes boxplot, violin, jitter, density, and pairwise. By default is boxplot
 #' @param altExp_name A character indicates which expression matrix is used. by default is none (i.e. RNA).
@@ -9,7 +9,7 @@
 #' @param cell_subset A vector of characters indicates the subset of cells that are used for visualisation
 #' @param n A numeric indicates the top expressed features to show.
 #' @param threshold Thresholds of high expresion for features (only is used for pairwise plot).
-#' 
+#'
 #' @importFrom Matrix rowMeans
 #' @importFrom reshape2 melt
 #' @importFrom SingleCellExperiment altExp altExpNames
@@ -20,49 +20,49 @@
 #' @import ggplot2
 #' @export
 
-visualiseExprs <- function(sce, 
+visualiseExprs <- function(sce,
                            plot = c("boxplot", "violin", "jitter", "density", "pairwise"),
-                           altExp_name = c("none"), 
+                           altExp_name = c("none"),
                            exprs_value = "logcounts",
                            feature_subset = NULL,
                            cell_subset = NULL,
                            n = NULL,
                            threshold = NULL
                            ) {
-  
+
   plot <- match.arg(plot, c("boxplot", "violin", "jitter", "density", "pairwise"))
-  
+
   if (!is.null(cell_subset)) {
     if (sum(!cell_subset %in% colnames(sce)) != 0) {
       stop("sce does not contain some or all of cell_subset as cell names")
-    } 
+    }
   } else {
     cell_subset <- colnames(sce)
   }
-  
-  
+
+
   if (altExp_name != "none") {
     if (!altExp_name %in% SingleCellExperiment::altExpNames(sce)) {
       stop("sce does not contain altExp_name as altExpNames")
     }
-    
+
     if (!exprs_value %in% SummarizedExperiment::assayNames(SingleCellExperiment::altExp(sce, altExp_name))) {
       stop("sce does not contain exprs_value as assayNames for altExp")
     }
-    
+
     exprsMat <- SummarizedExperiment::assay(SingleCellExperiment::altExp(sce[, cell_subset], altExp_name), exprs_value)
-    
+
   } else {
-    
+
     # if altExp_name is "none", then the assay in SingleCellExperiment is extracted (RNA in most of the cases)
-    
+
     exprsMat <- SummarizedExperiment::assay(sce[, cell_subset], exprs_value)
   }
 
-  
 
- 
-  
+
+
+
   if (is.null(feature_subset)) {
     if (is.null(n)) {
       n <- min(nrow(exprsMat), 10)
@@ -75,24 +75,24 @@ visualiseExprs <- function(sce,
       stop("sce does not contain some or all of feature_subset as features")
     }
   }
-  
+
   exprsMat <- as.matrix(exprsMat[feature_subset, , drop = FALSE])
 
   if (plot == "pairwise") {
     combination <- utils::combn(feature_subset, 2)
-    
+
     ggList <- apply(combination, 2, function(x) {
       suppressMessages(scatterSingle(exprsMat[x, ], threshold = threshold))
     })
-    
-    
-    
+
+
+
     do.call(gridExtra::grid.arrange, c(ggList, ncol = min(length(ggList), 2)))
   } else {
     df_toPlot <- reshape2::melt(exprsMat)
     colnames(df_toPlot) <- c("features", "cells", "value")
-    
-    
+
+
     if (plot == "boxplot") {
       g <- ggplot(df_toPlot, aes(x = features, y = value, color = features)) +
         geom_boxplot(outlier.size = 1, outlier.stroke = 0.3, outlier.alpha = 0.8,
@@ -103,8 +103,8 @@ visualiseExprs <- function(sce,
         ylab(exprs_value) +
         xlab("") +
         theme(legend.position = "none")
-    } 
-    
+    }
+
     if (plot == "violin") {
       g <- ggplot(df_toPlot, aes(x = features, y = value)) +
         geom_violin(aes(fill = features)) +
@@ -116,8 +116,8 @@ visualiseExprs <- function(sce,
         ylab(exprs_value) +
         xlab("") +
         theme(legend.position = "none")
-    } 
-    
+    }
+
     if (plot == "jitter")  {
       g <- ggplot(df_toPlot, aes(x = features, y = value)) +
         geom_jitter(aes(color = features), size = 0.5, alpha = 0.5) +
@@ -127,8 +127,8 @@ visualiseExprs <- function(sce,
         ylab(exprs_value) +
         xlab("") +
         theme(legend.position = "none")
-    } 
-    
+    }
+
     if (plot == "density")  {
       g <- ggplot(df_toPlot, aes(x = value, y = features)) +
         ggridges::geom_density_ridges2(aes(fill = features), alpha = 0.5) +
@@ -137,7 +137,7 @@ visualiseExprs <- function(sce,
         ylab(exprs_value) +
         xlab("") +
         theme(legend.position = "none")
-    } 
+    }
     return(g)
   }
 
@@ -149,27 +149,27 @@ visualiseExprs <- function(sce,
 
 
 
-# A function to generate scatter plot pairwise feature expression 
+# A function to generate scatter plot pairwise feature expression
 
 
 scatterSingle <- function(exprsMat, group = NULL, threshold = NULL) {
-  
-  
+
+
   df <- data.frame(t(as.matrix(exprsMat)))
-  
+
   colnames(df) <- lapply(strsplit(rownames(exprsMat), "\\."), "[[", 1)
-  
-  
+
+
   if (is.null(group)) {
-    
+
     if (is.null(threshold)) {
       threshold <- apply(exprsMat, 1, fitMixtures)
-    } 
+    }
 
-    
-    
+
+
     exprsMat_pass <- exprsMat > threshold
-    
+
     nn <- paste(c(rownames(exprsMat), ""), collapse = "-")
     pp <- paste(c(rownames(exprsMat), ""), collapse = "+")
     np <- paste(rownames(exprsMat)[1], "-", rownames(exprsMat)[2], "+", sep = "")
@@ -178,20 +178,20 @@ scatterSingle <- function(exprsMat, group = NULL, threshold = NULL) {
     group[exprsMat_pass[1, ] & exprsMat_pass[2, ]] <- pp
     group[exprsMat_pass[1, ] & !exprsMat_pass[2, ]] <- pn
     group[!exprsMat_pass[1, ] & exprsMat_pass[2, ]] <- np
-    
+
     group <- factor(group, levels = c(nn, np, pn, pp))
-    
+
     point_col <- c("grey50", "#377EB8", "#E41A1C", "#984EA3")
-    
+
     names(point_col) <- levels(group)
-    
-    col_layer <- scale_color_manual(values = point_col) 
+
+    col_layer <- scale_color_manual(values = point_col)
   } else{
     col_layer <- scale_color_hue()
   }
-  
 
-  
+
+
   pmain <- ggplot(df, aes(x = df[, 1], y = df[, 2], color = group)) +
     geom_point(alpha = 0.5) +
     # geom_density2d(bins = 10) +
@@ -205,28 +205,28 @@ scatterSingle <- function(exprsMat, group = NULL, threshold = NULL) {
     theme(aspect.ratio = 1) +
     xlab(colnames(df)[1]) +
     ylab(colnames(df)[2])
-  
-  
-  
-  
+
+
+
+
   xdens <- cowplot::axis_canvas(pmain, axis = "x") +
     geom_density(data = df, aes(x = df[, 1], fill = exprsMat_pass[1, ], alpha = 0.5)) +
     scale_fill_manual(values = c("grey50", "#E41A1C")) +
-    scale_y_reverse() + 
+    scale_y_reverse() +
     NULL
-  
+
   ydens <- cowplot::axis_canvas(pmain, axis = "y", coord_flip = TRUE) +
     geom_density(data = df, aes(x = df[, 2], fill = exprsMat_pass[2, ], alpha = 0.5)) +
     coord_flip() +
     scale_y_reverse() +
     scale_fill_manual(values = c("grey50", "#377EB8")) +
     NULL
-  
+
   p1 <- cowplot::insert_xaxis_grob(pmain, xdens, grid::unit(.2, "null"), position = "bottom")
-  
+
   p2 <- cowplot::insert_yaxis_grob(p1, ydens,
                                    grid::unit(.2, "null"), position = "left")
-  
+
   # ggdraw(p2)
   return(p2)
 }
@@ -234,15 +234,15 @@ scatterSingle <- function(exprsMat, group = NULL, threshold = NULL) {
 
 fitMixtures <- function(vec) {
   km <- stats::kmeans(vec, centers = 2, nstart = 1000)
-  mixmdl <- try(mixtools::normalmixEM(vec, 
+  mixmdl <- try(mixtools::normalmixEM(vec,
                                       fast = T, maxrestarts = 1000,
                                       k = 2, maxit = 10000,
                                       mu = km$centers[,1],
                                       ECM = TRUE, verb = F),
                 silent = T)
-  
-  
-  
+
+
+
   if (class(mixmdl) == "try-error") {
     threshold <- min(max(vec[km$cluster == 1]), max(vec[km$cluster == 2]))
   } else {

@@ -4,10 +4,19 @@
 \alias{CiteFuse}
 \title{A function to runSNF for CITE seq data}
 \usage{
-CiteFuse(sce, altExp_name = "ADT", W_list = NULL, gene_select = TRUE,
-  dist_cal_RNA = "correlation", dist_cal_ADT = "propr",
-  ADT_subset = NULL, K_knn = 20, t = 20, metadata_names = NULL,
-  verbose = TRUE)
+CiteFuse(
+  sce,
+  altExp_name = "ADT",
+  W_list = NULL,
+  gene_select = TRUE,
+  dist_cal_RNA = "correlation",
+  dist_cal_ADT = "propr",
+  ADT_subset = NULL,
+  K_knn = 20,
+  t = 20,
+  metadata_names = NULL,
+  verbose = TRUE
+)
 }
 \arguments{
 \item{sce}{a SingleCellExperiment#' @param return_sce A logical input indicates whether a \code{SingleCellExperiment} 

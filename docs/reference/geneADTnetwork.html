@@ -120,13 +120,23 @@
     <p>A function to visualise the features distribtuion</p>
     </div>
 
-    <pre class="usage"><span class='fu'>geneADTnetwork</span>(<span class='no'>sce</span>, <span class='kw'>RNA_exprs_value</span> <span class='kw'>=</span> <span class='st'>"logcounts"</span>, <span class='kw'>altExp_name</span> <span class='kw'>=</span> <span class='st'>"ADT"</span>,
-  <span class='kw'>altExp_exprs_value</span> <span class='kw'>=</span> <span class='st'>"logcounts"</span>, <span class='kw'>RNA_feature_subset</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>ADT_feature_subset</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>cell_subset</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>cor_threshold</span> <span class='kw'>=</span> <span class='fl'>0.5</span>,
+    <pre class="usage"><span class='fu'>geneADTnetwork</span>(
+  <span class='no'>sce</span>,
+  <span class='kw'>RNA_exprs_value</span> <span class='kw'>=</span> <span class='st'>"logcounts"</span>,
+  <span class='kw'>altExp_name</span> <span class='kw'>=</span> <span class='st'>"ADT"</span>,
+  <span class='kw'>altExp_exprs_value</span> <span class='kw'>=</span> <span class='st'>"logcounts"</span>,
+  <span class='kw'>RNA_feature_subset</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>ADT_feature_subset</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>cell_subset</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>cor_threshold</span> <span class='kw'>=</span> <span class='fl'>0.5</span>,
   <span class='kw'>cor_method</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"pearson"</span>, <span class='st'>"kendall"</span>, <span class='st'>"spearman"</span>),
-  <span class='kw'>RNA_exprs_pct</span> <span class='kw'>=</span> <span class='fl'>0.1</span>, <span class='kw'>ADT_exprs_pct</span> <span class='kw'>=</span> <span class='fl'>0.1</span>, <span class='kw'>RNA_exprs_threshold</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>ADT_exprs_threshold</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>network_layout</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>return_igraph</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+  <span class='kw'>RNA_exprs_pct</span> <span class='kw'>=</span> <span class='fl'>0.1</span>,
+  <span class='kw'>ADT_exprs_pct</span> <span class='kw'>=</span> <span class='fl'>0.1</span>,
+  <span class='kw'>RNA_exprs_threshold</span> <span class='kw'>=</span> <span class='fl'>0</span>,
+  <span class='kw'>ADT_exprs_threshold</span> <span class='kw'>=</span> <span class='fl'>0</span>,
+  <span class='kw'>network_layout</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>return_igraph</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">

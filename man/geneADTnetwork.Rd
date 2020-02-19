@@ -4,13 +4,23 @@
 \alias{geneADTnetwork}
 \title{A function to visualise the features distribtuion}
 \usage{
-geneADTnetwork(sce, RNA_exprs_value = "logcounts", altExp_name = "ADT",
-  altExp_exprs_value = "logcounts", RNA_feature_subset = NULL,
-  ADT_feature_subset = NULL, cell_subset = NULL, cor_threshold = 0.5,
+geneADTnetwork(
+  sce,
+  RNA_exprs_value = "logcounts",
+  altExp_name = "ADT",
+  altExp_exprs_value = "logcounts",
+  RNA_feature_subset = NULL,
+  ADT_feature_subset = NULL,
+  cell_subset = NULL,
+  cor_threshold = 0.5,
   cor_method = c("pearson", "kendall", "spearman"),
-  RNA_exprs_pct = 0.1, ADT_exprs_pct = 0.1, RNA_exprs_threshold = 0,
-  ADT_exprs_threshold = 0, network_layout = NULL,
-  return_igraph = FALSE)
+  RNA_exprs_pct = 0.1,
+  ADT_exprs_pct = 0.1,
+  RNA_exprs_threshold = 0,
+  ADT_exprs_threshold = 0,
+  network_layout = NULL,
+  return_igraph = FALSE
+)
 }
 \arguments{
 \item{sce}{A singlecellexperiment object}

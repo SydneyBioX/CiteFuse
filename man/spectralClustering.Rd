@@ -4,8 +4,16 @@
 \alias{spectralClustering}
 \title{A function to perform spectral clustering}
 \usage{
-spectralClustering(affinity, K = 20, type = 4, fast = T,
-  maxdim = 50, delta = 1e-05, t = 0, neigen = NULL)
+spectralClustering(
+  affinity,
+  K = 20,
+  type = 4,
+  fast = T,
+  maxdim = 50,
+  delta = 1e-05,
+  t = 0,
+  neigen = NULL
+)
 }
 \arguments{
 \item{affinity}{An affinity matrix}

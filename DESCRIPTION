@@ -41,13 +41,13 @@ Imports:
     randomForest,
     pheatmap,
     ggraph,
-    grDevices
+    grDevices,
+    rhdf5
 LinkingTo: Rcpp, RcppEigen
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.2
 Suggests: 
     knitr,
     rmarkdown,
     DT,
     mclust
 VignetteBuilder: knitr
-

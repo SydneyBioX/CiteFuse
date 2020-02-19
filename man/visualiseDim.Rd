@@ -4,8 +4,13 @@
 \alias{visualiseDim}
 \title{A function to visualise the reduced dimension}
 \usage{
-visualiseDim(sce, dimNames = NULL, colour_by = NULL, shape_by = NULL,
-  dim = 1:2)
+visualiseDim(
+  sce,
+  dimNames = NULL,
+  colour_by = NULL,
+  shape_by = NULL,
+  dim = 1:2
+)
 }
 \arguments{
 \item{sce}{A singlecellexperiment object}
