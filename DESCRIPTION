@@ -42,7 +42,8 @@ Imports:
     pheatmap,
     ggraph,
     grDevices,
-    rhdf5
+    rhdf5,
+    clue
 LinkingTo: Rcpp, RcppEigen
 RoxygenNote: 7.0.2
 Suggests: 

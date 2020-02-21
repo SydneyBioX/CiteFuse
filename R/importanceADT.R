@@ -4,26 +4,44 @@
 #' @param sce A singlecellexperiment object
 #' @param altExp_name A character indicates which expression matrix is used. by default is none (i.e. RNA).
 #' @param exprs_value A character indicates which expression value in assayNames is used.
-#' @param group A vector indicates the grouping of the data
-#' @param subsample Whether perform subsampling
-#' @param times A numeric indicates the times of subsampling is performed
-#' @param prop A numeric indicates the proportion of cells are subsampled from the whole data
-#' @param ... other arguments to `randomForest()` function
+#' @param method A character indicates the method of ADT importance calculation,
+#' either randomForest or PCA
+#' @param group A vector indicates the grouping of the data (for random forest)
+#' @param subsample Whether perform subsampling (for random forest)
+#' @param times A numeric indicates the times of subsampling is performed (for random forest)
+#' @param prop A numeric indicates the proportion of cells are subsampled from the whole data (for random forest)
+#' @param k_pca Number of principal component will be used to calculate the loading scores (for PCA)
+#' @param remove_first_PC A logical input indicates whether the first component will be removed from calculation (for PCA).
+#' @param ... other arguments to `randomForest()` or `prcomp()` function
 #'
 #' @importFrom randomForest randomForest
+#' @importFrom stats prcomp
 #' @importFrom SingleCellExperiment altExp altExpNames
 #' @importFrom SummarizedExperiment assayNames assay
 #' @importFrom S4Vectors metadata
+#'
+#' @details
+#' For random forest, the importance scores are based on features importance.
+#' For PCA, it implements the method proposed in Levin et al (based on the loading of features).
+#'
+#' @references
+#' Levine, J.H., Simonds, E.F., Bendall, S.C., Davis, K.L., El-ad, D.A., Tadmor, M.D.,
+#' Litvin, O., Fienberg, H.G., Jager, A., Zunder, E.R. and Finck, R., 2015.
+#' Data-driven phenotypic dissection of AML reveals progenitor-like cells that
+#' correlate with prognosis. Cell, 162(1), pp.184-197.
 #'
 #' @export
 
 importanceADT <- function(sce,
                           altExp_name = "ADT",
                           exprs_value = "logcounts",
+                          method = c("randomForest", "PCA"),
                           group = NULL,
                           subsample = TRUE,
                           times = 10,
                           prop = 0.8,
+                          k_pca = 5,
+                          remove_first_PC = TRUE,
                           ...) {
 
   if (!altExp_name %in% SingleCellExperiment::altExpNames(sce)) {
@@ -34,26 +52,54 @@ importanceADT <- function(sce,
     stop("sce does not contain exprs_value as assayNames for altExp")
   }
 
+  method <- match.arg(method, c("randomForest", "PCA"))
+
+  if (method == "randomForest" & is.null(group)) {
+    stop("To run randomForest ADT importance calculation, please provide group infomation.")
+  }
+
+  if (k_pca < 2 | k_pca <= 2 & remove_first_PC) {
+    stop("Please set a larger k_pca")
+  }
 
 
   exprsMat <- SummarizedExperiment::assay(SingleCellExperiment::altExp(sce, altExp_name), exprs_value)
 
-  if (subsample) {
-    num_sub <- round(ncol(exprsMat) * prop)
-    rf <- lapply(seq_len(times), function(x) {
-      idx <- sample(ncol(exprsMat), num_sub)
-      randomForest::randomForest(t(as.matrix(exprsMat[, idx])), as.factor(group[idx]), ...)
-    })
+  if (method == "randomForest") {
+    if (subsample) {
+      num_sub <- round(ncol(exprsMat) * prop)
+      rf <- lapply(seq_len(times), function(x) {
+        idx <- sample(ncol(exprsMat), num_sub)
+        randomForest::randomForest(t(as.matrix(exprsMat[, idx])), as.factor(group[idx]), ...)
+      })
 
-    importance <- do.call(cbind, lapply(rf, function(x) x$importance))
-    colnames(importance) <- seq_len(times)
-  } else {
-    rf <- randomForest::randomForest(t(as.matrix(exprsMat)), as.factor(group), ...)
-    importance <- rf$importance
+      importance <- do.call(cbind, lapply(rf, function(x) x$importance))
+      colnames(importance) <- seq_len(times)
+    } else {
+      rf <- randomForest::randomForest(t(as.matrix(exprsMat)), as.factor(group), ...)
+      importance <- rf$importance
+    }
+
+    S4Vectors::metadata(sce)[["importanceADT_matrix"]] <- as.matrix(importance)
+    S4Vectors::metadata(sce)[["importanceADT"]] <- Matrix::rowMeans(as.matrix(importance))
+  }
+  if (method == "PCA") {
+    adt_pca <- stats::prcomp(t(exprsMat), scale = T, center = T)
+
+    if (remove_first_PC) {
+      use_k <- c(2:k_pca)
+    } else {
+      use_k <- c(1:k_pca)
+    }
+    pca_eigenvalue <- adt_pca$sdev[use_k]^2
+    # eigenvalue
+    ev_mat <- matrix(1, ncol = 1, nrow = nrow(adt_pca$rotation)) %*% matrix(pca_eigenvalue, ncol = length(use_k))
+
+    NRS <- Matrix::rowSums(abs(adt_pca$rotation[, use_k]) * ev_mat)
+    S4Vectors::metadata(sce)[["importanceADT_matrix"]] <- as.matrix(NRS)
+    S4Vectors::metadata(sce)[["importanceADT"]] <- rowMeans(as.matrix(NRS))
   }
 
-  S4Vectors::metadata(sce)[["importanceADT_matrix"]] <- as.matrix(importance)
-  S4Vectors::metadata(sce)[["importanceADT"]] <- Matrix::rowMeans(as.matrix(importance))
 
   return(sce)
 }

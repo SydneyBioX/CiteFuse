@@ -14,10 +14,10 @@
 #' @importFrom methods as
 #' @export
 
-spectralClustering <- function (affinity, K = 20, type = 4,
-                                fast = T,
-                                maxdim = 50, delta = 1e-5,
-                                t = 0, neigen = NULL)
+spectralClustering <- function(affinity, K = 20, type = 4,
+                               fast = T,
+                               maxdim = 50, delta = 1e-5,
+                               t = 0, neigen = NULL)
 {
 
   # if(kernel) {
@@ -55,10 +55,10 @@ spectralClustering <- function (affinity, K = 20, type = 4,
 
   } else if (type == 4) {
     v <- sqrt(d)
-    NL <- L/(v%*%t(v))
+    NL <- L/(v %*% t(v))
   }
 
-  if(!fast) {
+  if (!fast) {
     eig <- eigen(NL)
   }else {
     f = function(x, A = NULL){ # matrix multiplication for ARPACK
@@ -98,14 +98,14 @@ spectralClustering <- function (affinity, K = 20, type = 4,
   if (t <= 0) {# use multi-scale geometry
     lambda = eigenvals[-1]/(1 - eigenvals[-1])
     lambda = rep(1,n) %*% t(lambda)
-    if(is.null(neigen)){#use no. of dimensions corresponding to 95% dropoff
+    if (is.null(neigen)) {#use no. of dimensions corresponding to 95% dropoff
       lam = lambda[1,]/lambda[1,1]
       # neigen = min(which(lam < .05)) # default number of eigenvalues
       neigen = min(neigen, maxdim, K)
-      eigenvals = eigenvals[1:(neigen+1)]
+      eigenvals = eigenvals[1:(neigen + 1)]
       cat('Used default value:',neigen,'dimensions\n')
     }
-    X = psi[,2:(neigen+1)]*lambda[,1:neigen] #diffusion coords. X
+    X = psi[,2:(neigen + 1)]*lambda[, 1:neigen] #diffusion coords. X
   }
   else{# use fixed scale t
     lambda = eigenvals[-1]^t
@@ -115,7 +115,7 @@ spectralClustering <- function (affinity, K = 20, type = 4,
       lam = lambda[1, ]/lambda[1, 1]
       neigen = min(which(lam < .05)) # default number of eigenvalues
       neigen = min(neigen, maxdim)
-      eigenvals = eigenvals[1: (neigen + 1)]
+      eigenvals = eigenvals[1:(neigen + 1)]
       cat('Used default value:', neigen, 'dimensions\n')
     }
 
@@ -164,7 +164,7 @@ spectralClustering <- function (affinity, K = 20, type = 4,
 
   c = matrix(0,n,1)
   for (j in 2:k) {
-    c = c + abs(eigenVectors %*% matrix(R[,j-1],k,1))
+    c = c + abs(eigenVectors %*% matrix(R[,j - 1], k, 1))
     i = mini(c)
     R[,j] = t(eigenVectors[i,])
   }
@@ -178,8 +178,8 @@ spectralClustering <- function (affinity, K = 20, type = 4,
     V = svde[['v']]
     S = svde[['d']]
 
-    NcutValue = 2 * (n-sum(S))
-    if(abs(NcutValue - lastObjectiveValue) < .Machine$double.eps)
+    NcutValue = 2 * (n - sum(S))
+    if (abs(NcutValue - lastObjectiveValue) < .Machine$double.eps)
       break
 
     lastObjectiveValue = NcutValue
@@ -316,7 +316,7 @@ visualiseDim <- function(sce,
 
   }else if (class(shape_by) == "character" & length(shape_by) == 1) {
 
-    if(! shape_by %in% names(colData(sce))) {
+    if (!shape_by %in% names(colData(sce))) {
 
       stop("There is no colData with name shape_by")
 
@@ -371,20 +371,30 @@ visualiseDim <- function(sce,
   return(X)
 }
 
-#' A function to perform louvain clustering
+#' A function to perform igraph clustering
 #'
 #'
 #' @param sce A singlecellexperiment object
 #' @param metadata indicates the meta data name of affinity matrix to virsualise
+#' @param method A character indicates the method for finding communities from igraph. Default is louvain clustering.
+#' @param ... Other inputs for the igraph functions
 #'
 #' @importFrom S4Vectors metadata
 #' @importFrom dbscan sNN
 #' @importFrom igraph graph_from_adjacency_matrix cluster_louvain
+#' cluster_walktrap cluster_spinglass cluster_optimal
+#' cluster_edge_betweenness cluster_fast_greedy cluster_label_prop cluster_leading_eigen
 #' @importFrom stats median as.dist
 #' @export
 
-louvain <- function(sce,
-                    metadata = "SNF_W") {
+igraphClustering <- function(sce,
+                             metadata = "SNF_W",
+                             method = c("louvain", "walktrap", "spinglass", "optimal",
+                                        "leading_eigen", "label_prop", "fast_greedy", "edge_betweenness"),
+                             ...) {
+
+  method <- match.arg(method, c("louvain", "walktrap", "spinglass", "optimal",
+                                "leading_eigen", "label_prop", "fast_greedy", "edge_betweenness"))
 
   normalized.mat <- S4Vectors::metadata(sce)[[metadata]]
   diag(normalized.mat) <- stats::median(as.vector(normalized.mat))
@@ -405,23 +415,47 @@ louvain <- function(sce,
 
   g <- igraph::graph_from_adjacency_matrix(binary.mat, mode = "undirected")
 
-  X <- igraph::cluster_louvain(g)
+  if (method == "louvain") {
+    X <- igraph::cluster_louvain(g, ...)
+  }
+
+  if (method == "walktrap") {
+    X <- igraph::cluster_walktrap(g, ...)
+  }
+
+  if (method == "spinglass") {
+    X <- igraph::cluster_spinglass(g, ...)
+  }
+
+  if (method == "optimal") {
+    X <- igraph::cluster_optimal(g, ...)
+  }
+
+  if (method == "leading_eigen") {
+    X <- igraph::cluster_leading_eigen(g, ...)
+  }
+
+  if (method == "label_prop") {
+    X <- igraph::cluster_label_prop(g, ...)
+  }
+
+  if (method == "fast_greedy") {
+    X <- igraph::cluster_fast_greedy(g, ...)
+  }
+
+  if (method == "edge_betweenness") {
+    X <- igraph::cluster_edge_betweenness(g, ...)
+  }
 
   clustres <- X$membership
-  # cat('no. of clusters')
-  # print(nlevels(as.factor(X$membership)))
-  #
-  # plot(g, vertex.label=NA,
-  #      edge.arrow.size=0.000001,
-  #      layout=layout.fruchterman.reingold,
-  #      vertex.color = tableau_color_pal("Tableau 10")(nlevels(as.factor(X$membership)))[X$membership],
-  #      vertex.size = 4)
-  #
+
   return(clustres)
 
 }
 
-#
+
+
+
 # plot_igraph <- function(X, n) {
 #
 #   clusteroutput <- spectralClustering4(X, K = n, kernel = T)

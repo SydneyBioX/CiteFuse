@@ -211,7 +211,7 @@ grid.arrange(g3, g2, g1, ncol = 2)
 ## Louvain Clustering
 
 ```{r fig.height=8, fig.width=8}
-SNF_W_louvain <- louvain(sce_citeseq)
+SNF_W_louvain <- igraphClustering(sce_citeseq, method = "louvain")
 table(SNF_W_louvain)
 
 sce_citeseq$SNF_W_louvain <- as.factor(SNF_W_louvain)
