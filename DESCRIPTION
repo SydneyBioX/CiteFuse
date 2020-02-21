@@ -52,3 +52,4 @@ Suggests:
     DT,
     mclust
 VignetteBuilder: knitr
+LazyData: true

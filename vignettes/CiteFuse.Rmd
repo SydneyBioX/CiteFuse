@@ -31,15 +31,15 @@ library(DT)
 
 
 ```{r}
-load("data/CITEseq_example.rda", verbose = T)
+data("CITEseq_example", package = "CiteFuse")
+names(CITEseq_example)
+lapply(CITEseq_example, dim)
 ```
 
-Here, we started from three matrices of RNA, ADT and HTO, which have common cell names. The `preprocessing` function will utilise the three matrices and its common cell names to create a `SingleCellExperiment` object, which stores RNA data in `assay`, and `ADT`, `HTO` data in `altExp` slot.
+Here, we started from a list of three matrices of RNA, ADT and HTO, which have common cell names. The `preprocessing` function will utilise the three matrices and its common cell names to create a `SingleCellExperiment` object, which stores RNA data in `assay`, and `ADT`, `HTO` data in `altExp` slot.
 
 ```{r}
-sce_citeseq <- preprocessing(list(RNA = rna_subset,
-                                  ADT = adt_subset,
-                                  HTO = hto_subset))
+sce_citeseq <- preprocessing(CITEseq_example)
 
 sce_citeseq
 ```
@@ -405,7 +405,7 @@ geneADTnetwork(sce_citeseq,
 
 
 ```{r}
-load("data/lr_pairs_example.rda", verbose = T)
+data("lr_pair_subset", package = "CiteFuse")
 head(lr_pair_subset)
 
 sce_citeseq <- normaliseExprs(sce = sce_citeseq, 

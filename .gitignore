@@ -7,3 +7,5 @@ src/*.so
 src/*.dll
 ^vignettes/webOnly/
 .Rproj
+.DS_Store
+.git
