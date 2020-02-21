@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>A function to calculate the importance score of ADT — importanceADT • CiteFuse</title>
+<title>A function to perform igraph clustering — igraphClustering • CiteFuse</title>
 
 
 <!-- jquery -->
@@ -35,8 +35,8 @@
 
 
 
-<meta property="og:title" content="A function to calculate the importance score of ADT — importanceADT" />
-<meta property="og:description" content="A function to calculate the importance score of ADT" />
+<meta property="og:title" content="A function to perform igraph clustering — igraphClustering" />
+<meta property="og:description" content="A function to perform igraph clustering" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -111,26 +111,20 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>A function to calculate the importance score of ADT</h1>
+    <h1>A function to perform igraph clustering</h1>
     
-    <div class="hidden name"><code>importanceADT.Rd</code></div>
+    <div class="hidden name"><code>igraphClustering.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>A function to calculate the importance score of ADT</p>
+    <p>A function to perform igraph clustering</p>
     </div>
 
-    <pre class="usage"><span class='fu'>importanceADT</span>(
+    <pre class="usage"><span class='fu'>igraphClustering</span>(
   <span class='no'>sce</span>,
-  <span class='kw'>altExp_name</span> <span class='kw'>=</span> <span class='st'>"ADT"</span>,
-  <span class='kw'>exprs_value</span> <span class='kw'>=</span> <span class='st'>"logcounts"</span>,
-  <span class='kw'>method</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"randomForest"</span>, <span class='st'>"PCA"</span>),
-  <span class='kw'>group</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>subsample</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>times</span> <span class='kw'>=</span> <span class='fl'>10</span>,
-  <span class='kw'>prop</span> <span class='kw'>=</span> <span class='fl'>0.8</span>,
-  <span class='kw'>k_pca</span> <span class='kw'>=</span> <span class='fl'>5</span>,
-  <span class='kw'>remove_first_PC</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>metadata</span> <span class='kw'>=</span> <span class='st'>"SNF_W"</span>,
+  <span class='kw'>method</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"louvain"</span>, <span class='st'>"walktrap"</span>, <span class='st'>"spinglass"</span>, <span class='st'>"optimal"</span>, <span class='st'>"leading_eigen"</span>,
+    <span class='st'>"label_prop"</span>, <span class='st'>"fast_greedy"</span>, <span class='st'>"edge_betweenness"</span>),
   <span class='no'>...</span>
 )</pre>
 
@@ -142,66 +136,25 @@
       <td><p>A singlecellexperiment object</p></td>
     </tr>
     <tr>
-      <th>altExp_name</th>
-      <td><p>A character indicates which expression matrix is used. by default is none (i.e. RNA).</p></td>
-    </tr>
-    <tr>
-      <th>exprs_value</th>
-      <td><p>A character indicates which expression value in assayNames is used.</p></td>
+      <th>metadata</th>
+      <td><p>indicates the meta data name of affinity matrix to virsualise</p></td>
     </tr>
     <tr>
       <th>method</th>
-      <td><p>A character indicates the method of ADT importance calculation,
-either randomForest or PCA</p></td>
-    </tr>
-    <tr>
-      <th>group</th>
-      <td><p>A vector indicates the grouping of the data (for random forest)</p></td>
-    </tr>
-    <tr>
-      <th>subsample</th>
-      <td><p>Whether perform subsampling (for random forest)</p></td>
-    </tr>
-    <tr>
-      <th>times</th>
-      <td><p>A numeric indicates the times of subsampling is performed (for random forest)</p></td>
-    </tr>
-    <tr>
-      <th>prop</th>
-      <td><p>A numeric indicates the proportion of cells are subsampled from the whole data (for random forest)</p></td>
-    </tr>
-    <tr>
-      <th>k_pca</th>
-      <td><p>Number of principal component will be used to calculate the loading scores (for PCA)</p></td>
-    </tr>
-    <tr>
-      <th>remove_first_PC</th>
-      <td><p>A logical input indicates whether the first component will be removed from calculation (for PCA).</p></td>
+      <td><p>A character indicates the method for finding communities from igraph. Default is louvain clustering.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>other arguments to `randomForest()` or `prcomp()` function</p></td>
+      <td><p>Other inputs for the igraph functions</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>For random forest, the importance scores are based on features importance.
-For PCA, it implements the method proposed in Levin et al (based on the loading of features).</p>
-    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
-
-    <p>Levine, J.H., Simonds, E.F., Bendall, S.C., Davis, K.L., El-ad, D.A., Tadmor, M.D.,
-Litvin, O., Fienberg, H.G., Jager, A., Zunder, E.R. and Finck, R., 2015.
-Data-driven phenotypic dissection of AML reveals progenitor-like cells that
-correlate with prognosis. Cell, 162(1), pp.184-197.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#details">Details</a></li>
-      <li><a href="#references">References</a></li>
     </ul>
 
   </div>
