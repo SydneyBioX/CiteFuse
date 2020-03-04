@@ -25,7 +25,7 @@ devtools::install_github("SydneyBioX/CiteFuse")
 
 ## Vignette
 
-You can find the vignette at our webiste: https://sydneybiox.github.io/CiteFuse/index.html.
+You can find the vignette at our website: https://sydneybiox.github.io/CiteFuse/articles/CiteFuse.html.
 
 
 ## CiteFuse overview
