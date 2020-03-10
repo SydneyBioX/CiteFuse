@@ -2,7 +2,7 @@
 % Please edit documentation in R/clustering.R
 \name{visualiseKNN}
 \alias{visualiseKNN}
-\title{A function to perform louvain clustering}
+\title{visualiseKNN}
 \usage{
 visualiseKNN(sce, colour_by = NULL, metadata = "SNF_W")
 }
@@ -12,6 +12,9 @@ visualiseKNN(sce, colour_by = NULL, metadata = "SNF_W")
 \item{colour_by}{the name of coldata that is used to colour the node}
 
 \item{metadata}{indicates the meta data name of affinity matrix to virsualise}
+}
+\value{
+A igraph plot
 }
 \description{
 A function to perform louvain clustering

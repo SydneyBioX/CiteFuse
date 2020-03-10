@@ -1,4 +1,6 @@
 
+#' DEgenes
+#'
 #' A function to perform DE analysis on CITE seq data
 #'
 #' @param sce A singlecellexperiment object
@@ -13,6 +15,8 @@
 #' @param mean_diff A numeric indicates the threshold of difference of average expression.
 #' @param pct_diff A numeric indicates the threshold of difference of percentage expression.
 #' @param topN A numeric indicates the top number of genes will be included in the list.
+#'
+#' @return A list of DE results
 #'
 #' @importFrom randomForest randomForest
 #' @importFrom SingleCellExperiment altExp altExpNames
@@ -82,6 +86,8 @@ DEgenes <- function(sce,
 
 
 
+#' selectDEgenes
+#'
 #' A function to select DE genes
 #'
 #' @param de_res The de results returned by `DEgenes()``
@@ -89,6 +95,8 @@ DEgenes <- function(sce,
 #' @param mean_diff A numeric indicates the threshold of difference of average expression.
 #' @param pct_diff A numeric indicates the threshold of difference of percentage expression.
 #' @param topN A numeric indicates the top number of genes will be included in the list.
+#'
+#' @return A list of DE results of significant DE genes
 #'
 #'
 #' @export
@@ -117,7 +125,7 @@ doWilcox <- function(exprsMat, cellTypes, exprs_pct = 0.05, exprs_threshold = 0)
   cellTypes <- droplevels(as.factor(cellTypes))
   tt <- list()
 
-  for (i in 1:nlevels(cellTypes)) {
+  for (i in seq_len(nlevels(cellTypes))) {
     tmp_celltype <- (ifelse(cellTypes == levels(cellTypes)[i], 1, 0))
 
 
@@ -172,11 +180,16 @@ doWilcox <- function(exprsMat, cellTypes, exprs_pct = 0.05, exprs_threshold = 0)
 
 
 
+#' DEbubblePlot
+#'
 #' A function to generate circlepack plot to visualise the marker for each cluster
 #'
 #' @param de_list A list of results from `DE genes ()`
 #'
+#' @return A ggplot to visualise the DE results via bubble plot
+#'
 #' @importFrom ggraph ggraph geom_node_circle geom_node_text geom_node_label
+#'
 #' @import ggplot2
 #'
 #' @export
@@ -221,7 +234,7 @@ DEbubblePlot <- function(de_list) {
 
   fillColor <-  rep(NA, nrow(vertices))
 
-  for (i in 1:length(type)) {
+  for (i in seq_len(length(type))) {
     fillColor[grep(type[i], vertices$group)] <- type[i]
   }
 
@@ -235,15 +248,19 @@ DEbubblePlot <- function(de_list) {
   vertices[rownames(data), ]$size <- data$size
 
 
-  vertices$originalGroup <- unlist(lapply(strsplit(as.character(vertices$group), "_"), "[[", 1))
+  vertices$originalGroup <- unlist(lapply(strsplit(as.character(vertices$group),
+                                                   "_"), "[[", 1))
 
   common <- rep(FALSE, nrow(vertices))
   group_list <- unique(vertices$originalGroup)
   group_list <- group_list[!group_list %in% c("root", "group")]
 
-  for (i in 1:length(group_list)) {
+  for (i in seq_len(length(group_list))) {
     tmp <- vertices[vertices$originalGroup == group_list[i], ]
-    common_features <- Reduce(intersect, lapply(lapply(unique(tmp$group), function(x) tmp[tmp$group == x, ]), function(x) x$labels))
+    common_features <- Reduce(intersect,
+                              lapply(lapply(unique(tmp$group),
+                                            function(x) tmp[tmp$group == x, ]),
+                                     function(x) x$labels))
     if (length(common_features) != 0) {
       common[vertices$originalGroup == group_list[i]][tmp$labels %in% common_features] <- TRUE
     }
@@ -253,7 +270,8 @@ DEbubblePlot <- function(de_list) {
 
   vertices$common <- vertices$fillColor
   vertices$common <- ifelse(common, "common", vertices$common)
-  vertices$fillColor <- factor(vertices$fillColor, levels = c("root", "group", type, "common"))
+  vertices$fillColor <- factor(vertices$fillColor,
+                               levels = c("root", "group", type, "common"))
 
   mygraph <- igraph::graph_from_data_frame(edges, vertices = vertices )
 
@@ -270,7 +288,8 @@ DEbubblePlot <- function(de_list) {
   text_size <- ifelse(text_size < 1.8, 1.8, text_size)
 
   g <- ggraph::ggraph(mygraph, layout = 'circlepack', weight = vertices$size) +
-    ggraph::geom_node_circle(aes(fill = vertices$fillColor, color = vertices$common), size = 0.5) +
+    ggraph::geom_node_circle(aes(fill = vertices$fillColor,
+                                 color = vertices$common), size = 0.5) +
     # scale_fill_viridis_d() +
     scale_fill_manual(values = fill_colors) +
     scale_color_manual(values = text_colors) +
@@ -278,7 +297,8 @@ DEbubblePlot <- function(de_list) {
     ggraph::geom_node_text(aes(label = labels,
                                filter = leaf),
                            size = text_size) +
-    ggraph::geom_node_label(aes(label = ifelse(grepl("group", as.character(vertices$labels)),
+    ggraph::geom_node_label(aes(label = ifelse(grepl("group",
+                                                     as.character(vertices$labels)),
                                                as.character(vertices$labels), "")),
                             fill = "white",
                             repel = TRUE,
@@ -291,10 +311,15 @@ DEbubblePlot <- function(de_list) {
 }
 
 
+#' DEcomparisonPlot
+#'
 #' A function to visualise the pairwise comparison of pvalue in different data modality.
 #'
 #' @param de_list A list including two lists results from `DE genes ()`.
-#' @param feature_list A list including two lists features indicating the selected subset of features will be visualised
+#' @param feature_list A list including two lists features indicating
+#' the selected subset of features will be visualised
+#'
+#' @return A ggplot2 to visualise the comparison plot of DE.
 #'
 #' @import ggplot2
 #'
@@ -307,16 +332,10 @@ DEcomparisonPlot <- function(de_list, feature_list) {
     stop("The length of de_list and feature_list not equal to 2")
   }
 
-  #
-  # for (i in 1:length(de_list)) {
-  #   if (sum(!feature_list[[i]] %in% unique(as.character(unlist(lapply(de_list[[i]], "[[", "name"))))) != 0) {
-  #     stop("Exist feature dost not have DE results.")
-  #   }
-  # }
-  #
+
   de_pvalue_list <- list()
 
-  for (i in 1:length(de_list)) {
+  for (i in seq_len(length(de_list))) {
     de_pvalue_list[[i]]  <- lapply(de_list[[i]], function(x) {
       p <- x[feature_list[[i]], ]$p.adjust
       p[is.na(p)] <- 1
@@ -326,7 +345,7 @@ DEcomparisonPlot <- function(de_list, feature_list) {
     )
   }
 
-  df <- lapply(1:length(de_pvalue_list[[1]]), function(i) {
+  df <- lapply(seq_len(length(de_pvalue_list[[1]])), function(i) {
 
     df <- data.frame(log10(de_pvalue_list[[1]][[i]]),
                      -log10(de_pvalue_list[[2]][[i]]))
@@ -334,7 +353,7 @@ DEcomparisonPlot <- function(de_list, feature_list) {
     colnames(df) <- c(names(de_list), paste(names(de_list), "name", sep = "_"))
 
 
-    df <- df[rowSums(df[, 1:2]) != 0, ]
+    df <- df[rowSums(df[, seq_len(2)]) != 0, ]
 
     df <- df[order(abs(df[, 2] - df[, 1]), decreasing = TRUE), ]
 
@@ -345,18 +364,27 @@ DEcomparisonPlot <- function(de_list, feature_list) {
   df <- do.call(rbind, df)
 
   g <- ggplot(data = df, aes(group = df$group)) +
-    geom_segment(data = df, aes(x = 0, xend = df[, 1], y = 1:length(df[, 3]), yend = 1:length(df[, 3]))) +
-    geom_segment(data = df, aes(x = 0, xend = df[, 2], y = 1:length(df[, 3]), yend = 1:length(df[, 3]))) +
-    geom_point(data = df, aes(x = 0, y = 1:length(df[, 3])), color = "black", shape = 124, size = 10) +
-    geom_point(data = df, aes(x = df[, 1], y = 1:length(df[, 3])), color = "red", size = 2) +
-    geom_point(data = df, aes(x = df[, 2], y = 1:length(df[, 3])), color = "blue", size = 2) +
-    scale_y_continuous(breaks = 1:(length(df[, 3])),
+    geom_segment(data = df, aes(x = 0, xend = df[, 1],
+                                y = seq_len(length(df[, 3])),
+                                yend = seq_len(length(df[, 3])))) +
+    geom_segment(data = df, aes(x = 0, xend = df[, 2],
+                                y = seq_len(length(df[, 3])),
+                                yend = seq_len(length(df[, 3])))) +
+    geom_point(data = df, aes(x = 0, y = seq_len(length(df[, 3]))),
+               color = "black", shape = 124, size = 10) +
+    geom_point(data = df, aes(x = df[, 1], y = seq_len(length(df[, 3]))),
+               color = "red", size = 2) +
+    geom_point(data = df, aes(x = df[, 2], y = seq_len(length(df[, 3]))),
+               color = "blue", size = 2) +
+    scale_y_continuous(breaks = seq_len(length(df[, 3])),
                        labels = c(as.character(df[, 3])),
                        sec.axis = sec_axis(~.,
-                                           breaks = 1:(length(df[, 3])),
+                                           breaks = seq_len(length(df[, 3])),
                                            labels = c(as.character(df[, 4])))) +
-    facet_grid(group~., scales = "free_y", space = "free_y", switch = "both") +
-    ylab("") + xlab("log10(p.adjust)                              -log10(p.adjust)") +  theme_bw() +
+    facet_grid(group~., scales = "free_y", space = "free_y",
+               switch = "both") +
+    ylab("") + xlab("log10(p.adjust)                              -log10(p.adjust)") +
+    theme_bw() +
     theme(strip.placement = "outside", strip.text = element_text(size = 5)) +
     NULL
   return(g)

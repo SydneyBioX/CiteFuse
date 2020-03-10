@@ -2,7 +2,7 @@
 % Please edit documentation in R/clustering.R
 \name{igraphClustering}
 \alias{igraphClustering}
-\title{A function to perform igraph clustering}
+\title{igraphClustering}
 \usage{
 igraphClustering(
   sce,
@@ -20,6 +20,9 @@ igraphClustering(
 \item{method}{A character indicates the method for finding communities from igraph. Default is louvain clustering.}
 
 \item{...}{Other inputs for the igraph functions}
+}
+\value{
+A vector indicates the membership (clustering) results
 }
 \description{
 A function to perform igraph clustering

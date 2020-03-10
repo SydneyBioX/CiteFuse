@@ -2,7 +2,7 @@
 % Please edit documentation in R/DEgenes.R
 \name{DEgenes}
 \alias{DEgenes}
-\title{A function to perform DE analysis on CITE seq data}
+\title{DEgenes}
 \usage{
 DEgenes(
   sce,
@@ -43,6 +43,9 @@ DEgenes(
 \item{pct_diff}{A numeric indicates the threshold of difference of percentage expression.}
 
 \item{topN}{A numeric indicates the top number of genes will be included in the list.}
+}
+\value{
+A list of DE results
 }
 \description{
 A function to perform DE analysis on CITE seq data

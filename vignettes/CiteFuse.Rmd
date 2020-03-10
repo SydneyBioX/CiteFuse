@@ -354,6 +354,7 @@ DEcomparisonPlot(de_list = de_list,
 # ADT importance evaluation
 
 ```{r fig.height = 8, fig.width = 8}
+set.seed(2020)
 sce_citeseq <- importanceADT(sce_citeseq, 
                              group = sce_citeseq$SNF_W_louvain,
                              subsample = TRUE)
@@ -421,36 +422,46 @@ sce_citeseq <- ligandReceptorTest(sce = sce_citeseq,
                                   ligandReceptor_list = lr_pair_subset,
                                   cluster = sce_citeseq$SNF_W_louvain,
                                   RNA_exprs_value = "minMax",
+                                  use_alt_exp = TRUE,
                                   altExp_name = "ADT",
                                   altExp_exprs_value = "zi_minMax",
-                                  num_permute = 1000,
-                                  ncores = 1) 
+                                  num_permute = 1000) 
 ```
 
 
-```{r fig.height=10, fig.width=8}
-visLigandReceptor(sce_citeseq, type = "pval_heatmap")
 
+```{r fig.height=10, fig.width=8}
+visLigandReceptor(sce_citeseq, 
+                  type = "pval_heatmap",
+                  receptor_type = "ADT")
 ```
 
 
 ```{r fig.height=12, fig.width=6}
-visLigandReceptor(sce_citeseq, type = "pval_dotplot")
+visLigandReceptor(sce_citeseq, 
+                  type = "pval_dotplot",
+                  receptor_type = "ADT")
 ```
 
 
 ```{r fig.height=8, fig.width=8}
-visLigandReceptor(sce_citeseq, type = "group_network")
+visLigandReceptor(sce_citeseq, 
+                  type = "group_network",
+                  receptor_type = "ADT")
 ```
 
 
 ```{r fig.height=8, fig.width=8}
-visLigandReceptor(sce_citeseq, type = "group_heatmap")
+visLigandReceptor(sce_citeseq, 
+                  type = "group_heatmap",
+                  receptor_type = "ADT")
 ```
 
 
 ```{r fig.height=8, fig.width=8}
-visLigandReceptor(sce_citeseq, type = "lr_network")
+visLigandReceptor(sce_citeseq, 
+                  type = "lr_network",
+                  receptor_type = "ADT")
 ```
 
 

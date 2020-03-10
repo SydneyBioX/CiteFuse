@@ -2,7 +2,7 @@
 % Please edit documentation in R/runSNF.R
 \name{CiteFuse}
 \alias{CiteFuse}
-\title{A function to runSNF for CITE seq data}
+\title{CiteFuse}
 \usage{
 CiteFuse(
   sce,
@@ -19,7 +19,7 @@ CiteFuse(
 )
 }
 \arguments{
-\item{sce}{a SingleCellExperiment#' @param return_sce A logical input indicates whether a \code{SingleCellExperiment} 
+\item{sce}{a SingleCellExperiment#' @param return_sce A logical input indicates whether a \code{SingleCellExperiment}
 object will be return}
 
 \item{altExp_name}{expression name of ADT matrix}
@@ -41,6 +41,9 @@ object will be return}
 \item{metadata_names}{A vector indicates the names of metadata returned}
 
 \item{verbose}{whether print out the process}
+}
+\value{
+A SingleCellExperiment object with fused matrix results stored
 }
 \description{
 A function to runSNF for CITE seq data

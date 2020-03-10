@@ -2,7 +2,7 @@
 % Please edit documentation in R/QCfunctions.R
 \name{normaliseExprs}
 \alias{normaliseExprs}
-\title{A function that perform normalisation for alternative expression}
+\title{normaliseExprs}
 \usage{
 normaliseExprs(
   sce,
@@ -22,6 +22,9 @@ normaliseExprs(
 \item{transform}{type of transformation, either log or clr (Centered log ratio transform)}
 
 \item{log_offset}{Numeric scalar specifying the pseudo-count to add when log-transforming expression values. Default is 1}
+}
+\value{
+a SingleCellExperiment object
 }
 \description{
 A function that perform normalisation for alternative expression

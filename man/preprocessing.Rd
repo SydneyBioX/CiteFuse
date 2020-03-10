@@ -28,6 +28,9 @@ object will be return}
 
 \item{colData}{A DataFrame indicates the colData to be stored in the sce object}
 }
+\value{
+either a SingleCellExperiment object or a preprocessed expression matrix
+}
 \description{
 This function will keep the samples that are common across the list of expression matrix,
 and filter the features that are all zeros across samples, and finally construct a \code{SingleCellExperiment}

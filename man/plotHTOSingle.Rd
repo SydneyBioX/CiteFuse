@@ -2,9 +2,9 @@
 % Please edit documentation in R/QCfunctions.R
 \name{plotHTOSingle}
 \alias{plotHTOSingle}
-\title{A function to plot HTO expression}
+\title{plotHTOSingle}
 \usage{
-plotHTOSingle(sce, which_idx = 1:2, altExp_name = NULL)
+plotHTOSingle(sce, which_idx = seq_len(2), altExp_name = NULL)
 }
 \arguments{
 \item{sce}{sce}
@@ -12,6 +12,9 @@ plotHTOSingle(sce, which_idx = 1:2, altExp_name = NULL)
 \item{which_idx}{which_idx}
 
 \item{altExp_name}{altExp_name}
+}
+\value{
+A plot visualising the HTO expression
 }
 \description{
 A function to plot HTO expression

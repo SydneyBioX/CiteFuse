@@ -2,7 +2,7 @@
 % Please edit documentation in R/QCfunctions.R
 \name{readFrom10X}
 \alias{readFrom10X}
-\title{A function to read the data from 10X}
+\title{readFrom10X}
 \usage{
 readFrom10X(
   dir,
@@ -19,6 +19,9 @@ readFrom10X(
 \item{feature_named_by}{A character indicates whehter the genes will be named by gene_id or gene_symbol}
 
 \item{filter_features}{A logical input indicates whether the features with all zeros will be removed}
+}
+\value{
+a SingleCellExperiment object
 }
 \description{
 A function to read the data from 10X

@@ -1,5 +1,6 @@
-#' A function to calculate the importance score of ADT
+#' importanceADT
 #'
+#' A function to calculate the importance score of ADT
 #'
 #' @param sce A singlecellexperiment object
 #' @param altExp_name A character indicates which expression matrix is used. by default is none (i.e. RNA).
@@ -13,6 +14,8 @@
 #' @param k_pca Number of principal component will be used to calculate the loading scores (for PCA)
 #' @param remove_first_PC A logical input indicates whether the first component will be removed from calculation (for PCA).
 #' @param ... other arguments to `randomForest()` or `prcomp()` function
+#'
+#' @return A SingleCellExperiment object
 #'
 #' @importFrom randomForest randomForest
 #' @importFrom stats prcomp
@@ -88,9 +91,9 @@ importanceADT <- function(sce,
     adt_pca <- stats::prcomp(t(exprsMat), scale = TRUE, center = TRUE)
 
     if (remove_first_PC) {
-      use_k <- c(2:k_pca)
+      use_k <- seq(2, k_pca)
     } else {
-      use_k <- c(1:k_pca)
+      use_k <- seq_len(k_pca)
     }
     pca_eigenvalue <- adt_pca$sdev[use_k]^2
     # eigenvalue
@@ -106,6 +109,8 @@ importanceADT <- function(sce,
 }
 
 
+#' visImportance
+#'
 #' A function to visualise the features distribtuion
 #'
 #'
@@ -113,6 +118,8 @@ importanceADT <- function(sce,
 #' @param plot A string indicates the type of the plot (either boxplot or heatmap)
 #' @param altExp_name A character indicates which expression matrix is used. by default is none (i.e. RNA).
 #' @param exprs_value A character indicates which expression value in assayNames is used.
+#'
+#' @return A plot (either ggplot or pheatmap) to visualise the ADT importance results
 #'
 #' @importFrom Matrix rowMeans
 #' @importFrom reshape2 melt

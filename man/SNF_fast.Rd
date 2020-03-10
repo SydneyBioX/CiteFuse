@@ -2,7 +2,7 @@
 % Please edit documentation in R/SNF_fast.R
 \name{SNF_fast}
 \alias{SNF_fast}
-\title{Fast similarity network fusion method}
+\title{SNF_fast}
 \usage{
 SNF_fast(Wall, K = 20, t = 20)
 }

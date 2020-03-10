@@ -2,7 +2,7 @@
 % Please edit documentation in R/clustering.R
 \name{spectralClustering}
 \alias{spectralClustering}
-\title{A function to perform spectral clustering}
+\title{spectralClustering}
 \usage{
 spectralClustering(
   affinity,
@@ -31,6 +31,9 @@ spectralClustering(
 \item{t}{t}
 
 \item{neigen}{neigen}
+}
+\value{
+A list indicates the spectral clustering results
 }
 \description{
 A function to perform spectral clustering

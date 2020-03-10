@@ -2,7 +2,7 @@
 % Please edit documentation in R/DEgenes.R
 \name{selectDEgenes}
 \alias{selectDEgenes}
-\title{A function to select DE genes}
+\title{selectDEgenes}
 \usage{
 selectDEgenes(
   de_res,
@@ -22,6 +22,9 @@ selectDEgenes(
 \item{pct_diff}{A numeric indicates the threshold of difference of percentage expression.}
 
 \item{topN}{A numeric indicates the top number of genes will be included in the list.}
+}
+\value{
+A list of DE results of significant DE genes
 }
 \description{
 A function to select DE genes

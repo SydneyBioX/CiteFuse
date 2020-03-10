@@ -2,7 +2,7 @@
 % Please edit documentation in R/QCfunctions.R
 \name{crossSampleDoublets}
 \alias{crossSampleDoublets}
-\title{A function that perform normalisation for alternative expression}
+\title{crossSampleDoublets}
 \usage{
 crossSampleDoublets(sce, altExp_name = NULL, totalExp_threshold = 10)
 }
@@ -14,6 +14,9 @@ If it is NULL, it will set to HTO.}
 
 \item{totalExp_threshold}{the threshold indicates for the HTO less than this threshold
 will be filtered from the analysis}
+}
+\value{
+A SingleCellExperiment Object
 }
 \description{
 A function that perform normalisation for alternative expression

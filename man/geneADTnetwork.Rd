@@ -2,7 +2,7 @@
 % Please edit documentation in R/geneADTnetwork.R
 \name{geneADTnetwork}
 \alias{geneADTnetwork}
-\title{A function to visualise the features distribtuion}
+\title{geneADTnetwork}
 \usage{
 geneADTnetwork(
   sce,
@@ -52,6 +52,9 @@ geneADTnetwork(
 \item{network_layout}{layout of the network}
 
 \item{return_igraph}{indicates whether return the igraph object}
+}
+\value{
+A igraph object of gene-ADT network
 }
 \description{
 A function to visualise the features distribtuion

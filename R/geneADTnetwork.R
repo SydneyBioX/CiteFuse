@@ -1,3 +1,5 @@
+#' geneADTnetwork
+#'
 #' A function to visualise the features distribtuion
 #'
 #'
@@ -17,12 +19,14 @@
 #' @param network_layout layout of the network
 #' @param return_igraph indicates whether return the igraph object
 #'
+#' @return A igraph object of gene-ADT network
 #'
 #' @importFrom reshape2 melt
 #' @importFrom SingleCellExperiment altExp altExpNames
 #' @importFrom SummarizedExperiment assayNames assay
 #' @importFrom igraph V E graph_from_data_frame
 #' @importFrom graphics legend plot
+#'
 #' @export
 
 geneADTnetwork <- function(sce,

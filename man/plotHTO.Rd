@@ -2,9 +2,9 @@
 % Please edit documentation in R/QCfunctions.R
 \name{plotHTO}
 \alias{plotHTO}
-\title{A function to plot HTO expression}
+\title{plotHTO}
 \usage{
-plotHTO(sce, which_idx = 1:2, altExp_name = NULL, ncol = 2)
+plotHTO(sce, which_idx = seq_len(2), altExp_name = NULL, ncol = 2)
 }
 \arguments{
 \item{sce}{sce}
@@ -14,6 +14,9 @@ plotHTO(sce, which_idx = 1:2, altExp_name = NULL, ncol = 2)
 \item{altExp_name}{altExp_name}
 
 \item{ncol}{ncol}
+}
+\value{
+A plot visualising the HTO expression
 }
 \description{
 A function to plot HTO expression

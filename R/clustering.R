@@ -1,5 +1,6 @@
-#' A function to perform spectral clustering
+#' spectralClustering
 #'
+#' A function to perform spectral clustering
 #'
 #' @param affinity An affinity matrix
 #' @param K number of clusters
@@ -10,8 +11,12 @@
 #' @param t t
 #' @param neigen neigen
 #'
+#' @return A list indicates the spectral clustering results
+#'
 #' @importFrom igraph arpack
 #' @importFrom methods as
+#'
+#'
 #' @export
 
 spectralClustering <- function(affinity, K = 20, type = 4,
@@ -83,7 +88,7 @@ spectralClustering <- function(affinity, K = 20, type = 4,
   cat('Computing Spectral Clustering \n')
 
   res <- sort(abs(eigenvals), index.return = TRUE, decreasing = TRUE)
-  U <- eig$vectors[, res$ix[1:K]]
+  U <- eig$vectors[, res$ix[seq_len(K)]]
   normalize <- function(x) x/sqrt(sum(x^2))
 
   if (type == 3 | type == 4) {
@@ -103,10 +108,10 @@ spectralClustering <- function(affinity, K = 20, type = 4,
       lam = lambda[1,]/lambda[1,1]
       # neigen = min(which(lam < .05)) # default number of eigenvalues
       neigen = min(neigen, maxdim, K)
-      eigenvals = eigenvals[1:(neigen + 1)]
+      eigenvals = eigenvals[seq_len((neigen + 1))]
       cat('Used default value:',neigen,'dimensions\n')
     }
-    X = psi[,2:(neigen + 1)]*lambda[, 1:neigen] #diffusion coords. X
+    X = psi[,2:(neigen + 1)]*lambda[, seq_len(neigen)] #diffusion coords. X
   }
   else{# use fixed scale t
     lambda = eigenvals[-1]^t
@@ -116,11 +121,11 @@ spectralClustering <- function(affinity, K = 20, type = 4,
       lam = lambda[1, ]/lambda[1, 1]
       neigen = min(which(lam < .05)) # default number of eigenvalues
       neigen = min(neigen, maxdim)
-      eigenvals = eigenvals[1:(neigen + 1)]
+      eigenvals = eigenvals[seq_len(neigen + 1)]
       cat('Used default value:', neigen, 'dimensions\n')
     }
 
-    X = psi[, 2:(neigen + 1)] * lambda[, 1:neigen] #diffusion coords. X
+    X = psi[, 2:(neigen + 1)] * lambda[, seq_len(neigen)] #diffusion coords. X
   }
 
   return(list(labels = labels,
@@ -140,7 +145,7 @@ spectralClustering <- function(affinity, K = 20, type = 4,
     return(i[1])
   }
   j = apply(eigenVector,1,maxi)
-  Y[cbind(1:nrow(eigenVector),j)] = 1
+  Y[cbind(seq_len(nrow(eigenVector)), j)] = 1
 
   return(Y)
 
@@ -163,15 +168,15 @@ spectralClustering <- function(affinity, K = 20, type = 4,
     return(i[1])
   }
 
-  c = matrix(0,n,1)
-  for (j in 2:k) {
+  c = matrix(0, n, 1)
+  for (j in seq(2, k)) {
     c = c + abs(eigenVectors %*% matrix(R[,j - 1], k, 1))
     i = mini(c)
     R[,j] = t(eigenVectors[i,])
   }
 
   lastObjectiveValue = 0
-  for (i in 1:1000) {
+  for (i in seq_len(1000)) {
     eigenDiscrete = .discretisationEigenVectorData(eigenVectors %*% R)
 
     svde = svd(t(eigenDiscrete) %*% eigenVectors)
@@ -188,13 +193,14 @@ spectralClustering <- function(affinity, K = 20, type = 4,
 
   }
 
-  return(list(discrete=eigenDiscrete,continuous =eigenVectors))
+  return(list(discrete = eigenDiscrete, continuous = eigenVectors))
 }
 
 
 
-#' A function to reduce the dimension of the similarity matrix
+#' reducedDimSNF
 #'
+#' A function to reduce the dimension of the similarity matrix
 #'
 #' @param sce A singlecellexperiment object
 #' @param metadata indicates the meta data name of affinity matrix to virsualise
@@ -202,6 +208,9 @@ spectralClustering <- function(affinity, K = 20, type = 4,
 #' @param dimNames indicates the name of the reduced dimension results.
 #'
 #' @param ... other parameters for tsne(), umap()
+#'
+#' @return A SingleCellExperiment object
+#'
 #' @importFrom uwot umap
 #' @importFrom Rtsne Rtsne
 #' @importFrom SingleCellExperiment reducedDim
@@ -257,6 +266,8 @@ reducedDimSNF <- function(sce,
 
 
 
+#' visualiseDim
+#'
 #' A function to visualise the reduced dimension
 #'
 #' @param sce A singlecellexperiment object
@@ -264,6 +275,8 @@ reducedDimSNF <- function(sce,
 #' @param colour_by the method of visualisation, which can be UMAP, tSNE and diffusion map
 #' @param shape_by the method of visualisation, which can be UMAP, tSNE and diffusion map
 #' @param dim a vector of numeric with length of 2 indicates which component is being plot
+#'
+#' @return A ggplot of the reduced dimension visualisation
 #'
 #' @importFrom SingleCellExperiment reducedDimNames
 #' @importFrom SummarizedExperiment colData
@@ -276,7 +289,7 @@ visualiseDim <- function(sce,
                          dimNames = NULL,
                          colour_by = NULL,
                          shape_by = NULL,
-                         dim = 1:2){
+                         dim = seq_len(2)){
 
 
   if (!dimNames %in% SingleCellExperiment::reducedDimNames(sce)) {
@@ -377,13 +390,16 @@ visualiseDim <- function(sce,
   return(X)
 }
 
-#' A function to perform igraph clustering
+#' igraphClustering
 #'
+#' A function to perform igraph clustering
 #'
 #' @param sce A singlecellexperiment object
 #' @param metadata indicates the meta data name of affinity matrix to virsualise
 #' @param method A character indicates the method for finding communities from igraph. Default is louvain clustering.
 #' @param ... Other inputs for the igraph functions
+#'
+#' @return A vector indicates the membership (clustering) results
 #'
 #' @importFrom S4Vectors metadata
 #' @importFrom dbscan sNN
@@ -411,7 +427,7 @@ igraphClustering <- function(sce,
 
   binary.mat <- dbscan::sNN(stats::as.dist(0.5 - normalized.mat), k = 20)
 
-  binary.mat <- sapply(1:nrow(normalized.mat), function(x) {
+  binary.mat <- sapply(seq_len(nrow(normalized.mat)), function(x) {
     tmp <- rep(0, ncol(normalized.mat))
     tmp[binary.mat$id[x,]] <- 1
     tmp
@@ -464,46 +480,17 @@ igraphClustering <- function(sce,
 
 
 
-# plot_igraph <- function(X, n) {
-#
-#   clusteroutput <- spectralClustering4(X, K = n, kernel = T)
-#
-#   normalized.mat <- X
-#   diag(normalized.mat) <- median(as.vector(X))
-#   normalized.mat <- normalize(normalized.mat)
-#   normalized.mat <- normalized.mat + t(normalized.mat)
-#
-#   binary.mat <- dbscan::sNN(as.dist(0.5 - normalized.mat), k=20)
-#
-#   binary.mat <- sapply(1:nrow(normalized.mat), function(x) {
-#     tmp <- rep(0, ncol(normalized.mat))
-#     tmp[binary.mat$id[x,]] <- 1
-#     tmp
-#   })
-#
-#   rownames(binary.mat) <- colnames(binary.mat)
-#   dim(binary.mat)
-#
-#   library(igraph)
-#
-#   g <- graph_from_adjacency_matrix(binary.mat, mode = "undirected")
-#
-#   plot(g, vertex.label=NA,
-#        edge.arrow.size=0.000001,
-#        layout=layout.fruchterman.reingold,
-#        vertex.color = tableau_color_pal("Tableau 10")(nlevels(as.factor(clusteroutput$labels)))[clusteroutput$labels],
-#        vertex.size = 4)
-#
-#   return(X)
-#
-# }
-#
-#' A function to perform louvain clustering
+
+
+#' visualiseKNN
 #'
+#' A function to perform louvain clustering
 #'
 #' @param sce A singlecellexperiment object
 #' @param colour_by the name of coldata that is used to colour the node
 #' @param metadata indicates the meta data name of affinity matrix to virsualise
+#'
+#' @return A igraph plot
 #'
 #' @importFrom S4Vectors metadata
 #' @importFrom dbscan sNN
@@ -525,7 +512,7 @@ visualiseKNN <- function(sce,
 
   binary.mat <- dbscan::sNN(as.dist(0.5 - normalized.mat), k = 20)
 
-  binary.mat <- sapply(1:nrow(normalized.mat), function(x) {
+  binary.mat <- sapply(seq_len(nrow(normalized.mat)), function(x) {
     tmp <- rep(0, ncol(normalized.mat))
     tmp[binary.mat$id[x,]] <- 1
     tmp

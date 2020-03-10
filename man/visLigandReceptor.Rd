@@ -2,18 +2,27 @@
 % Please edit documentation in R/ligandReceptor_analysis.R
 \name{visLigandReceptor}
 \alias{visLigandReceptor}
-\title{A function to visualise ligand receptor analysis}
+\title{visLigandReceptor}
 \usage{
 visLigandReceptor(
   sce,
   type = c("pval_heatmap", "pval_dotplot", "group_network", "group_heatmap",
-    "lr_network")
+    "lr_network"),
+  receptor_type = NULL
 )
 }
 \arguments{
 \item{sce}{A singlecellexperiment object}
 
-\item{type}{A character indicates the type of the plot}
+\item{type}{A character indicates the type of the plot for ligand receptor
+restuls visualisation, option includes "pval_heatmap", "pval_dotplot",
+"group_network", "group_heatmap", and "lr_network"}
+
+\item{receptor_type}{A character indicates which receptor expression's
+ligand receptor results are used to generate the figures.}
+}
+\value{
+A plot visualise the ligand receptor results
 }
 \description{
 A function to visualise ligand receptor analysis

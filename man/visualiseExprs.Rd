@@ -2,7 +2,7 @@
 % Please edit documentation in R/visualise_features.R
 \name{visualiseExprs}
 \alias{visualiseExprs}
-\title{A function to visualise the features distribtuion}
+\title{visualiseExprs}
 \usage{
 visualiseExprs(
   sce,
@@ -31,6 +31,9 @@ visualiseExprs(
 \item{n}{A numeric indicates the top expressed features to show.}
 
 \item{threshold}{Thresholds of high expresion for features (only is used for pairwise plot).}
+}
+\value{
+A ggplot to visualise te features distribution
 }
 \description{
 A function to visualise the features distribtuion

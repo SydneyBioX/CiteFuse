@@ -2,18 +2,18 @@
 % Please edit documentation in R/ligandReceptor_analysis.R
 \name{ligandReceptorTest}
 \alias{ligandReceptorTest}
-\title{A function to perform ligand receptor analysis}
+\title{ligandReceptorTest}
 \usage{
 ligandReceptorTest(
   sce,
   ligandReceptor_list,
   cluster,
   RNA_exprs_value = "minMax",
+  use_alt_exp = TRUE,
   altExp_name = "ADT",
   altExp_exprs_value = "zi_minMax",
   num_permute = 1000,
-  p_sig = 0.05,
-  ncores = 1
+  p_sig = 0.05
 )
 }
 \arguments{
@@ -25,15 +25,19 @@ ligandReceptorTest(
 
 \item{RNA_exprs_value}{A character indicates which expression value for RNA in assayNames is used.}
 
-\item{altExp_name}{A character indicates which expression matrix is used. by default is none (i.e. RNA).}
+\item{use_alt_exp}{A logical vector indicates whether receptors expression will
+use alternative expression matrix to quantify.}
+
+\item{altExp_name}{A character indicates which expression matrix is used. by default is ADT .}
 
 \item{altExp_exprs_value}{A character indicates which expression value in assayNames is used.}
 
 \item{num_permute}{Number of permutation.}
 
 \item{p_sig}{A numeric indicates threshold of the pvalue significance}
-
-\item{ncores}{Number of cores can be used}
+}
+\value{
+A SingleCellExperiment object with ligand receptor results
 }
 \description{
 A function to perform ligand receptor analysis

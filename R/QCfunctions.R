@@ -1,5 +1,3 @@
-
-
 #' A function to preprocess the list of expression matrix
 #'
 #' @description  This function will keep the samples that are common across the list of expression matrix,
@@ -15,10 +13,13 @@
 #' @param rowData A DataFrame indicates the rowData to be stored in the sce object
 #' @param colData A DataFrame indicates the colData to be stored in the sce object
 #'
+#' @return either a SingleCellExperiment object or a preprocessed expression matrix
+#'
 #' @importFrom SingleCellExperiment SingleCellExperiment
 #' @importFrom Matrix rowSums
 #' @importFrom SummarizedExperiment SummarizedExperiment
 #' @importFrom methods as
+#'
 #' @export
 
 
@@ -114,6 +115,8 @@ preprocessing <- function(exprsMat = NULL,
 
 
 
+#' readFrom10X
+#'
 #' A function to read the data from 10X
 #'
 #'
@@ -122,11 +125,14 @@ preprocessing <- function(exprsMat = NULL,
 #' @param feature_named_by A character indicates whehter the genes will be named by gene_id or gene_symbol
 #' @param filter_features A logical input indicates whether the features with all zeros will be removed
 #'
+#' @return a SingleCellExperiment object
+#'
 #' @importFrom rhdf5 h5read
 #' @importFrom Matrix readMM sparseMatrix
 #' @importFrom SummarizedExperiment SummarizedExperiment
 #' @importFrom methods as
 #' @importFrom utils read.delim
+#'
 #' @export
 #'
 
@@ -252,6 +258,8 @@ readFrom10X <- function(dir,
 
 
 
+#' normaliseExprs
+#'
 #' A function that perform normalisation for alternative expression
 #'
 #' @param sce A \code{SingleCellExperiment} object
@@ -263,6 +271,9 @@ readFrom10X <- function(dir,
 #' @importFrom SummarizedExperiment assay assayNames
 #' @importFrom SingleCellExperiment altExpNames altExp
 #' @importFrom Matrix rowMeans
+#'
+#' @return a SingleCellExperiment object
+#'
 #' @export
 
 normaliseExprs <- function(sce,
@@ -380,7 +391,7 @@ normaliseExprs <- function(sce,
 
   X[X == 0] <- min(X[X != 0])
   logX <- log(X)
-  logSet <- logX[, 1:ncol(X), drop = FALSE]
+  logSet <- logX[, seq_len(ncol(X)), drop = FALSE]
   ref <- Matrix::rowMeans(logSet)
   res <- sweep(logX, 1, ref, "-")
 
@@ -388,6 +399,8 @@ normaliseExprs <- function(sce,
 }
 
 
+#' crossSampleDoublets
+#'
 #' A function that perform normalisation for alternative expression
 #'
 #' @param sce A \code{SingleCellExperiment} object
@@ -396,15 +409,18 @@ normaliseExprs <- function(sce,
 #' @param totalExp_threshold the threshold indicates for the HTO less than this threshold
 #' will be filtered from the analysis
 #'
+#' @return A SingleCellExperiment Object
+#'
 #' @importFrom SummarizedExperiment assay assayNames
 #' @importFrom SingleCellExperiment altExpNames altExp
 #' @importFrom Matrix rowSums
 #' @importFrom mixtools normalmixEM
 #' @importFrom S4Vectors metadata
 #' @importFrom stats kmeans
+#'
+#'
 #' @export
-#'
-#'
+
 
 crossSampleDoublets <- function(sce,
                                 altExp_name = NULL,
@@ -429,7 +445,7 @@ crossSampleDoublets <- function(sce,
                                          totalExp_threshold, ]
 
   hto_threshold <- list()
-  for (i in 1:nrow(hto_cellHash_log)) {
+  for (i in seq_len(nrow(hto_cellHash_log))) {
 
     vec <- hto_cellHash_log[i,][hto_cellHash_log[i,] > 0]
     mixmdl <- try(mixtools::normalmixEM(vec,
@@ -454,7 +470,7 @@ crossSampleDoublets <- function(sce,
 
 
 
-  hto_cellHash_pass <- sapply(1:nrow(hto_cellHash_log), function(x) {
+  hto_cellHash_pass <- sapply(seq_len(nrow(hto_cellHash_log)), function(x) {
     hto_cellHash_log[x,] > hto_threshold[x]
   })
 
@@ -491,12 +507,16 @@ crossSampleDoublets <- function(sce,
 
 
 
+#' plotHTO
+#'
 #' A function to plot HTO expression
 #'
 #' @param sce sce
 #' @param which_idx which_idx
 #' @param altExp_name altExp_name
 #' @param ncol ncol
+#'
+#' @return A plot visualising the HTO expression
 #'
 #' @importFrom SummarizedExperiment assay assayNames
 #' @importFrom SingleCellExperiment altExpNames altExp
@@ -510,7 +530,7 @@ crossSampleDoublets <- function(sce,
 
 
 plotHTO <- function(sce,
-                    which_idx = 1:2,
+                    which_idx = seq_len(2),
                     altExp_name = NULL,
                     ncol = 2) {
 
@@ -526,11 +546,15 @@ plotHTO <- function(sce,
 }
 
 
+#' plotHTOSingle
+#'
 #' A function to plot HTO expression
 #'
 #' @param sce sce
 #' @param which_idx which_idx
 #' @param altExp_name altExp_name
+#'
+#' @return A plot visualising the HTO expression
 #'
 #' @importFrom SummarizedExperiment assay assayNames
 #' @importFrom SingleCellExperiment altExpNames altExp
@@ -541,7 +565,7 @@ plotHTO <- function(sce,
 
 
 plotHTOSingle <- function(sce,
-                          which_idx = 1:2,
+                          which_idx = seq_len(2),
                           altExp_name = NULL
 ) {
 
@@ -629,12 +653,16 @@ plotHTOSingle <- function(sce,
 
 
 
+#' withinSampleDoublets
+#'
 #' doublet identification within batch
 #'
 #' @param sce a SingleCellExperiment
 #' @param altExp_name expression name of HTO matrix
 #' @param eps eps of DBSCAN
 #' @param minPts minPts of DBSCAN
+#'
+#' @return A SingleCellExperiment object
 #'
 #' @importFrom SummarizedExperiment assay assayNames
 #' @importFrom SingleCellExperiment altExpNames altExp counts
@@ -676,7 +704,7 @@ withinSampleDoublets <- function(sce,
 
   nUMI <- sce$nUMI
 
-  batch_doublets_list <- lapply(1:nrow(hto_cellHash_log), function(i) {
+  batch_doublets_list <- lapply(seq_len(nrow(hto_cellHash_log)), function(i) {
 
     db_cluster <- dbscan::dbscan(cbind(nUMI, hto_cellHash_log[i,]),
                                  eps = eps, minPts = minPts)
@@ -723,7 +751,7 @@ getThreshold <- function(mixmdl, verbose = FALSE){
   m_list <- sort(unique(membership))
 
   mu_list <- mixmdl$mu
-  names(mu_list) <- c(1:length(mu_list))
+  names(mu_list) <- seq_len(length(mu_list))
   mu_list <- mu_list[m_list]
 
   if (length(mu_list) > 1) {

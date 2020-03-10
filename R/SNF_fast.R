@@ -1,9 +1,13 @@
+#' SNF_fast
+#'
 #' Fast similarity network fusion method
+#'
 #' @param Wall List of matrices. Each element of the list is a square, symmetric matrix that shows affinities of the data points from a certain view.
 #' @param K Number of neighbors in K-nearest neighbors part of the algorithm.
 #' @param t Number of iterations for the diffusion process.
 #' @return W is the overall status matrix derived
 #' @useDynLib CiteFuse
+#'
 #'
 #' @import Rcpp RcppEigen
 #'
@@ -27,7 +31,7 @@ SNF_fast <- function(Wall, K = 20, t = 20)
   #   Wall[[i]] <- (Wall[[i]] + t(Wall[[i]]))/2
   # }
 
-  Wall <- lapply(1:LW, function(i) {
+  Wall <- lapply(seq_len(LW), function(i) {
     w <- normalize(Wall[[i]])
     w <- (w + t(w))/2
   })
@@ -36,15 +40,15 @@ SNF_fast <- function(Wall, K = 20, t = 20)
   #   newW[[i]] <- (.dominateset(Wall[[i]], K))
   # }
 
-  newW <- lapply(1:LW, function(i) {
+  newW <- lapply(seq_len(LW), function(i) {
     (.dominateset(Wall[[i]], K))
   })
 
 
-  for (i in 1:t) {
-    for (j in 1:LW) {
+  for (i in seq_len(t)) {
+    for (j in seq_len(LW)) {
       sumWJ <- matrix(0, dim(Wall[[j]])[1], dim(Wall[[j]])[2])
-      for (k in 1:LW) {
+      for (k in seq_len(LW)) {
         # weights may be added here
         if (k != j) {
           sumWJ <- sumWJ + Wall[[k]]
@@ -59,13 +63,13 @@ SNF_fast <- function(Wall, K = 20, t = 20)
     #   Wall[[j]] <- (Wall[[j]] + t(Wall[[j]]))/2
     # }
 
-    Wall <- lapply(1:LW, function(j) {
+    Wall <- lapply(seq_len(LW), function(j) {
       w <- normalize(nextW[[j]])
       w <- (w + t(w))/2
     })
   }
   W <- matrix(0, nrow(Wall[[1]]), ncol(Wall[[1]]))
-  for (i in 1:LW) {
+  for (i in seq_len(LW)) {
     W <- W + Wall[[i]]
   }
   W <- W/LW
@@ -84,13 +88,13 @@ SNF_fast <- function(Wall, K = 20, t = 20)
   ###This function outputs the top KK neighbors.
 
   zero <- function(x) {
-    s = sort(x, index.return=TRUE)
-    x[s$ix[1:(length(x)-KK)]] = 0
+    s = sort(x, index.return = TRUE)
+    x[s$ix[seq_len(length(x) - KK)]] = 0
     return(x)
   }
   normalize <- function(X) X / rowSums(X)
-  A = matrix(0,nrow(xx),ncol(xx));
-  for(i in 1:nrow(xx)){
+  A = matrix(0, nrow(xx), ncol(xx));
+  for (i in seq_len(nrow(xx))) {
     A[i,] = zero(xx[i,]);
 
   }

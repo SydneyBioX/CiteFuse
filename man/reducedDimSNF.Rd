@@ -2,7 +2,7 @@
 % Please edit documentation in R/clustering.R
 \name{reducedDimSNF}
 \alias{reducedDimSNF}
-\title{A function to reduce the dimension of the similarity matrix}
+\title{reducedDimSNF}
 \usage{
 reducedDimSNF(sce, metadata = "SNF_W", method = "UMAP", dimNames = NULL, ...)
 }
@@ -16,6 +16,9 @@ reducedDimSNF(sce, metadata = "SNF_W", method = "UMAP", dimNames = NULL, ...)
 \item{dimNames}{indicates the name of the reduced dimension results.}
 
 \item{...}{other parameters for tsne(), umap()}
+}
+\value{
+A SingleCellExperiment object
 }
 \description{
 A function to reduce the dimension of the similarity matrix

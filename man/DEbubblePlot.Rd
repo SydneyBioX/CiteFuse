@@ -2,12 +2,15 @@
 % Please edit documentation in R/DEgenes.R
 \name{DEbubblePlot}
 \alias{DEbubblePlot}
-\title{A function to generate circlepack plot to visualise the marker for each cluster}
+\title{DEbubblePlot}
 \usage{
 DEbubblePlot(de_list)
 }
 \arguments{
 \item{de_list}{A list of results from `DE genes ()`}
+}
+\value{
+A ggplot to visualise the DE results via bubble plot
 }
 \description{
 A function to generate circlepack plot to visualise the marker for each cluster

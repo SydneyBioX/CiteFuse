@@ -2,14 +2,14 @@
 % Please edit documentation in R/clustering.R
 \name{visualiseDim}
 \alias{visualiseDim}
-\title{A function to visualise the reduced dimension}
+\title{visualiseDim}
 \usage{
 visualiseDim(
   sce,
   dimNames = NULL,
   colour_by = NULL,
   shape_by = NULL,
-  dim = 1:2
+  dim = seq_len(2)
 )
 }
 \arguments{
@@ -22,6 +22,9 @@ visualiseDim(
 \item{shape_by}{the method of visualisation, which can be UMAP, tSNE and diffusion map}
 
 \item{dim}{a vector of numeric with length of 2 indicates which component is being plot}
+}
+\value{
+A ggplot of the reduced dimension visualisation
 }
 \description{
 A function to visualise the reduced dimension

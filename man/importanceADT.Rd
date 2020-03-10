@@ -2,7 +2,7 @@
 % Please edit documentation in R/importanceADT.R
 \name{importanceADT}
 \alias{importanceADT}
-\title{A function to calculate the importance score of ADT}
+\title{importanceADT}
 \usage{
 importanceADT(
   sce,
@@ -41,6 +41,9 @@ either randomForest or PCA}
 \item{remove_first_PC}{A logical input indicates whether the first component will be removed from calculation (for PCA).}
 
 \item{...}{other arguments to `randomForest()` or `prcomp()` function}
+}
+\value{
+A SingleCellExperiment object
 }
 \description{
 A function to calculate the importance score of ADT

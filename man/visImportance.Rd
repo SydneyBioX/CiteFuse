@@ -2,7 +2,7 @@
 % Please edit documentation in R/importanceADT.R
 \name{visImportance}
 \alias{visImportance}
-\title{A function to visualise the features distribtuion}
+\title{visImportance}
 \usage{
 visImportance(
   sce,
@@ -19,6 +19,9 @@ visImportance(
 \item{altExp_name}{A character indicates which expression matrix is used. by default is none (i.e. RNA).}
 
 \item{exprs_value}{A character indicates which expression value in assayNames is used.}
+}
+\value{
+A plot (either ggplot or pheatmap) to visualise the ADT importance results
 }
 \description{
 A function to visualise the features distribtuion

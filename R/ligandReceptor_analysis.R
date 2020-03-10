@@ -1,4 +1,5 @@
-
+#' ligandReceptorTest
+#'
 #' A function to perform ligand receptor analysis
 #'
 #'
@@ -6,15 +7,19 @@
 #' @param ligandReceptor_list A data.frame indicates the ligand receptor list
 #' @param cluster A vector indicates the cluster results
 #' @param RNA_exprs_value A character indicates which expression value for RNA in assayNames is used.
-#' @param altExp_name A character indicates which expression matrix is used. by default is none (i.e. RNA).
+#' @param use_alt_exp A logical vector indicates whether receptors expression will
+#' use alternative expression matrix to quantify.
+#' @param altExp_name A character indicates which expression matrix is used. by default is ADT .
 #' @param altExp_exprs_value A character indicates which expression value in assayNames is used.
 #' @param num_permute Number of permutation.
 #' @param p_sig A numeric indicates threshold of the pvalue significance
-#' @param ncores Number of cores can be used
+#'
+#' @return A SingleCellExperiment object with ligand receptor results
 #'
 #' @importFrom SingleCellExperiment altExp altExpNames
 #' @importFrom SummarizedExperiment assayNames assay
 #' @importFrom S4Vectors metadata
+#'
 #' @export
 
 
@@ -22,11 +27,11 @@ ligandReceptorTest <- function(sce,
                                ligandReceptor_list,
                                cluster,
                                RNA_exprs_value = "minMax",
+                               use_alt_exp = TRUE,
                                altExp_name = "ADT",
                                altExp_exprs_value = "zi_minMax",
                                num_permute = 1000,
-                               p_sig = 0.05,
-                               ncores = 1) {
+                               p_sig = 0.05) {
 
 
   if (!RNA_exprs_value %in% SummarizedExperiment::assayNames(sce)) {
@@ -35,16 +40,22 @@ ligandReceptorTest <- function(sce,
 
   exprsMat1 <- SummarizedExperiment::assay(sce, RNA_exprs_value)
 
-  if (!altExp_name %in% SingleCellExperiment::altExpNames(sce)) {
-    stop("sce does not contain altExp_name as altExpNames")
+  if (use_alt_exp) {
+    if (!altExp_name %in% SingleCellExperiment::altExpNames(sce)) {
+      stop("sce does not contain altExp_name as altExpNames")
+    }
+
+    if (!altExp_exprs_value %in% SummarizedExperiment::assayNames(SingleCellExperiment::altExp(sce, altExp_name))) {
+      stop("sce does not contain altExp_exprs_value as assayNames for altExp")
+    }
+
+    # ADT exprssion matrix
+    exprsMat2 <- SummarizedExperiment::assay(SingleCellExperiment::altExp(sce, altExp_name), altExp_exprs_value)
+
+  } else {
+    exprsMat2 <- SummarizedExperiment::assay(sce, RNA_exprs_value)
   }
 
-  if (!altExp_exprs_value %in% SummarizedExperiment::assayNames(SingleCellExperiment::altExp(sce, altExp_name))) {
-    stop("sce does not contain altExp_exprs_value as assayNames for altExp")
-  }
-
-  # ADT exprssion matrix
-  exprsMat2 <- SummarizedExperiment::assay(SingleCellExperiment::altExp(sce, altExp_name), altExp_exprs_value)
 
 
   if (length(cluster) != ncol(sce)) {
@@ -84,7 +95,7 @@ ligandReceptorTest <- function(sce,
   permute_lr_mean <- list()
 
 
-  permute_lr_mean <- lapply(1:num_permute, function(idx_per) {
+  permute_lr_mean <- lapply(seq_len(num_permute), function(idx_per) {
 
     if (idx_per %% 100 == 0) cat(idx_per, "......")
 
@@ -107,7 +118,7 @@ ligandReceptorTest <- function(sce,
 
   pvalue <- list()
 
-  for (pair in 1:nrow(ligandReceptor_list)) {
+  for (pair in seq_len(nrow(ligandReceptor_list))) {
 
     res <- lapply(permute_lr_mean, function(x) x[[pair]])
     res <- lapply(res, function(x) .get_expand_grid_average(x[1, ], x[2, ]))
@@ -116,7 +127,7 @@ ligandReceptorTest <- function(sce,
     observed <- .get_expand_grid_average(lr_mean[[pair]][1, ],
                                          lr_mean[[pair]][2, ])
 
-    pvalue[[pair]] <- sapply(1:length(observed), function(idx) {
+    pvalue[[pair]] <- sapply(seq_len(length(observed)), function(idx) {
       p <- 1 - sum(observed[idx] > res[, idx])/length(res[, idx])
     })
   }
@@ -149,13 +160,15 @@ ligandReceptorTest <- function(sce,
   df_cci <- apply(df_cci, 2, as.numeric)
 
   mat_cci <- matrix(0, length(cluster_level),  length(cluster_level))
-  for (i in 1:nrow(mat_cci)) {
-    for (j in 1:ncol(mat_cci)) {
+  for (i in seq_len(nrow(mat_cci))) {
+    for (j in seq_len(ncol(mat_cci))) {
       mat_cci[i, j] <- df_cci[df_cci[, 1] == i & df_cci[, 2] == j, 3]
     }
   }
 
-  colnames(mat_cci) <- rownames(mat_cci) <- paste("Group", seq_len(length(cluster_level)), sep = "_")
+  colnames(mat_cci) <- rownames(mat_cci) <- paste("Group",
+                                                  seq_len(length(cluster_level)),
+                                                  sep = "_")
 
   mat_cci_sym <- mat_cci + t(mat_cci)
   diag(mat_cci_sym) <- diag(mat_cci)
@@ -170,12 +183,28 @@ ligandReceptorTest <- function(sce,
   df_sig_list$receptor_cluster <- unlist(lapply(strsplit(as.character(df_sig_list$cluster_pair), "\\|"), "[[", 2))
 
 
+  #
+  #   S4Vectors::metadata(sce)[["LRanalysis_pvalue"]] <- pvalue_filter
+  #   S4Vectors::metadata(sce)[["LRanalysis_group"]] <- cluster
+  #   S4Vectors::metadata(sce)[["LRanalysis_pairsCount_sym"]] <- mat_cci_sym
+  #   S4Vectors::metadata(sce)[["LRanalysis_pairsCount"]] <- mat_cci
+  #   S4Vectors::metadata(sce)[["LRanalysis_pairsList"]] <- df_sig_list
 
-  S4Vectors::metadata(sce)[["LRanalysis_pvalue"]] <- pvalue_filter
-  S4Vectors::metadata(sce)[["LRanalysis_group"]] <- cluster
-  S4Vectors::metadata(sce)[["LRanalysis_pairsCount_sym"]] <- mat_cci_sym
-  S4Vectors::metadata(sce)[["LRanalysis_pairsCount"]] <- mat_cci
-  S4Vectors::metadata(sce)[["LRanalysis_pairsList"]] <- df_sig_list
+  LRanalysis_results <- list()
+  LRanalysis_results$LRanalysis_pvalue <- pvalue_filter
+  LRanalysis_results$LRanalysis_group <- cluster
+  LRanalysis_results$LRanalysis_pairsCount_sym <- mat_cci_sym
+  LRanalysis_results$LRanalysis_pairsCount <- mat_cci
+  LRanalysis_results$LRanalysis_pairsList <- df_sig_list
+  LRanalysis_results$receptor_type <- ifelse(use_alt_exp,
+                                             altExp_name,
+                                             "RNA")
+
+  res_meta_name <- paste("LRanalysis_results",
+                         LRanalysis_results$receptor_type,
+                         sep = "_")
+
+  S4Vectors::metadata(sce)[[res_meta_name]] <- LRanalysis_results
 
   return(sce)
 
@@ -202,11 +231,20 @@ ligandReceptorTest <- function(sce,
   return(res)
 }
 
+#' visLigandReceptor
+#'
 #' A function to visualise ligand receptor analysis
 #'
 #'
 #' @param sce A singlecellexperiment object
-#' @param type A character indicates the type of the plot
+#' @param type A character indicates the type of the plot for ligand receptor
+#' restuls visualisation, option includes "pval_heatmap", "pval_dotplot",
+#' "group_network", "group_heatmap", and "lr_network"
+#' @param receptor_type A character indicates which receptor expression's
+#' ligand receptor results are used to generate the figures.
+#'
+#' @return A plot visualise the ligand receptor results
+#'
 #'
 #' @importFrom S4Vectors metadata
 #' @importFrom grDevices colorRampPalette
@@ -220,20 +258,31 @@ ligandReceptorTest <- function(sce,
 visLigandReceptor <- function(sce,
                               type = c("pval_heatmap", "pval_dotplot",
                                        "group_network", "group_heatmap",
-                                       "lr_network"
-                              )) {
+                                       "lr_network"),
+                              receptor_type = NULL) {
 
 
   type <- match.arg(type, c("pval_heatmap", "pval_dotplot", "group_network",
                             "group_heatmap", "lr_network"))
 
-  if (!"LRanalysis_pvalue" %in% names(S4Vectors::metadata(sce))) {
+  if (is.null(receptor_type)) {
+    receptor_type <- "ADT"
+  }
+
+  meta_name <- paste("LRanalysis_results",
+                     receptor_type,
+                     sep = "_")
+
+  if (!meta_name %in% names(S4Vectors::metadata(sce))) {
     stop("Please perform ligandReceptorTest() first")
   }
 
-  pvalue_filter <- as.matrix(S4Vectors::metadata(sce)[["LRanalysis_pvalue"]])
 
-  cluster_level <- levels(factor(S4Vectors::metadata(sce)[["LRanalysis_group"]]))
+  LRanalysis_results <- S4Vectors::metadata(sce)[[meta_name]]
+
+  pvalue_filter <- as.matrix(LRanalysis_results$LRanalysis_pvalue)
+
+  cluster_level <- levels(factor(LRanalysis_results$LRanalysis_group))
 
 
 
@@ -246,14 +295,18 @@ visLigandReceptor <- function(sce,
               "#EF3B2C", "#FB6A4A", "#FC9272",
               "#FCBBA1", "#FEE0D2", "#FFF5F0")
 
-    pval_colors <- c(grDevices::colorRampPalette(reds[1:4])(100),
-                     grDevices::colorRampPalette(reds[4:9])(400),
+    pval_colors <- c(grDevices::colorRampPalette(reds[seq_len(4)])(100),
+                     grDevices::colorRampPalette(reds[seq(4, 9)])(400),
                      rep("#FFF5F0", 500))
 
-    annotation_row <- data.frame(ligand_cluster = factor(unlist(lapply(strsplit(colnames(pvalue_filter),
-                                                                                "\\|"), "[[", 1)), levels = cluster_level),
-                                 receptor_cluster = factor(unlist(lapply(strsplit(colnames(pvalue_filter),
-                                                                                  "\\|"), "[[", 2)), levels = cluster_level))
+    annotation_row <- data.frame(ligand_cluster =
+                                   factor(unlist(lapply(strsplit(colnames(pvalue_filter),
+                                                                 "\\|"), "[[", 1)),
+                                          levels = cluster_level),
+                                 receptor_cluster =
+                                   factor(unlist(lapply(strsplit(colnames(pvalue_filter),
+                                                                 "\\|"), "[[", 2)),
+                                          levels = cluster_level))
 
 
 
@@ -292,7 +345,7 @@ visLigandReceptor <- function(sce,
 
 
   if (type == "lr_network") {
-    df_sig_list <- S4Vectors::metadata(sce)[["LRanalysis_pairsList"]]
+    df_sig_list <- LRanalysis_results$LRanalysis_pairsList
 
     df_sig_list[, 3] <- paste("L", df_sig_list[, 3], sep = "_")
     df_sig_list[, 4] <- paste("R", df_sig_list[, 4], sep = "_")
@@ -301,8 +354,11 @@ visLigandReceptor <- function(sce,
 
 
 
-    igraph::V(g)$label <- unlist(lapply(strsplit(names(V(g)), "_"), function(x) paste(x[-1], collapse = "_")))
-    igraph::V(g)$class <- unlist(lapply(strsplit(names(V(g)), "_"), "[[", 1))
+    igraph::V(g)$label <- unlist(lapply(strsplit(names(V(g)), "_"),
+                                        function(x) paste(x[-1],
+                                                          collapse = "_")))
+    igraph::V(g)$class <- unlist(lapply(strsplit(names(V(g)), "_"),
+                                        "[[", 1))
 
     igraph::V(g)$type <- c(TRUE, FALSE)[as.numeric(as.factor(V(g)$class))]
     igraph::V(g)$shape <- c("circle", "square")[as.numeric(as.factor(V(g)$class))]
@@ -330,7 +386,7 @@ visLigandReceptor <- function(sce,
 
 
 
-    mat_cci <- S4Vectors::metadata(sce)[["LRanalysis_pairsCount_sym"]]
+    mat_cci <- LRanalysis_results$LRanalysis_pairsCount_sym
 
     mat_cci <- reshape2::melt(mat_cci)
 
@@ -352,7 +408,7 @@ visLigandReceptor <- function(sce,
 
   if (type == "group_heatmap") {
 
-    mat_cci <- S4Vectors::metadata(sce)[["LRanalysis_pairsCount"]]
+    mat_cci <- LRanalysis_results$LRanalysis_pairsCount
     pheatmap::pheatmap(mat_cci,
                        cluster_rows = FALSE,
                        cluster_cols = FALSE,

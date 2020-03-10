@@ -13,6 +13,9 @@ eigenMapMatMult(A, B, C)
 
 \item{C}{a matrix}
 }
+\value{
+A matrix
+}
 \description{
 Rcpp function for matrix
 }

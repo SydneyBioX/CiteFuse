@@ -1,3 +1,5 @@
+#' visualiseExprs
+#'
 #' A function to visualise the features distribtuion
 #'
 #'
@@ -9,6 +11,8 @@
 #' @param cell_subset A vector of characters indicates the subset of cells that are used for visualisation
 #' @param n A numeric indicates the top expressed features to show.
 #' @param threshold Thresholds of high expresion for features (only is used for pairwise plot).
+#'
+#' @return A ggplot to visualise te features distribution
 #'
 #' @importFrom Matrix rowMeans
 #' @importFrom reshape2 melt
@@ -69,7 +73,7 @@ visualiseExprs <- function(sce,
     }
     rowmeans <- apply(exprsMat, 1, median)
     rowmeans <- sort(rowmeans, decreasing = TRUE)
-    feature_subset <- rev(names(rowmeans)[1:n])
+    feature_subset <- rev(names(rowmeans)[seq_len(n)])
   } else {
     if (sum(!feature_subset %in% rownames(exprsMat)) != 0) {
       stop("sce does not contain some or all of feature_subset as features")

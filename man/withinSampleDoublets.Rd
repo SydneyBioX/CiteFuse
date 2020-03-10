@@ -2,7 +2,7 @@
 % Please edit documentation in R/QCfunctions.R
 \name{withinSampleDoublets}
 \alias{withinSampleDoublets}
-\title{doublet identification within batch}
+\title{withinSampleDoublets}
 \usage{
 withinSampleDoublets(sce, altExp_name = NULL, eps = 200, minPts = 50)
 }
@@ -14,6 +14,9 @@ withinSampleDoublets(sce, altExp_name = NULL, eps = 200, minPts = 50)
 \item{eps}{eps of DBSCAN}
 
 \item{minPts}{minPts of DBSCAN}
+}
+\value{
+A SingleCellExperiment object
 }
 \description{
 doublet identification within batch
