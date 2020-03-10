@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>A function to perform ligand receptor analysis — ligandReceptorTest • CiteFuse</title>
+<title>ligandReceptorTest — ligandReceptorTest • CiteFuse</title>
 
 
 <!-- jquery -->
@@ -35,7 +35,7 @@
 
 
 
-<meta property="og:title" content="A function to perform ligand receptor analysis — ligandReceptorTest" />
+<meta property="og:title" content="ligandReceptorTest — ligandReceptorTest" />
 <meta property="og:description" content="A function to perform ligand receptor analysis" />
 <meta name="twitter:card" content="summary" />
 
@@ -111,7 +111,7 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>A function to perform ligand receptor analysis</h1>
+    <h1>ligandReceptorTest</h1>
     
     <div class="hidden name"><code>ligandReceptorTest.Rd</code></div>
     </div>
@@ -125,11 +125,11 @@
   <span class='no'>ligandReceptor_list</span>,
   <span class='no'>cluster</span>,
   <span class='kw'>RNA_exprs_value</span> <span class='kw'>=</span> <span class='st'>"minMax"</span>,
+  <span class='kw'>use_alt_exp</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>altExp_name</span> <span class='kw'>=</span> <span class='st'>"ADT"</span>,
   <span class='kw'>altExp_exprs_value</span> <span class='kw'>=</span> <span class='st'>"zi_minMax"</span>,
   <span class='kw'>num_permute</span> <span class='kw'>=</span> <span class='fl'>1000</span>,
-  <span class='kw'>p_sig</span> <span class='kw'>=</span> <span class='fl'>0.05</span>,
-  <span class='kw'>ncores</span> <span class='kw'>=</span> <span class='fl'>1</span>
+  <span class='kw'>p_sig</span> <span class='kw'>=</span> <span class='fl'>0.05</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -152,8 +152,13 @@
       <td><p>A character indicates which expression value for RNA in assayNames is used.</p></td>
     </tr>
     <tr>
+      <th>use_alt_exp</th>
+      <td><p>A logical vector indicates whether receptors expression will
+use alternative expression matrix to quantify.</p></td>
+    </tr>
+    <tr>
       <th>altExp_name</th>
-      <td><p>A character indicates which expression matrix is used. by default is none (i.e. RNA).</p></td>
+      <td><p>A character indicates which expression matrix is used. by default is ADT .</p></td>
     </tr>
     <tr>
       <th>altExp_exprs_value</th>
@@ -167,18 +172,18 @@
       <th>p_sig</th>
       <td><p>A numeric indicates threshold of the pvalue significance</p></td>
     </tr>
-    <tr>
-      <th>ncores</th>
-      <td><p>Number of cores can be used</p></td>
-    </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A SingleCellExperiment object with ligand receptor results</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
+      <li><a href="#value">Value</a></li>
     </ul>
 
   </div>
