@@ -18,7 +18,7 @@
 #' @importFrom SingleCellExperiment SingleCellExperiment
 #' @importFrom Matrix rowSums
 #' @importFrom SummarizedExperiment SummarizedExperiment
-#' @importFrom methods as
+#' @importFrom methods as is
 #'
 #' @export
 
@@ -31,11 +31,23 @@ preprocessing <- function(exprsMat = NULL,
                           rowData = NULL,
                           colData = NULL) {
 
-  if (!class(exprsMat) %in% c("matrix", "dgCMatrix", "list")) {
+
+  if (!any("matrix" %in% methods::is(exprsMat),
+           "dgCMatrix" %in% methods::is(exprsMat),
+           "list" %in% methods::is(exprsMat))) {
     stop("exprsMat need to be a matrix or a list")
   }
 
-  if (class(exprsMat) %in% c("matrix", "dgCMatrix") ) {
+  if ("list" %in% methods::is(exprsMat)) {
+    if (any(!unlist(lapply(exprsMat, function(x) "dgCMatrix" %in% is(x))) &
+            !unlist(lapply(exprsMat, function(x) "matrix" %in% is(x))))) {
+      stop("Please make sure every expression matrix in
+           the list are matrix or sparse matrix")
+    }
+  }
+
+  if (any("matrix" %in% methods::is(exprsMat),
+          "dgCMatrix" %in% methods::is(exprsMat))) {
     exprsMat <- list(exprsMat)
   }
 
@@ -51,7 +63,7 @@ preprocessing <- function(exprsMat = NULL,
   # only keep the samples that are common across the list of exprsMat
   exprsMat <- lapply(exprsMat, function(exprs) {
     exprs <- exprs[, common_cells]
-    if (class(exprs) == "matrix") {
+    if (!"dgCMatrix" %in% methods::is(exprs)) {
       exprs <- methods::as(exprs, "dgCMatrix")
     }
     exprs
@@ -61,7 +73,7 @@ preprocessing <- function(exprsMat = NULL,
 
   if (filter_features) {
     exprsMat <- lapply(exprsMat, function(exprs) {
-      if (class(exprs) == "dgCMatrix") {
+      if ("dgCMatrix" %in% methods::is(exprsMat)) {
         rowsums <- Matrix::rowSums(exprs)
         exprs <- exprs[rowsums != 0, ]
 
@@ -417,6 +429,7 @@ normaliseExprs <- function(sce,
 #' @importFrom mixtools normalmixEM
 #' @importFrom S4Vectors metadata
 #' @importFrom stats kmeans
+#' @importFrom methods is
 #'
 #'
 #' @export
@@ -451,13 +464,15 @@ crossSampleDoublets <- function(sce,
     mixmdl <- try(mixtools::normalmixEM(vec,
                                         fast = TRUE, maxrestarts = 1000,
                                         k = 2, maxit = 10000,
-                                        mu = c(0, 8),
+                                        mu = c(0, 10),
+                                        lambda = c(1/2),
+                                        sigma = rep(2, 2),
                                         ECM = TRUE, verb = FALSE),
                   silent = TRUE)
 
 
 
-    if (class(mixmdl) == "try-error") {
+    if ("try-error" %in% methods::is(mixmdl)) {
       km <- stats::kmeans(vec, centers = 2)
       hto_threshold[[i]] <- min(max(vec[km$cluster == 1]), max(vec[km$cluster == 2]))
     } else {
@@ -467,7 +482,6 @@ crossSampleDoublets <- function(sce,
 
   names(hto_threshold) <- NULL
   hto_threshold <- unlist(hto_threshold)
-
 
 
   hto_cellHash_pass <- sapply(seq_len(nrow(hto_cellHash_log)), function(x) {
@@ -714,11 +728,11 @@ withinSampleDoublets <- function(sce,
 
   })
 
-  batch_doublets_mat <- do.call(cbind, batch_doublets_list)
+  batch_doublets_mat <- t(do.call(rbind, batch_doublets_list))
 
 
   doubletClassify_within_label <- apply(batch_doublets_mat, 1, function(res) {
-    if (sum(res) == 0) {
+    if (sum(res, na.rm = TRUE) == 0) {
       "NotDoublets(Within)"
     } else {
       paste("Doublets(Within)", which(res), sep = "_")
@@ -739,6 +753,7 @@ withinSampleDoublets <- function(sce,
 
 
 #' @importFrom stats uniroot
+#' @importFrom methods is
 
 
 getThreshold <- function(mixmdl, verbose = FALSE){
@@ -765,8 +780,7 @@ getThreshold <- function(mixmdl, verbose = FALSE){
                                rho1 = mixmdl$lambda[idx1], rho2 = mixmdl$lambda[idx2]),
                 silent = TRUE)
 
-
-    if (class(root) != "try-error") {
+    if (!"try-error" %in% methods::is(root)) {
       # if (verbose) {
       #   abline(v = root$root, col = "red")
       #   abline(v = mixmdl$mu[idx1] + qnorm(0.99) * mixmdl$sigma[idx1], col = "blue")

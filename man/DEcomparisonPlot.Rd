@@ -9,7 +9,8 @@ DEcomparisonPlot(de_list, feature_list)
 \arguments{
 \item{de_list}{A list including two lists results from `DE genes ()`.}
 
-\item{feature_list}{A list including two lists features indicating the selected subset of features will be visualised}
+\item{feature_list}{A list including two lists features indicating
+the selected subset of features will be visualised}
 }
 \value{
 A ggplot2 to visualise the comparison plot of DE.
