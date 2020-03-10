@@ -15,7 +15,7 @@
 #' @export
 
 spectralClustering <- function(affinity, K = 20, type = 4,
-                               fast = T,
+                               fast = TRUE,
                                maxdim = 50, delta = 1e-5,
                                t = 0, neigen = NULL)
 {
@@ -72,7 +72,8 @@ spectralClustering <- function(affinity, K = 20, type = 4,
 
 
     eig <- igraph::arpack(f, extra = NL, sym = TRUE,
-                          options = list(which = 'LA', nev = neff, n = n, ncv = max(min(c(n,4*neff)))))
+                          options = list(which = 'LA', nev = neff,
+                                         n = n, ncv = max(min(c(n,4*neff)))))
 
   }
 
@@ -81,7 +82,7 @@ spectralClustering <- function(affinity, K = 20, type = 4,
 
   cat('Computing Spectral Clustering \n')
 
-  res <- sort(abs(eigenvals), index.return = TRUE, decreasing = T)
+  res <- sort(abs(eigenvals), index.return = TRUE, decreasing = TRUE)
   U <- eig$vectors[, res$ix[1:K]]
   normalize <- function(x) x/sqrt(sum(x^2))
 
@@ -289,7 +290,7 @@ visualiseDim <- function(sce,
 
   }else if (class(colour_by) == "character" & length(colour_by) == 1) {
 
-    if(! colour_by %in% names(colData(sce))) {
+    if (!colour_by %in% names(colData(sce))) {
 
       stop("There is no colData with name colour_by")
 
@@ -301,7 +302,8 @@ visualiseDim <- function(sce,
 
   } else if (length(colour_by) != ncol(sce)) {
 
-    stop("colour_by needs to be a character or a vector with length equal to the number of cells.")
+    stop("colour_by needs to be a character or a vector with
+         length equal to the number of cells.")
 
   } else{
 
@@ -328,7 +330,8 @@ visualiseDim <- function(sce,
 
   } else if (length(shape_by) != ncol(sce)) {
 
-    stop("shape_by needs to be a character or a vector with length equal to the number of cells.")
+    stop("shape_by needs to be a character or a vector with
+         length equal to the number of cells.")
 
   } else{
 
@@ -345,7 +348,10 @@ visualiseDim <- function(sce,
 
   dimred <- data.frame(dimred)
 
-  ggplot2::ggplot(dimred, aes(x = dimred[, dim[1]], y = dimred[, dim[2]], col = colour_by, shape = shape_by)) +
+  ggplot2::ggplot(dimred, aes(x = dimred[, dim[1]],
+                              y = dimred[, dim[2]],
+                              col = colour_by,
+                              shape = shape_by)) +
     geom_point() +
     scale_color_manual(values = cite_colorPal(length(unique(colour_by)))) +
     scale_shape_manual(values = cite_shapePal(length(unique(shape_by)))) +
@@ -390,11 +396,13 @@ visualiseDim <- function(sce,
 igraphClustering <- function(sce,
                              metadata = "SNF_W",
                              method = c("louvain", "walktrap", "spinglass", "optimal",
-                                        "leading_eigen", "label_prop", "fast_greedy", "edge_betweenness"),
+                                        "leading_eigen", "label_prop",
+                                        "fast_greedy", "edge_betweenness"),
                              ...) {
 
   method <- match.arg(method, c("louvain", "walktrap", "spinglass", "optimal",
-                                "leading_eigen", "label_prop", "fast_greedy", "edge_betweenness"))
+                                "leading_eigen", "label_prop", "fast_greedy",
+                                "edge_betweenness"))
 
   normalized.mat <- S4Vectors::metadata(sce)[[metadata]]
   diag(normalized.mat) <- stats::median(as.vector(normalized.mat))

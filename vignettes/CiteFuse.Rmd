@@ -356,7 +356,7 @@ DEcomparisonPlot(de_list = de_list,
 ```{r fig.height = 8, fig.width = 8}
 sce_citeseq <- importanceADT(sce_citeseq, 
                              group = sce_citeseq$SNF_W_louvain,
-                             subsample = T)
+                             subsample = TRUE)
 
 visImportance(sce_citeseq, plot = "boxplot")
 visImportance(sce_citeseq, plot = "heatmap")

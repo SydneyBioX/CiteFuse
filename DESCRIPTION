@@ -24,7 +24,6 @@ Imports:
     grid,
     dbscan,
     SNFtool,
-    scater (>= 1.14.1),
     propr,
     uwot,
     Rtsne,
@@ -42,14 +41,15 @@ Imports:
     pheatmap,
     ggraph,
     grDevices,
-    rhdf5,
-    clue
+    rhdf5
 LinkingTo: Rcpp, RcppEigen
 RoxygenNote: 7.0.2
 Suggests: 
     knitr,
     rmarkdown,
     DT,
-    mclust
+    mclust,
+    scater
 VignetteBuilder: knitr
 LazyData: true
+biocViews: SingleCell, GeneExpression

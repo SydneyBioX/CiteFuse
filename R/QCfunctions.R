@@ -273,7 +273,8 @@ normaliseExprs <- function(sce,
 
 ) {
 
-  transform <- match.arg(transform, c("log", "clr", "zi_minMax", "minMax"), several.ok = TRUE)
+  transform <- match.arg(transform, c("log", "clr", "zi_minMax", "minMax"),
+                         several.ok = TRUE)
 
   if (altExp_name != "none") {
     if (!altExp_name %in% SingleCellExperiment::altExpNames(sce)) {
@@ -350,7 +351,8 @@ normaliseExprs <- function(sce,
 
 
   if (altExp_name != "none") {
-    SummarizedExperiment::assay(SingleCellExperiment::altExp(sce, altExp_name), new_assay_name) <- exprs_norm
+    SummarizedExperiment::assay(SingleCellExperiment::altExp(sce, altExp_name),
+                                new_assay_name) <- exprs_norm
   } else {
     SummarizedExperiment::assay(sce, new_assay_name) <- exprs_norm
   }
@@ -423,18 +425,19 @@ crossSampleDoublets <- function(sce,
 
   hto_cellHash_log <- SummarizedExperiment::assay(SingleCellExperiment::altExp(sce, altExp_name), "logcounts")
 
-  hto_cellHash_log <- hto_cellHash_log[Matrix::rowSums(hto_cellHash_log) > totalExp_threshold, ]
+  hto_cellHash_log <- hto_cellHash_log[Matrix::rowSums(hto_cellHash_log) >
+                                         totalExp_threshold, ]
 
   hto_threshold <- list()
   for (i in 1:nrow(hto_cellHash_log)) {
 
     vec <- hto_cellHash_log[i,][hto_cellHash_log[i,] > 0]
     mixmdl <- try(mixtools::normalmixEM(vec,
-                                        fast = T, maxrestarts = 1000,
+                                        fast = TRUE, maxrestarts = 1000,
                                         k = 2, maxit = 10000,
                                         mu = c(0, 8),
-                                        ECM = TRUE, verb = F),
-                  silent = T)
+                                        ECM = TRUE, verb = FALSE),
+                  silent = TRUE)
 
 
 
@@ -469,7 +472,8 @@ crossSampleDoublets <- function(sce,
     }
   })
 
-  doubletClassify_between_class <- ifelse(!hto_cellHash_mix_label %in% c("negative", "doublet/multiplet"),
+  doubletClassify_between_class <- ifelse(!hto_cellHash_mix_label %in%
+                                            c("negative", "doublet/multiplet"),
                                           "Singlet", hto_cellHash_mix_label)
 
 
@@ -584,10 +588,10 @@ plotHTOSingle <- function(sce,
 
   pmain <- ggplot(df, aes(x = df[, 1], y = df[, 2], color = doublets)) +
     geom_point(alpha = 0.5) +
-    # geom_density2d(bins = 10) +
-    # stat_density2d(aes(alpha = ..level.., fill = ..level..), geom = "polygon", n = 100, bins = 10) +
-    geom_hline(yintercept = hto_threshold[which_idx[2]], col = "red", linetype = 2, size = 1) +
-    geom_vline(xintercept = hto_threshold[which_idx[1]], col = "red", linetype = 2, size = 1) +
+    geom_hline(yintercept = hto_threshold[which_idx[2]], col = "red",
+               linetype = 2, size = 1) +
+    geom_vline(xintercept = hto_threshold[which_idx[1]], col = "red",
+               linetype = 2, size = 1) +
     scale_color_manual(values = c("#377EB8", "#E41A1C")) +
     theme_bw() +
     theme(aspect.ratio = 1) +
@@ -598,17 +602,22 @@ plotHTOSingle <- function(sce,
 
 
   xdens <- cowplot::axis_canvas(pmain, axis = "x") +
-    geom_density(data = df, aes(x = df[, 1], fill = hto_cellHash_pass[, which_idx[1]], alpha = 0.5)) +
+    geom_density(data = df, aes(x = df[, 1],
+                                fill = hto_cellHash_pass[, which_idx[1]],
+                                alpha = 0.5)) +
     scale_fill_manual(values = c("#377EB8", "#E41A1C")) +
     NULL
 
   ydens <- cowplot::axis_canvas(pmain, axis = "y", coord_flip = TRUE) +
-    geom_density(data = df, aes(x = df[, 2], fill = hto_cellHash_pass[, which_idx[2]], alpha = 0.5)) +
+    geom_density(data = df, aes(x = df[, 2],
+                                fill = hto_cellHash_pass[, which_idx[2]],
+                                alpha = 0.5)) +
     coord_flip() +
     scale_fill_manual(values = c("#377EB8", "#E41A1C")) +
     NULL
 
-  p1 <- cowplot::insert_xaxis_grob(pmain, xdens, grid::unit(.2, "null"), position = "top")
+  p1 <- cowplot::insert_xaxis_grob(pmain, xdens,
+                                   grid::unit(.2, "null"), position = "top")
 
   p2 <- cowplot::insert_yaxis_grob(p1, ydens,
                                    grid::unit(.2, "null"), position = "right")
@@ -649,7 +658,8 @@ withinSampleDoublets <- function(sce,
 
 
   if (!"logcounts" %in% SummarizedExperiment::assayNames(altExp(sce, altExp_name))) {
-    warning("HTO does not contain logcounts... we will perform normaliseExprs() to get logcounts")
+    warning("HTO does not contain logcounts...
+            we will perform normaliseExprs() to get logcounts")
     sce <- normaliseExprs(sce, altExp_name, "log")
   }
 
@@ -668,8 +678,11 @@ withinSampleDoublets <- function(sce,
 
   batch_doublets_list <- lapply(1:nrow(hto_cellHash_log), function(i) {
 
-    db_cluster <- dbscan::dbscan(cbind(nUMI, hto_cellHash_log[i,]), eps = eps, minPts = minPts)
-    batch_doublets <- (db_cluster$cluster == 0 & hto_cellHash_log[i,] > hto_threshold[i] & hto_cellHash_mix_label != "doublet/multiplet")
+    db_cluster <- dbscan::dbscan(cbind(nUMI, hto_cellHash_log[i,]),
+                                 eps = eps, minPts = minPts)
+    batch_doublets <- (db_cluster$cluster == 0 &
+                         hto_cellHash_log[i,] > hto_threshold[i] &
+                         hto_cellHash_mix_label != "doublet/multiplet")
 
   })
 
@@ -722,7 +735,7 @@ getThreshold <- function(mixmdl, verbose = FALSE){
                                mu1 = mixmdl$mu[idx1], mu2 = mixmdl$mu[idx2],
                                sd1 = mixmdl$sigma[idx1], sd2 = mixmdl$sigma[idx2],
                                rho1 = mixmdl$lambda[idx1], rho2 = mixmdl$lambda[idx2]),
-                silent = T)
+                silent = TRUE)
 
 
     if (class(root) != "try-error") {

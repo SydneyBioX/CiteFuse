@@ -4,10 +4,13 @@
 #' @param t Number of iterations for the diffusion process.
 #' @return W is the overall status matrix derived
 #' @useDynLib CiteFuse
+#'
+#' @import Rcpp RcppEigen
+#'
 #' @export
 #'
 
-SNF_fast <- function (Wall, K = 20, t = 20)
+SNF_fast <- function(Wall, K = 20, t = 20)
 {
 
   wall.name.check <- check_wall_names(Wall)

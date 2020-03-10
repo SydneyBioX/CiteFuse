@@ -161,7 +161,7 @@ ligandReceptorTest <- function(sce,
   diag(mat_cci_sym) <- diag(mat_cci)
 
 
-  idx_sig <- which(pvalue_filter < p_sig, arr.ind = T)
+  idx_sig <- which(pvalue_filter < p_sig, arr.ind = TRUE)
   df_sig_list <- data.frame(lr_pair = rownames(idx_sig), cluster_pair = colnames(pvalue_filter)[idx_sig[, 2]])
 
   df_sig_list$ligand <- unlist(lapply(strsplit(rownames(idx_sig), "\\|"), "[[", 1))
@@ -354,8 +354,8 @@ visLigandReceptor <- function(sce,
 
     mat_cci <- S4Vectors::metadata(sce)[["LRanalysis_pairsCount"]]
     pheatmap::pheatmap(mat_cci,
-                       cluster_rows = F,
-                       cluster_cols = F,
+                       cluster_rows = FALSE,
+                       cluster_cols = FALSE,
                        border_color = "grey100")
   }
 

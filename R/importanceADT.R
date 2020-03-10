@@ -55,7 +55,8 @@ importanceADT <- function(sce,
   method <- match.arg(method, c("randomForest", "PCA"))
 
   if (method == "randomForest" & is.null(group)) {
-    stop("To run randomForest ADT importance calculation, please provide group infomation.")
+    stop("To run randomForest ADT importance calculation,
+         please provide group infomation.")
   }
 
   if (k_pca < 2 | k_pca <= 2 & remove_first_PC) {
@@ -84,7 +85,7 @@ importanceADT <- function(sce,
     S4Vectors::metadata(sce)[["importanceADT"]] <- Matrix::rowMeans(as.matrix(importance))
   }
   if (method == "PCA") {
-    adt_pca <- stats::prcomp(t(exprsMat), scale = T, center = T)
+    adt_pca <- stats::prcomp(t(exprsMat), scale = TRUE, center = TRUE)
 
     if (remove_first_PC) {
       use_k <- c(2:k_pca)

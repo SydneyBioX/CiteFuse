@@ -94,7 +94,9 @@ visualiseExprs <- function(sce,
 
 
     if (plot == "boxplot") {
-      g <- ggplot(df_toPlot, aes(x = features, y = value, color = features)) +
+      g <- ggplot(df_toPlot, aes(x = df_toPlot$features,
+                                 y = df_toPlot$value,
+                                 color = df_toPlot$features)) +
         geom_boxplot(outlier.size = 1, outlier.stroke = 0.3, outlier.alpha = 0.8,
                      width = 0.3) +
         scale_colour_viridis_d(direction = -1, end = 0.95) +
@@ -106,8 +108,8 @@ visualiseExprs <- function(sce,
     }
 
     if (plot == "violin") {
-      g <- ggplot(df_toPlot, aes(x = features, y = value)) +
-        geom_violin(aes(fill = features)) +
+      g <- ggplot(df_toPlot, aes(x = df_toPlot$features, y = df_toPlot$value)) +
+        geom_violin(aes(fill = df_toPlot$features)) +
         geom_boxplot(outlier.size = 1, outlier.stroke = 0.3, outlier.alpha = 0.8,
                      width = 0.05) +
         scale_fill_viridis_d(direction = -1, end = 0.95) +
@@ -119,8 +121,8 @@ visualiseExprs <- function(sce,
     }
 
     if (plot == "jitter")  {
-      g <- ggplot(df_toPlot, aes(x = features, y = value)) +
-        geom_jitter(aes(color = features), size = 0.5, alpha = 0.5) +
+      g <- ggplot(df_toPlot, aes(x = df_toPlot$features, y = df_toPlot$value)) +
+        geom_jitter(aes(color = df_toPlot$features), size = 0.5, alpha = 0.5) +
         scale_color_viridis_d(direction = -1, end = 0.95) +
         coord_flip() +
         theme_bw() +
@@ -130,8 +132,8 @@ visualiseExprs <- function(sce,
     }
 
     if (plot == "density")  {
-      g <- ggplot(df_toPlot, aes(x = value, y = features)) +
-        ggridges::geom_density_ridges2(aes(fill = features), alpha = 0.5) +
+      g <- ggplot(df_toPlot, aes(x = df_toPlot$value, y = df_toPlot$features)) +
+        ggridges::geom_density_ridges2(aes(fill = df_toPlot$features), alpha = 0.5) +
         scale_fill_viridis_d(direction = -1, end = 0.95) +
         theme_bw() +
         ylab(exprs_value) +
@@ -235,11 +237,11 @@ scatterSingle <- function(exprsMat, group = NULL, threshold = NULL) {
 fitMixtures <- function(vec) {
   km <- stats::kmeans(vec, centers = 2, nstart = 1000)
   mixmdl <- try(mixtools::normalmixEM(vec,
-                                      fast = T, maxrestarts = 1000,
+                                      fast = TRUE, maxrestarts = 1000,
                                       k = 2, maxit = 10000,
                                       mu = km$centers[,1],
-                                      ECM = TRUE, verb = F),
-                silent = T)
+                                      ECM = TRUE, verb = FALSE),
+                silent = TRUE)
 
 
 
