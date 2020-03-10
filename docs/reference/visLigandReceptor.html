@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>A function to visualise ligand receptor analysis — visLigandReceptor • CiteFuse</title>
+<title>visLigandReceptor — visLigandReceptor • CiteFuse</title>
 
 
 <!-- jquery -->
@@ -35,7 +35,7 @@
 
 
 
-<meta property="og:title" content="A function to visualise ligand receptor analysis — visLigandReceptor" />
+<meta property="og:title" content="visLigandReceptor — visLigandReceptor" />
 <meta property="og:description" content="A function to visualise ligand receptor analysis" />
 <meta name="twitter:card" content="summary" />
 
@@ -111,7 +111,7 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>A function to visualise ligand receptor analysis</h1>
+    <h1>visLigandReceptor</h1>
     
     <div class="hidden name"><code>visLigandReceptor.Rd</code></div>
     </div>
@@ -123,7 +123,8 @@
     <pre class="usage"><span class='fu'>visLigandReceptor</span>(
   <span class='no'>sce</span>,
   <span class='kw'>type</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"pval_heatmap"</span>, <span class='st'>"pval_dotplot"</span>, <span class='st'>"group_network"</span>, <span class='st'>"group_heatmap"</span>,
-    <span class='st'>"lr_network"</span>)
+    <span class='st'>"lr_network"</span>),
+  <span class='kw'>receptor_type</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -135,16 +136,27 @@
     </tr>
     <tr>
       <th>type</th>
-      <td><p>A character indicates the type of the plot</p></td>
+      <td><p>A character indicates the type of the plot for ligand receptor
+restuls visualisation, option includes "pval_heatmap", "pval_dotplot",
+"group_network", "group_heatmap", and "lr_network"</p></td>
+    </tr>
+    <tr>
+      <th>receptor_type</th>
+      <td><p>A character indicates which receptor expression's
+ligand receptor results are used to generate the figures.</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A plot visualise the ligand receptor results</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
+      <li><a href="#value">Value</a></li>
     </ul>
 
   </div>
