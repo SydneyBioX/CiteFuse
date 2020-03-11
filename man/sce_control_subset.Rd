@@ -4,7 +4,7 @@
 \name{sce_control_subset}
 \alias{sce_control_subset}
 \title{A SingleCellExperiment of ECCITE-seq data}
-\format{An object of class \code{SingleCellExperiment} with 571 rows and 437 columns.}
+\format{An object of class \code{SingleCellExperiment} with 1508 rows and 128 columns.}
 \source{
 Gene Expression Omnibus with the accession code GSE126310.
 }

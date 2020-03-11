@@ -27,6 +27,7 @@ A function to reduce the dimension of the similarity matrix
 }
 \examples{
 data("sce_control_subset", package = "CiteFuse")
+sce_control_subset <- CiteFuse(sce_control_subset)
 sce_control_subset <- reducedDimSNF(sce_control_subset,
 method = "tSNE",
 dimNames = "tSNE_joint")

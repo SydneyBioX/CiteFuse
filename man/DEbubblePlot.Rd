@@ -15,3 +15,35 @@ A ggplot to visualise the DE results via bubble plot
 \description{
 A function to generate circlepack plot to visualise the marker for each cluster
 }
+\examples{
+library(S4Vectors)
+data("sce_control_subset", package = "CiteFuse")
+sce_control_subset <- DEgenes(sce_control_subset,
+altExp_name = "none",
+group = sce_control_subset$SNF_W_louvain,
+return_all = TRUE,
+exprs_pct = 0.5)
+
+
+sce_control_subset <- selectDEgenes(sce_control_subset,
+                            altExp_name = "none")
+
+sce_control_subset <- DEgenes(sce_control_subset,
+altExp_name = "ADT",
+group = sce_control_subset$SNF_W_louvain,
+return_all = TRUE,
+exprs_pct = 0.5)
+
+
+sce_control_subset <- selectDEgenes(sce_control_subset,
+                             altExp_name = "ADT")
+
+rna_DEgenes <- metadata(sce_control_subset)[["DE_res_RNA_filter"]]
+adt_DEgenes <- metadata(sce_control_subset)[["DE_res_ADT_filter"]]
+
+rna_DEgenes <- lapply(rna_DEgenes, function(x){
+  x$name <- gsub("hg19_", "", x$name)
+  x})
+DEbubblePlot(list(RNA = rna_DEgenes, ADT = adt_DEgenes))
+
+}

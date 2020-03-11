@@ -158,7 +158,8 @@ rom igraph. Default is louvain clustering.</p></td>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
 <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"sce_control_subset"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"CiteFuse"</span>)
-<span class='no'>SNF_W_louvain</span> <span class='kw'>&lt;-</span> <span class='fu'>igraphClustering</span>(<span class='no'>sce_control_subset</span>,
+<span class='no'>sce_control_subset</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='CiteFuse.html'>CiteFuse</a></span>(<span class='no'>sce_control_subset</span>)</div><div class='output co'>#&gt; Calculating affinity matrix 
+#&gt; Performing SNF  </div><div class='input'><span class='no'>SNF_W_louvain</span> <span class='kw'>&lt;-</span> <span class='fu'>igraphClustering</span>(<span class='no'>sce_control_subset</span>,
 <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"louvain"</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

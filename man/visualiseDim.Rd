@@ -34,6 +34,10 @@ A function to visualise the reduced dimension
 }
 \examples{
 data("sce_control_subset", package = "CiteFuse")
+sce_control_subset <- CiteFuse(sce_control_subset)
+sce_control_subset <- reducedDimSNF(sce_control_subset,
+method = "tSNE",
+dimNames = "tSNE_joint")
 visualiseDim(sce_control_subset, dimNames = "tSNE_joint",
 colour_by = "SNF_W_clust")
 

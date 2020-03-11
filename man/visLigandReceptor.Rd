@@ -27,3 +27,28 @@ A plot visualise the ligand receptor results
 \description{
 A function to visualise ligand receptor analysis
 }
+\examples{
+data("lr_pair_subset", package = "CiteFuse")
+data("sce_control_subset", package = "CiteFuse")
+
+sce_control_subset <- normaliseExprs(sce = sce_control_subset,
+altExp_name = "ADT",
+transform = "zi_minMax")
+
+sce_control_subset <- normaliseExprs(sce = sce_control_subset,
+                              altExp_name = "none",
+                              exprs_value = "logcounts",
+                              transform = "minMax")
+
+sce_control_subset <- ligandReceptorTest(sce = sce_control_subset,
+                                  ligandReceptor_list = lr_pair_subset,
+                                  cluster = sce_control_subset$SNF_W_louvain,
+                                  RNA_exprs_value = "minMax",
+                                  use_alt_exp = TRUE,
+                                  altExp_name = "ADT",
+                                  altExp_exprs_value = "zi_minMax",
+                                  num_permute = 100)
+visLigandReceptor(sce_control_subset,
+type = "pval_heatmap",
+receptor_type = "ADT")
+}

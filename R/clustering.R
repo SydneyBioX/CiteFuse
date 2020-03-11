@@ -16,6 +16,7 @@
 #' @examples
 #'
 #' data("sce_control_subset", package = "CiteFuse")
+#' sce_control_subset <- CiteFuse(sce_control_subset)
 #' SNF_W_clust <- spectralClustering(S4Vectors::metadata(sce_control_subset)[["SNF_W"]],
 #' K = 5)
 #'
@@ -221,6 +222,7 @@ spectralClustering <- function(affinity, K = 20, type = 4,
 #'
 #' @examples
 #' data("sce_control_subset", package = "CiteFuse")
+#' sce_control_subset <- CiteFuse(sce_control_subset)
 #' sce_control_subset <- reducedDimSNF(sce_control_subset,
 #' method = "tSNE",
 #' dimNames = "tSNE_joint")
@@ -302,6 +304,10 @@ reducedDimSNF <- function(sce,
 #'
 #' @examples
 #' data("sce_control_subset", package = "CiteFuse")
+#' sce_control_subset <- CiteFuse(sce_control_subset)
+#' sce_control_subset <- reducedDimSNF(sce_control_subset,
+#' method = "tSNE",
+#' dimNames = "tSNE_joint")
 #' visualiseDim(sce_control_subset, dimNames = "tSNE_joint",
 #' colour_by = "SNF_W_clust")
 #'
@@ -433,6 +439,7 @@ visualiseDim <- function(sce,
 #' @examples
 #'
 #' data("sce_control_subset", package = "CiteFuse")
+#' sce_control_subset <- CiteFuse(sce_control_subset)
 #' SNF_W_louvain <- igraphClustering(sce_control_subset,
 #' method = "louvain")
 #'
@@ -529,6 +536,9 @@ igraphClustering <- function(sce,
 #'
 #' @examples
 #' data("sce_control_subset", package = "CiteFuse")
+#' sce_control_subset <- CiteFuse(sce_control_subset)
+#' SNF_W_louvain <- igraphClustering(sce_control_subset,
+#' method = "louvain")
 #' visualiseKNN(sce_control_subset, colour_by = "SNF_W_louvain")
 #'
 #' @importFrom S4Vectors metadata

@@ -18,6 +18,15 @@
 #'
 #' @return A SingleCellExeperiment with DE results stored in meta data DE_res
 #'
+#' @examples
+#' data("sce_control_subset", package = "CiteFuse")
+#' sce_control_subset <- DEgenes(sce_control_subset,
+#' group = sce_control_subset$SNF_W_louvain,
+#' return_all = TRUE,
+#' exprs_pct = 0.5)
+#'
+#' sce_control_subset <- selectDEgenes(sce_control_subset)
+#'
 #' @importFrom randomForest randomForest
 #' @importFrom SingleCellExperiment altExp altExpNames
 #' @importFrom SummarizedExperiment assayNames assay
@@ -92,12 +101,131 @@ DEgenes <- function(sce,
 }
 
 
+#' DEgenesCross
+#'
+#' A function to perform DE analysis on a list of CITE seq data
+#'
+#' @param sce_list A Slist of ingleCellExperiment object
+#' @param altExp_name A character indicates which expression matrix is
+#' used. by default is none (i.e. RNA).
+#' @param exprs_value A character indicates which expression value in
+#' assayNames is used.
+#' @param method A character indicates the method used in DE analysis
+#' @param colData_name A vector of character indicates the colData that
+#' stored the group information of each sce of the sce_list
+#' @param group_to_test A vector of character indicates which group in each
+#' sce is used to compared across the sce list.
+#' @param exprs_pct A numeric indicates the threshold expression percentage
+#' of a gene to be considered in DE analysis
+#' @param exprs_threshold A numeric indicates the threshold of expression.
+#' By default is 0.
+#' @param return_all Whether return full list of DE genes
+#' @param pval_adj A numeric indicates the threshold of adjusted p-value.
+#' @param mean_diff A numeric indicates the threshold of difference of
+#' average expression.
+#' @param pct_diff A numeric indicates the threshold of difference of
+#' percentage expression.
+#' @param topN A numeric indicates the top number of genes will be
+#' included in the list.
+#'
+#' @return A SingleCellExeperiment with DE results stored in meta data DE_res
+#'
+#'
+#' @importFrom randomForest randomForest
+#' @importFrom SingleCellExperiment altExp altExpNames
+#' @importFrom SummarizedExperiment assayNames assay
+#' @importFrom S4Vectors metadata
+#'
+#' @export
+#'
+
+DEgenesCross <- function(sce_list,
+                         altExp_name = "none",
+                         exprs_value = "logcounts",
+                         method = "wilcox",
+                         colData_name = NULL,
+                         group_to_test = NULL,
+                         exprs_pct = 0.1,
+                         exprs_threshold = 0,
+                         return_all = FALSE,
+                         pval_adj = 0.05,
+                         mean_diff = 0,
+                         pct_diff = 0.1,
+                         topN = 10) {
+
+  method <- match.arg(method, c("wilcox"))
+
+
+
+
+  exprsMatList <- lapply(seq_len(length(sce_list)), function(i) {
+    cell_subset <- .get_cell_subsets_de(sce_list[[i]],
+                                        group_to_test[i],
+                                        colData_name[i])
+
+    if (length(cell_subset) == 0) {
+      stop("There is no cells with name of group_to_test in colData_name")
+    } else {
+      exprs <- .extract_exprsMat(sce_list[[i]],
+                                 cell_subset,
+                                 altExp_name, exprs_value)
+    }
+    exprs
+  })
+
+  common_genes <- Reduce(intersect, lapply(exprsMatList, rownames))
+
+  exprsMat <- do.call(cbind, lapply(exprsMatList, function(x) {
+    x[common_genes, ]
+  }))
+
+  dataset_name <- names(sce_list)
+
+  if (is.null(dataset_name)) {
+    dataset_name <- paste("dataset", seq_len(sce_list), sep = "_")
+  }
+
+
+
+  group <- rep(dataset_name, unlist(lapply(exprsMatList, ncol)))
+
+
+  if (method == "wilcox") {
+    de_res <- doWilcox(exprsMat,
+                       cellTypes = group,
+                       exprs_pct = exprs_pct,
+                       exprs_threshold = exprs_threshold)
+  }
+
+  return(de_res)
+}
+
+#' @importFrom SummarizedExperiment colData
+
+.get_cell_subsets_de <- function(sce, group_to_test, colData_name) {
+
+  if (is.null(colData_name)) {
+    cell_subset <- colnames(sce)
+  } else {
+    if (!colData_name %in% colnames(colData(sce))) {
+      stop("colData name is not in sce's colData")
+    } else {
+      this_col_data <- colData(sce)[, colData_name]
+    }
+
+    cell_subset <- colnames(sce)[this_col_data %in%  group_to_test]
+  }
+  return(cell_subset)
+
+}
+
 
 #' selectDEgenes
 #'
 #' A function to select DE genes
 #'
 #' @param sce A SingleCellExperiment object with DE results stored in meta data DE_res list.
+#' @param de_res DE_res returned by DEgenesCross().
 #' @param altExp_name A character indicates which expression matrix is used. by default is none (i.e. RNA).
 #' @param pval_adj A numeric indicates the threshold of adjusted p-value.
 #' @param mean_diff A numeric indicates the threshold of
@@ -110,27 +238,43 @@ DEgenes <- function(sce,
 #' @return A SingleCellExperiment With filtered DE results in
 #' DE_res_filter list of metadata
 #'
+#' @examples
+#' data("sce_control_subset", package = "CiteFuse")
+#' sce_control_subset <- DEgenes(sce_control_subset,
+#' group = sce_control_subset$SNF_W_louvain,
+#' return_all = TRUE,
+#' exprs_pct = 0.5)
+#'
+#' sce_control_subset <- selectDEgenes(sce_control_subset)
 #'
 #' @export
 
-selectDEgenes <- function(sce,
+selectDEgenes <- function(sce = NULL,
+                          de_res = NULL,
                           altExp_name = "none",
                           pval_adj = 0.05,
                           mean_diff = 0,
                           pct_diff = 0.1,
                           topN = 10) {
 
-  meta_name <- paste("DE_res",
-                     ifelse(altExp_name == "none", "RNA", altExp_name),
-                     sep = "_")
-
-
-  if (!meta_name %in% names(S4Vectors::metadata(sce))) {
-    stop("There is no DE_res in the sce object.
-         Please run DEgenes() with the same altExp_name first.")
+  if (is.null(de_res) & is.null(sce)) {
+    stop("Both de_res and sce is null")
   }
 
-  de_res <- S4Vectors::metadata(sce)[[meta_name]]
+  if (is.null(de_res) & !is.null(sce)) {
+    meta_name <- paste("DE_res",
+                       ifelse(altExp_name == "none", "RNA", altExp_name),
+                       sep = "_")
+
+
+    if (!meta_name %in% names(S4Vectors::metadata(sce))) {
+      stop("There is no DE_res in the sce object.
+         Please run DEgenes() with the same altExp_name first.")
+    }
+
+    de_res <- S4Vectors::metadata(sce)[[meta_name]]
+  }
+
 
   de_res_filter <- lapply(de_res, function(x) {
     subset <- x[x$meanDiff > mean_diff &
@@ -139,9 +283,15 @@ selectDEgenes <- function(sce,
     subset
   })
 
-  S4Vectors::metadata(sce)[[paste(meta_name, "filter", sep = "_")]] <- de_res_filter
+  if (!is.null(sce)) {
+    S4Vectors::metadata(sce)[[paste(meta_name, "filter", sep = "_")]] <- de_res_filter
 
-  return(sce)
+    return(sce)
+  } else {
+    return(de_res_filter)
+  }
+
+
 
 }
 
@@ -219,6 +369,37 @@ doWilcox <- function(exprsMat, cellTypes,
 #' @importFrom ggraph ggraph geom_node_circle geom_node_text geom_node_label
 #'
 #' @import ggplot2
+#'
+#' @examples
+#' library(S4Vectors)
+#' data("sce_control_subset", package = "CiteFuse")
+#' sce_control_subset <- DEgenes(sce_control_subset,
+#' altExp_name = "none",
+#' group = sce_control_subset$SNF_W_louvain,
+#' return_all = TRUE,
+#' exprs_pct = 0.5)
+#'
+#'
+#' sce_control_subset <- selectDEgenes(sce_control_subset,
+#'                             altExp_name = "none")
+#'
+#' sce_control_subset <- DEgenes(sce_control_subset,
+#' altExp_name = "ADT",
+#' group = sce_control_subset$SNF_W_louvain,
+#' return_all = TRUE,
+#' exprs_pct = 0.5)
+#'
+#'
+#' sce_control_subset <- selectDEgenes(sce_control_subset,
+#'                              altExp_name = "ADT")
+#'
+#' rna_DEgenes <- metadata(sce_control_subset)[["DE_res_RNA_filter"]]
+#' adt_DEgenes <- metadata(sce_control_subset)[["DE_res_ADT_filter"]]
+#'
+#' rna_DEgenes <- lapply(rna_DEgenes, function(x){
+#'   x$name <- gsub("hg19_", "", x$name)
+#'   x})
+#' DEbubblePlot(list(RNA = rna_DEgenes, ADT = adt_DEgenes))
 #'
 #' @export
 

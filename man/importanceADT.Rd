@@ -52,6 +52,13 @@ A function to calculate the importance score of ADT
 For random forest, the importance scores are based on features importance.
 For PCA, it implements the method proposed in Levin et al (based on the loading of features).
 }
+\examples{
+data("sce_control_subset", package = "CiteFuse")
+sce_control_subset <- importanceADT(sce_control_subset,
+group = sce_control_subset$SNF_W_louvain,
+subsample = TRUE)
+
+}
 \references{
 Levine, J.H., Simonds, E.F., Bendall, S.C., Davis, K.L., El-ad, D.A., Tadmor, M.D.,
 Litvin, O., Fienberg, H.G., Jager, A., Zunder, E.R. and Finck, R., 2015.

@@ -26,3 +26,11 @@ A plot (either ggplot or pheatmap) to visualise the ADT importance results
 \description{
 A function to visualise the features distribtuion
 }
+\examples{
+data("sce_control_subset", package = "CiteFuse")
+sce_control_subset <- importanceADT(sce_control_subset,
+group = sce_control_subset$SNF_W_louvain,
+subsample = TRUE)
+visImportance(sce_control_subset, plot = "boxplot")
+
+}

@@ -32,6 +32,7 @@ A function to perform igraph clustering
 \examples{
 
 data("sce_control_subset", package = "CiteFuse")
+sce_control_subset <- CiteFuse(sce_control_subset)
 SNF_W_louvain <- igraphClustering(sce_control_subset,
 method = "louvain")
 

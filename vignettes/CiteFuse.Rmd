@@ -4,15 +4,15 @@ output:
   rmarkdown::html_vignette:
     number_sections: yes
 vignette: >
-  %\VignetteIndexEntry{CiteFuse}
+%\VignetteIndexEntry{CiteFuse}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
----
-
-
-
-
-```{r setup, include=FALSE}
+  ---
+  
+  
+  
+  
+  ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 ```
 
@@ -508,6 +508,17 @@ visualiseExprsList(sce_list = list(control = sce_citeseq,
                    group_by = c("SNF_W_louvain", "SNF_W_louvain"))
 ```
 
+
+We can then perform differential expression analysis in RNA epxression level across the two clusters that have high CD19 expression in ADT.
+
+```{r}
+de_res <- DEgenesCross(sce_list = list(control = sce_citeseq,
+                                       ctcl = sce_ctcl_subset),
+                       colData_name = c("SNF_W_louvain", "SNF_W_louvain"),
+                       group_to_test = c("2", "6"))
+de_res_filter <- selectDEgenes(de_res = de_res)
+de_res_filter
+```
 
 # SessionInfo
 

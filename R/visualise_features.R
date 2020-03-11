@@ -269,7 +269,9 @@ scatterSingle <- function(exprsMat, group = NULL, threshold = NULL) {
 
 
 
-    exprsMat_pass <- exprsMat > threshold
+    exprsMat_pass <- exprsMat > matrix(threshold,
+                                       ncol = ncol(exprsMat),
+                                       nrow = nrow(exprsMat))
 
     nn <- paste(c(rownames(exprsMat), ""), collapse = "-")
     pp <- paste(c(rownames(exprsMat), ""), collapse = "+")
@@ -440,7 +442,6 @@ visualiseExprsList <- function(sce_list,
     exprs <- .extract_exprsMat(sce_list[[i]],
                                cell_subset[[i]],
                                altExp_name, exprs_value)
-    exprs <- exprs
   })
 
   names(exprsMatList) <- dataset_name
@@ -618,7 +619,7 @@ visualiseExprsList <- function(sce_list,
 
 .extract_exprsMat <- function(sce, cell_subset, altExp_name, exprs_value) {
 
-  if (altExp_name != "none") {
+  if (!altExp_name %in% c("RNA", "none")) {
     if (!altExp_name %in% SingleCellExperiment::altExpNames(sce)) {
       stop("sce does not contain altExp_name as altExpNames")
     }

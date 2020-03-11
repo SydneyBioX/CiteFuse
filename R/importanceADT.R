@@ -17,6 +17,12 @@
 #'
 #' @return A SingleCellExperiment object
 #'
+#' @examples
+#' data("sce_control_subset", package = "CiteFuse")
+#' sce_control_subset <- importanceADT(sce_control_subset,
+#' group = sce_control_subset$SNF_W_louvain,
+#' subsample = TRUE)
+#'
 #' @importFrom randomForest randomForest
 #' @importFrom stats prcomp
 #' @importFrom SingleCellExperiment altExp altExpNames
@@ -67,20 +73,23 @@ importanceADT <- function(sce,
   }
 
 
-  exprsMat <- SummarizedExperiment::assay(SingleCellExperiment::altExp(sce, altExp_name), exprs_value)
+  exprsMat <- assay(SingleCellExperiment::altExp(sce, altExp_name),
+                    exprs_value)
 
   if (method == "randomForest") {
     if (subsample) {
       num_sub <- round(ncol(exprsMat) * prop)
       rf <- lapply(seq_len(times), function(x) {
         idx <- sample(ncol(exprsMat), num_sub)
-        randomForest::randomForest(t(as.matrix(exprsMat[, idx])), as.factor(group[idx]), ...)
+        randomForest::randomForest(t(as.matrix(exprsMat[, idx])),
+                                   as.factor(droplevels(group)[idx]), ...)
       })
 
       importance <- do.call(cbind, lapply(rf, function(x) x$importance))
       colnames(importance) <- seq_len(times)
     } else {
-      rf <- randomForest::randomForest(t(as.matrix(exprsMat)), as.factor(group), ...)
+      rf <- randomForest::randomForest(t(as.matrix(exprsMat)),
+                                       as.factor(droplevels(group)), ...)
       importance <- rf$importance
     }
 
@@ -120,6 +129,13 @@ importanceADT <- function(sce,
 #' @param exprs_value A character indicates which expression value in assayNames is used.
 #'
 #' @return A plot (either ggplot or pheatmap) to visualise the ADT importance results
+#'
+#' @examples
+#' data("sce_control_subset", package = "CiteFuse")
+#' sce_control_subset <- importanceADT(sce_control_subset,
+#' group = sce_control_subset$SNF_W_louvain,
+#' subsample = TRUE)
+#' visImportance(sce_control_subset, plot = "boxplot")
 #'
 #' @importFrom Matrix rowMeans
 #' @importFrom reshape2 melt

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>visualiseExprsList — visualiseExprsList • CiteFuse</title>
+<title>DEgenesCross — DEgenesCross • CiteFuse</title>
 
 
 <!-- jquery -->
@@ -35,9 +35,8 @@
 
 
 
-<meta property="og:title" content="visualiseExprsList — visualiseExprsList" />
-<meta property="og:description" content="A function to visualise the features distribtuion for
-a list of SingleCellExperiment" />
+<meta property="og:title" content="DEgenesCross — DEgenesCross" />
+<meta property="og:description" content="A function to perform DE analysis on a list of CITE seq data" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -112,25 +111,29 @@ a list of SingleCellExperiment" />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>visualiseExprsList</h1>
+    <h1>DEgenesCross</h1>
     
-    <div class="hidden name"><code>visualiseExprsList.Rd</code></div>
+    <div class="hidden name"><code>DEgenesCross.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>A function to visualise the features distribtuion for
-a list of SingleCellExperiment</p>
+    <p>A function to perform DE analysis on a list of CITE seq data</p>
     </div>
 
-    <pre class="usage"><span class='fu'>visualiseExprsList</span>(
+    <pre class="usage"><span class='fu'>DEgenesCross</span>(
   <span class='no'>sce_list</span>,
-  <span class='kw'>plot</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"boxplot"</span>, <span class='st'>"violin"</span>, <span class='st'>"jitter"</span>, <span class='st'>"density"</span>),
   <span class='kw'>altExp_name</span> <span class='kw'>=</span> <span class='st'>"none"</span>,
   <span class='kw'>exprs_value</span> <span class='kw'>=</span> <span class='st'>"logcounts"</span>,
-  <span class='kw'>group_by</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>feature_subset</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>cell_subset</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>n</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
+  <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"wilcox"</span>,
+  <span class='kw'>colData_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>group_to_test</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>exprs_pct</span> <span class='kw'>=</span> <span class='fl'>0.1</span>,
+  <span class='kw'>exprs_threshold</span> <span class='kw'>=</span> <span class='fl'>0</span>,
+  <span class='kw'>return_all</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>pval_adj</span> <span class='kw'>=</span> <span class='fl'>0.05</span>,
+  <span class='kw'>mean_diff</span> <span class='kw'>=</span> <span class='fl'>0</span>,
+  <span class='kw'>pct_diff</span> <span class='kw'>=</span> <span class='fl'>0.1</span>,
+  <span class='kw'>topN</span> <span class='kw'>=</span> <span class='fl'>10</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -138,67 +141,77 @@ a list of SingleCellExperiment</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>sce_list</th>
-      <td><p>A list of SingleCellExperiment object</p></td>
-    </tr>
-    <tr>
-      <th>plot</th>
-      <td><p>Type of plot, includes boxplot, violin, jitter, density,
-and pairwise. By default is boxplot</p></td>
+      <td><p>A Slist of ingleCellExperiment object</p></td>
     </tr>
     <tr>
       <th>altExp_name</th>
-      <td><p>A character indicates which expression matrix is used.
-by default is none (i.e. RNA).</p></td>
+      <td><p>A character indicates which expression matrix is
+used. by default is none (i.e. RNA).</p></td>
     </tr>
     <tr>
       <th>exprs_value</th>
-      <td><p>A character indicates which expression value
-in assayNames is used.</p></td>
+      <td><p>A character indicates which expression value in
+assayNames is used.</p></td>
     </tr>
     <tr>
-      <th>group_by</th>
-      <td><p>A character indicates how is the expression
-will be group in the plots (stored in colData).</p></td>
+      <th>method</th>
+      <td><p>A character indicates the method used in DE analysis</p></td>
     </tr>
     <tr>
-      <th>feature_subset</th>
-      <td><p>A vector of characters indicates
-the subset of features that are used for visualisation</p></td>
+      <th>colData_name</th>
+      <td><p>A vector of character indicates the colData that
+stored the group information of each sce of the sce_list</p></td>
     </tr>
     <tr>
-      <th>cell_subset</th>
-      <td><p>A vector of characters indicates
-the subset of cells that are used for visualisation</p></td>
+      <th>group_to_test</th>
+      <td><p>A vector of character indicates which group in each
+sce is used to compared across the sce list.</p></td>
     </tr>
     <tr>
-      <th>n</th>
-      <td><p>A numeric indicates the top expressed features to show.</p></td>
+      <th>exprs_pct</th>
+      <td><p>A numeric indicates the threshold expression percentage
+of a gene to be considered in DE analysis</p></td>
+    </tr>
+    <tr>
+      <th>exprs_threshold</th>
+      <td><p>A numeric indicates the threshold of expression.
+By default is 0.</p></td>
+    </tr>
+    <tr>
+      <th>return_all</th>
+      <td><p>Whether return full list of DE genes</p></td>
+    </tr>
+    <tr>
+      <th>pval_adj</th>
+      <td><p>A numeric indicates the threshold of adjusted p-value.</p></td>
+    </tr>
+    <tr>
+      <th>mean_diff</th>
+      <td><p>A numeric indicates the threshold of difference of
+average expression.</p></td>
+    </tr>
+    <tr>
+      <th>pct_diff</th>
+      <td><p>A numeric indicates the threshold of difference of
+percentage expression.</p></td>
+    </tr>
+    <tr>
+      <th>topN</th>
+      <td><p>A numeric indicates the top number of genes will be
+included in the list.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A ggplot to visualise te features distribution</p>
+    <p>A SingleCellExeperiment with DE results stored in meta data DE_res</p>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"sce_control_subset"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"CiteFuse"</span>)
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"sce_ctcl_subset"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"CiteFuse"</span>)
-<span class='fu'>visualiseExprsList</span>(<span class='kw'>sce_list</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>control</span> <span class='kw'>=</span> <span class='no'>sce_control_subset</span>,
-<span class='kw'>ctcl</span> <span class='kw'>=</span> <span class='no'>sce_ctcl_subset</span>),
-<span class='kw'>plot</span> <span class='kw'>=</span> <span class='st'>"boxplot"</span>,
-<span class='kw'>altExp_name</span> <span class='kw'>=</span> <span class='st'>"none"</span>,
-<span class='kw'>exprs_value</span> <span class='kw'>=</span> <span class='st'>"logcounts"</span>,
-<span class='kw'>feature_subset</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"hg19_CD8A"</span>),
-<span class='kw'>group_by</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"SNF_W_louvain"</span>, <span class='st'>"SNF_W_louvain"</span>))</div><div class='img'><img src='visualiseExprsList-1.png' alt='' width='700' height='433' /></div><div class='input'>
-
-</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       <li><a href="#value">Value</a></li>
-      <li><a href="#examples">Examples</a></li>
     </ul>
 
   </div>

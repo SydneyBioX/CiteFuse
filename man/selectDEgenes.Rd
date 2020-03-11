@@ -5,7 +5,8 @@
 \title{selectDEgenes}
 \usage{
 selectDEgenes(
-  sce,
+  sce = NULL,
+  de_res = NULL,
   altExp_name = "none",
   pval_adj = 0.05,
   mean_diff = 0,
@@ -15,6 +16,8 @@ selectDEgenes(
 }
 \arguments{
 \item{sce}{A SingleCellExperiment object with DE results stored in meta data DE_res list.}
+
+\item{de_res}{DE_res returned by DEgenesCross().}
 
 \item{altExp_name}{A character indicates which expression matrix is used. by default is none (i.e. RNA).}
 
@@ -35,4 +38,14 @@ DE_res_filter list of metadata
 }
 \description{
 A function to select DE genes
+}
+\examples{
+data("sce_control_subset", package = "CiteFuse")
+sce_control_subset <- DEgenes(sce_control_subset,
+group = sce_control_subset$SNF_W_louvain,
+return_all = TRUE,
+exprs_pct = 0.5)
+
+sce_control_subset <- selectDEgenes(sce_control_subset)
+
 }
