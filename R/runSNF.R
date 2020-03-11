@@ -117,15 +117,17 @@ CiteFuse <- function(sce,
 
 
 
-#' @importFrom scran trendVar decomposeVar
+#' @importFrom scran modelGeneVar
 
 selectHVG <- function(sce,
                       FDR = 0.05,
                       bio = 0.1) {
-  fit <- scran::trendVar(sce,
-                         use.spikes = FALSE)
+  # fit <- scran::modelGeneVar(sce,
+  #                        use.spikes = FALSE)
+  #
+  # decomp <- scran::decomposeVar(sce, fit)
 
-  decomp <- scran::decomposeVar(sce, fit)
+  decomp <- scran::modelGeneVar(sce)
   decomp <- decomp[order(decomp$bio, decreasing = TRUE), ]
   # top.hvgs <- order(decomp$bio, decreasing=TRUE)
   hvg <- rownames(decomp)[decomp$FDR < FDR & decomp$bio > bio]

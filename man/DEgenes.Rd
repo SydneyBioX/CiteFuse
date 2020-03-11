@@ -20,7 +20,7 @@ DEgenes(
 )
 }
 \arguments{
-\item{sce}{A singlecellexperiment object}
+\item{sce}{A SingleCellExperiment object}
 
 \item{altExp_name}{A character indicates which expression matrix is used. by default is none (i.e. RNA).}
 
@@ -45,7 +45,7 @@ DEgenes(
 \item{topN}{A numeric indicates the top number of genes will be included in the list.}
 }
 \value{
-A list of DE results
+A SingleCellExeperiment with DE results stored in meta data DE_res
 }
 \description{
 A function to perform DE analysis on CITE seq data

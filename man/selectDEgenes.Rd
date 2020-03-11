@@ -5,7 +5,8 @@
 \title{selectDEgenes}
 \usage{
 selectDEgenes(
-  de_res,
+  sce,
+  altExp_name = "none",
   pval_adj = 0.05,
   mean_diff = 0,
   pct_diff = 0.1,
@@ -13,18 +14,24 @@ selectDEgenes(
 )
 }
 \arguments{
-\item{de_res}{The de results returned by `DEgenes()``}
+\item{sce}{A SingleCellExperiment object with DE results stored in meta data DE_res list.}
+
+\item{altExp_name}{A character indicates which expression matrix is used. by default is none (i.e. RNA).}
 
 \item{pval_adj}{A numeric indicates the threshold of adjusted p-value.}
 
-\item{mean_diff}{A numeric indicates the threshold of difference of average expression.}
+\item{mean_diff}{A numeric indicates the threshold of
+difference of average expression.}
 
-\item{pct_diff}{A numeric indicates the threshold of difference of percentage expression.}
+\item{pct_diff}{A numeric indicates the threshold of
+difference of percentage expression.}
 
-\item{topN}{A numeric indicates the top number of genes will be included in the list.}
+\item{topN}{A numeric indicates the top number of genes
+will be included in the list.}
 }
 \value{
-A list of DE results of significant DE genes
+A SingleCellExperiment With filtered DE results in
+DE_res_filter list of metadata
 }
 \description{
 A function to select DE genes

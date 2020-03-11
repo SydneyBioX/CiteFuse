@@ -3,7 +3,7 @@
 #'
 #' A function to perform DE analysis on CITE seq data
 #'
-#' @param sce A singlecellexperiment object
+#' @param sce A SingleCellExperiment object
 #' @param altExp_name A character indicates which expression matrix is used. by default is none (i.e. RNA).
 #' @param exprs_value A character indicates which expression value in assayNames is used.
 #' @param group A vector indicates the grouping of the data
@@ -16,7 +16,7 @@
 #' @param pct_diff A numeric indicates the threshold of difference of percentage expression.
 #' @param topN A numeric indicates the top number of genes will be included in the list.
 #'
-#' @return A list of DE results
+#' @return A SingleCellExeperiment with DE results stored in meta data DE_res
 #'
 #' @importFrom randomForest randomForest
 #' @importFrom SingleCellExperiment altExp altExpNames
@@ -45,7 +45,7 @@ DEgenes <- function(sce,
     stop("group is NULL.")
   }
 
-  if (altExp_name != "none") {
+  if (!altExp_name %in% c("none", "RNA")) {
     if (!altExp_name %in% SingleCellExperiment::altExpNames(sce)) {
       stop("sce does not contain altExp_name as altExpNames")
     }
@@ -58,7 +58,8 @@ DEgenes <- function(sce,
 
   } else {
 
-    # if altExp_name is "none", then the assay in SingleCellExperiment is extracted (RNA in most of the cases)
+    # if altExp_name is "none", then the assay in SingleCellExperiment
+    #is extracted (RNA in most of the cases)
 
     exprsMat <- SummarizedExperiment::assay(sce, exprs_value)
   }
@@ -70,17 +71,23 @@ DEgenes <- function(sce,
                        exprs_threshold = exprs_threshold)
   }
 
-  if (return_all) {
-    return(de_res)
-  } else {
-    de_res <- selectDEgenes(de_res,
-                            pval_adj = pval_adj,
-                            mean_diff = mean_diff,
-                            pct_diff = pct_diff,
-                            topN = topN
-    )
+  meta_name <- paste("DE_res",
+                     ifelse(altExp_name == "none", "RNA", altExp_name),
+                     sep = "_")
 
-    return(de_res)
+  S4Vectors::metadata(sce)[[meta_name]] <- de_res
+
+  if (return_all) {
+    return(sce)
+  } else {
+    sce <- selectDEgenes(sce,
+                         altExp_name = altExp_name,
+                         pval_adj = pval_adj,
+                         mean_diff = mean_diff,
+                         pct_diff = pct_diff,
+                         topN = topN
+    )
+    return(sce)
   }
 }
 
@@ -90,38 +97,59 @@ DEgenes <- function(sce,
 #'
 #' A function to select DE genes
 #'
-#' @param de_res The de results returned by `DEgenes()``
+#' @param sce A SingleCellExperiment object with DE results stored in meta data DE_res list.
+#' @param altExp_name A character indicates which expression matrix is used. by default is none (i.e. RNA).
 #' @param pval_adj A numeric indicates the threshold of adjusted p-value.
-#' @param mean_diff A numeric indicates the threshold of difference of average expression.
-#' @param pct_diff A numeric indicates the threshold of difference of percentage expression.
-#' @param topN A numeric indicates the top number of genes will be included in the list.
+#' @param mean_diff A numeric indicates the threshold of
+#' difference of average expression.
+#' @param pct_diff A numeric indicates the threshold of
+#' difference of percentage expression.
+#' @param topN A numeric indicates the top number of genes
+#' will be included in the list.
 #'
-#' @return A list of DE results of significant DE genes
+#' @return A SingleCellExperiment With filtered DE results in
+#' DE_res_filter list of metadata
 #'
 #'
 #' @export
 
-selectDEgenes <- function(de_res,
+selectDEgenes <- function(sce,
+                          altExp_name = "none",
                           pval_adj = 0.05,
                           mean_diff = 0,
                           pct_diff = 0.1,
                           topN = 10) {
 
-  de_res <- lapply(de_res, function(x) {
+  meta_name <- paste("DE_res",
+                     ifelse(altExp_name == "none", "RNA", altExp_name),
+                     sep = "_")
+
+
+  if (!meta_name %in% names(S4Vectors::metadata(sce))) {
+    stop("There is no DE_res in the sce object.
+         Please run DEgenes() with the same altExp_name first.")
+  }
+
+  de_res <- S4Vectors::metadata(sce)[[meta_name]]
+
+  de_res_filter <- lapply(de_res, function(x) {
     subset <- x[x$meanDiff > mean_diff &
                   x$p.adjust < pval_adj & x$pctDiff > pct_diff, ]
     subset <- subset[seq_len(min(nrow(subset), topN)),]
     subset
   })
 
-  return(de_res)
+  S4Vectors::metadata(sce)[[paste(meta_name, "filter", sep = "_")]] <- de_res_filter
+
+  return(sce)
 
 }
 
 
 
 
-doWilcox <- function(exprsMat, cellTypes, exprs_pct = 0.05, exprs_threshold = 0){
+doWilcox <- function(exprsMat, cellTypes,
+                     exprs_pct = 0.05, exprs_threshold = 0){
   cellTypes <- droplevels(as.factor(cellTypes))
   tt <- list()
 

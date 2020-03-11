@@ -4,14 +4,15 @@ output:
   rmarkdown::html_vignette:
     number_sections: yes
 vignette: >
-  %\VignetteIndexEntry{scClassify}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::knitr}
+  %\VignetteIndexEntry{Getting started: CiteFuse}
+  %\usepackage[UTF-8]{inputenc}
 ---
-
-
-
-
+  
+  
+  
+  
+  
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 ```
@@ -165,7 +166,7 @@ sce_citeseq
 ## Performing SNF
 
 ```{r}
-sce_citeseq <- scater::normalize(sce_citeseq)
+sce_citeseq <- scater::logNormCounts(sce_citeseq)
 system.time(sce_citeseq <- CiteFuse(sce_citeseq))
 ```
 
@@ -289,31 +290,36 @@ visualiseExprs(sce_citeseq, altExp_name = "ADT",
 
 ## Perform DE analysis using Wilcoxon Rank Sum test
 
+
+### For RNA expression
 ```{r}
-rna_DEgenes_all <- DEgenes(sce_citeseq,
-                           group = sce_citeseq$SNF_W_louvain,
-                           return_all = TRUE,
-                           exprs_pct = 0.5)
+# DE will be performed for RNA if altExp_name = "none" 
+sce_citeseq <- DEgenes(sce_citeseq,
+                       altExp_name = "none", 
+                       group = sce_citeseq$SNF_W_louvain,
+                       return_all = TRUE,
+                       exprs_pct = 0.5)
 
 
-rna_DEgenes <- selectDEgenes(rna_DEgenes_all)
-datatable(format(do.call(rbind, rna_DEgenes), digits = 2))
+sce_citeseq <- selectDEgenes(sce_citeseq,
+                             altExp_name = "none")
+datatable(format(do.call(rbind, metadata(sce_citeseq)[["DE_res_RNA_filter"]]), 
+                 digits = 2))
 ```
 
-
+### For ADT 
 ```{r}
-adt_DEgenes_all <- DEgenes(sce_citeseq,
-                           altExp_name = "ADT",
-                           group = sce_citeseq$SNF_W_louvain,
-                           exprs_threshold = 4,
-                           return_all = TRUE,
-                           exprs_pct = 0.1)
-
-adt_DEgenes <- selectDEgenes(adt_DEgenes_all)
+sce_citeseq <- DEgenes(sce_citeseq,
+                       altExp_name = "ADT", 
+                       group = sce_citeseq$SNF_W_louvain,
+                       return_all = TRUE,
+                       exprs_pct = 0.5)
 
 
-
-datatable(format(do.call(rbind, adt_DEgenes), digits = 2))
+sce_citeseq <- selectDEgenes(sce_citeseq,
+                             altExp_name = "ADT")
+datatable(format(do.call(rbind, metadata(sce_citeseq)[["DE_res_ADT_filter"]]), 
+                 digits = 2))
 ```
 
 
@@ -322,10 +328,12 @@ datatable(format(do.call(rbind, adt_DEgenes), digits = 2))
 ### circlepackPlot
 
 ```{r fig.height = 10, fig.width = 10}
+rna_DEgenes <- metadata(sce_citeseq)[["DE_res_RNA_filter"]]
+adt_DEgenes <- metadata(sce_citeseq)[["DE_res_ADT_filter"]]
+
 rna_DEgenes <- lapply(rna_DEgenes, function(x){
   x$name <- gsub("hg19_", "", x$name)
-  x
-})
+  x})
 DEbubblePlot(list(RNA = rna_DEgenes, ADT = adt_DEgenes))
 ```
 
@@ -342,6 +350,9 @@ rna_list <- c("hg19_CD4",
               "hg19_CD19")
 
 adt_list <- c("CD4", "CD8", "MHCII (HLA-DR)", "CD11c", "CD56", "CD27", "CD19")
+
+rna_DEgenes_all <- metadata(sce_citeseq)[["DE_res_RNA"]]
+adt_DEgenes_all <- metadata(sce_citeseq)[["DE_res_ADT"]]
 
 feature_list <- list(RNA = rna_list, ADT = adt_list)
 de_list <- list(RNA = rna_DEgenes_all, ADT = adt_DEgenes_all)
@@ -376,8 +387,7 @@ system.time(sce_citeseq <- CiteFuse(sce_citeseq,
                                     ADT_subset = subset_adt,
                                     metadata_names = c("W_SNF_adtSubset1",
                                                        "W_ADT_adtSubset1",
-                                                       "W_RNA"
-                                    )))
+                                                       "W_RNA")))
 
 SNF_W_clust_adtSubset1 <- spectralClustering(metadata(sce_citeseq)[["W_SNF_adtSubset1"]], K = 5)
 sce_citeseq$SNF_W_clust_adtSubset1 <- as.factor(SNF_W_clust_adtSubset1$labels)
