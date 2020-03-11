@@ -15,9 +15,11 @@ igraphClustering(
 \arguments{
 \item{sce}{A singlecellexperiment object}
 
-\item{metadata}{indicates the meta data name of affinity matrix to virsualise}
+\item{metadata}{indicates the meta data name of affinity matrix
+to virsualise}
 
-\item{method}{A character indicates the method for finding communities from igraph. Default is louvain clustering.}
+\item{method}{A character indicates the method for finding communities f
+rom igraph. Default is louvain clustering.}
 
 \item{...}{Other inputs for the igraph functions}
 }
@@ -26,4 +28,11 @@ A vector indicates the membership (clustering) results
 }
 \description{
 A function to perform igraph clustering
+}
+\examples{
+
+data("sce_control_subset", package = "CiteFuse")
+SNF_W_louvain <- igraphClustering(sce_control_subset,
+method = "louvain")
+
 }

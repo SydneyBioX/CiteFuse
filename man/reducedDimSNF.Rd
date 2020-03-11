@@ -9,9 +9,11 @@ reducedDimSNF(sce, metadata = "SNF_W", method = "UMAP", dimNames = NULL, ...)
 \arguments{
 \item{sce}{A singlecellexperiment object}
 
-\item{metadata}{indicates the meta data name of affinity matrix to virsualise}
+\item{metadata}{indicates the meta data name of
+affinity matrix to virsualise}
 
-\item{method}{the method of visualisation, which can be UMAP, tSNE and diffusion map}
+\item{method}{the method of visualisation, which can be UMAP,
+tSNE and diffusion map}
 
 \item{dimNames}{indicates the name of the reduced dimension results.}
 
@@ -22,4 +24,11 @@ A SingleCellExperiment object
 }
 \description{
 A function to reduce the dimension of the similarity matrix
+}
+\examples{
+data("sce_control_subset", package = "CiteFuse")
+sce_control_subset <- reducedDimSNF(sce_control_subset,
+method = "tSNE",
+dimNames = "tSNE_joint")
+
 }

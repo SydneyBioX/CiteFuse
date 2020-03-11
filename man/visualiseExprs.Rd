@@ -10,6 +10,7 @@ visualiseExprs(
   altExp_name = c("none"),
   exprs_value = "logcounts",
   group_by = NULL,
+  facet_by = NULL,
   feature_subset = NULL,
   cell_subset = NULL,
   n = NULL,
@@ -31,6 +32,9 @@ in assayNames is used.}
 \item{group_by}{A character indicates how is the expression
 will be group in the plots (stored in colData).}
 
+\item{facet_by}{A character indicates how is the expression
+will be lay out panels in a grid in the plots (stored in colData).}
+
 \item{feature_subset}{A vector of characters indicates
 the subset of features that are used for visualisation}
 
@@ -47,4 +51,18 @@ A ggplot to visualise te features distribution
 }
 \description{
 A function to visualise the features distribtuion
+}
+\examples{
+data("sce_control_subset", package = "CiteFuse")
+visualiseExprs(sce_control_subset,
+plot = "boxplot",
+group_by = "SNF_W_louvain",
+feature_subset = c("hg19_CD8A"))
+
+visualiseExprs(sce_control_subset,
+plot = "density",
+altExp_name = "ADT",
+group_by = "SNF_W_louvain",
+feature_subset = c("CD8", "CD4"))
+
 }

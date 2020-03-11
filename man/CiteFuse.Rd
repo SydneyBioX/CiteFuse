@@ -48,3 +48,8 @@ A SingleCellExperiment object with fused matrix results stored
 \description{
 A function to runSNF for CITE seq data
 }
+\examples{
+data("sce_ctcl_subset", package = "CiteFuse")
+sce_ctcl_subset <- CiteFuse(sce_ctcl_subset)
+
+}

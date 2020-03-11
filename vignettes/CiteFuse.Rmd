@@ -40,7 +40,6 @@ Here, we started from a list of three matrices of RNA, ADT and HTO, which have c
 
 ```{r}
 sce_citeseq <- preprocessing(CITEseq_example)
-
 sce_citeseq
 ```
 
@@ -232,7 +231,7 @@ visualiseKNN(sce_citeseq, colour_by = "SNF_W_louvain")
 
 ## Exploration of features expression 
 
-```{r fig.height = 8, fig.width = 8}
+```{r fig.height = 4, fig.width = 8}
 visualiseExprs(sce_citeseq, 
                plot = "boxplot", 
                group_by = "SNF_W_louvain",
@@ -263,7 +262,7 @@ visualiseExprs(sce_citeseq,
 ```
 
 
-```{r fig.height = 8, fig.width = 8}
+```{r fig.height = 4, fig.width = 8}
 visualiseExprs(sce_citeseq, 
                altExp_name = "ADT", 
                group_by = "SNF_W_louvain",
@@ -282,7 +281,7 @@ visualiseExprs(sce_citeseq, altExp_name = "ADT",
 
 
 
-```{r fig.height = 8, fig.width = 8}
+```{r fig.height = 4, fig.width = 8}
 visualiseExprs(sce_citeseq, altExp_name = "ADT", 
                plot = "pairwise", 
                feature_subset = c("CD4", "CD8"))
@@ -477,6 +476,36 @@ visLigandReceptor(sce_citeseq,
 visLigandReceptor(sce_citeseq, 
                   type = "lr_network",
                   receptor_type = "ADT")
+```
+
+# Analysis cross condtions
+
+Here we will jointly analysis the current data in control condtion, with the another subset in CTCL condition from Mimitou et al.. The data `sce_ctcl_subset` provided in `CiteFuse` package already contain the clustering inforamtion.
+
+```{r}
+data("sce_ctcl_subset", package = "CiteFuse")
+```
+
+
+To visualise jointly gene or protein expression data, we can use `visualiseExprsList` function.
+
+
+```{r}
+
+visualiseExprsList(sce_list = list(control = sce_citeseq,
+                                   ctcl = sce_ctcl_subset),
+                   plot = "boxplot",
+                   altExp_name = "none",
+                   exprs_value = "logcounts",
+                   feature_subset = c("hg19_S100A10", "hg19_CD8A"),
+                   group_by = c("SNF_W_louvain", "SNF_W_louvain"))
+
+visualiseExprsList(sce_list = list(control = sce_citeseq,
+                                   ctcl = sce_ctcl_subset),
+                   plot = "boxplot",
+                   altExp_name = "ADT", 
+                   feature_subset = c("CD19", "CD8"),
+                   group_by = c("SNF_W_louvain", "SNF_W_louvain"))
 ```
 
 

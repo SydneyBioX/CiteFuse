@@ -18,6 +18,10 @@
 #'
 #' @return A SingleCellExperiment object with fused matrix results stored
 #'
+#' @examples
+#' data("sce_ctcl_subset", package = "CiteFuse")
+#' sce_ctcl_subset <- CiteFuse(sce_ctcl_subset)
+#'
 #' @importFrom SingleCellExperiment SingleCellExperiment logcounts
 #' @importFrom Matrix rowSums
 #' @importFrom SummarizedExperiment SummarizedExperiment
@@ -110,7 +114,7 @@ CiteFuse <- function(sce,
 
   S4Vectors::metadata(sce)[[metadata_names[1]]] <- W
   S4Vectors::metadata(sce)[[metadata_names[2]]] <- W1
-  S4Vectors::metadata(sce)[[metadata_names[3]]]<- W2
+  S4Vectors::metadata(sce)[[metadata_names[3]]] <- W2
 
   return(sce)
 }

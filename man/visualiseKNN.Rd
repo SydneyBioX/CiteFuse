@@ -19,3 +19,8 @@ A igraph plot
 \description{
 A function to perform louvain clustering
 }
+\examples{
+data("sce_control_subset", package = "CiteFuse")
+visualiseKNN(sce_control_subset, colour_by = "SNF_W_louvain")
+
+}

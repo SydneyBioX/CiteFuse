@@ -9,6 +9,7 @@
 #' @useDynLib CiteFuse
 #'
 #'
+#'
 #' @import Rcpp RcppEigen
 #'
 #' @export

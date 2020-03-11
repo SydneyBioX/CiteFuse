@@ -13,6 +13,12 @@
 #'
 #' @return A list indicates the spectral clustering results
 #'
+#' @examples
+#'
+#' data("sce_control_subset", package = "CiteFuse")
+#' SNF_W_clust <- spectralClustering(S4Vectors::metadata(sce_control_subset)[["SNF_W"]],
+#' K = 5)
+#'
 #' @importFrom igraph arpack
 #' @importFrom methods as
 #'
@@ -203,13 +209,21 @@ spectralClustering <- function(affinity, K = 20, type = 4,
 #' A function to reduce the dimension of the similarity matrix
 #'
 #' @param sce A singlecellexperiment object
-#' @param metadata indicates the meta data name of affinity matrix to virsualise
-#' @param method the method of visualisation, which can be UMAP, tSNE and diffusion map
+#' @param metadata indicates the meta data name of
+#' affinity matrix to virsualise
+#' @param method the method of visualisation, which can be UMAP,
+#' tSNE and diffusion map
 #' @param dimNames indicates the name of the reduced dimension results.
 #'
 #' @param ... other parameters for tsne(), umap()
 #'
 #' @return A SingleCellExperiment object
+#'
+#' @examples
+#' data("sce_control_subset", package = "CiteFuse")
+#' sce_control_subset <- reducedDimSNF(sce_control_subset,
+#' method = "tSNE",
+#' dimNames = "tSNE_joint")
 #'
 #' @importFrom uwot umap
 #' @importFrom Rtsne Rtsne
@@ -277,11 +291,19 @@ reducedDimSNF <- function(sce,
 #'
 #' @param sce A singlecellexperiment object
 #' @param dimNames indicates the name of the reduced dimension results.
-#' @param colour_by the method of visualisation, which can be UMAP, tSNE and diffusion map
-#' @param shape_by the method of visualisation, which can be UMAP, tSNE and diffusion map
-#' @param dim a vector of numeric with length of 2 indicates which component is being plot
+#' @param colour_by the method of visualisation, which can be UMAP,
+#' tSNE and diffusion map
+#' @param shape_by the method of visualisation, which can be UMAP,
+#' tSNE and diffusion map
+#' @param dim a vector of numeric with length of 2 indicates
+#' which component is being plot
 #'
 #' @return A ggplot of the reduced dimension visualisation
+#'
+#' @examples
+#' data("sce_control_subset", package = "CiteFuse")
+#' visualiseDim(sce_control_subset, dimNames = "tSNE_joint",
+#' colour_by = "SNF_W_clust")
 #'
 #' @importFrom SingleCellExperiment reducedDimNames
 #' @importFrom SummarizedExperiment colData
@@ -400,11 +422,19 @@ visualiseDim <- function(sce,
 #' A function to perform igraph clustering
 #'
 #' @param sce A singlecellexperiment object
-#' @param metadata indicates the meta data name of affinity matrix to virsualise
-#' @param method A character indicates the method for finding communities from igraph. Default is louvain clustering.
+#' @param metadata indicates the meta data name of affinity matrix
+#' to virsualise
+#' @param method A character indicates the method for finding communities f
+#' rom igraph. Default is louvain clustering.
 #' @param ... Other inputs for the igraph functions
 #'
 #' @return A vector indicates the membership (clustering) results
+#'
+#' @examples
+#'
+#' data("sce_control_subset", package = "CiteFuse")
+#' SNF_W_louvain <- igraphClustering(sce_control_subset,
+#' method = "louvain")
 #'
 #' @importFrom S4Vectors metadata
 #' @importFrom dbscan sNN
@@ -496,6 +526,10 @@ igraphClustering <- function(sce,
 #' @param metadata indicates the meta data name of affinity matrix to virsualise
 #'
 #' @return A igraph plot
+#'
+#' @examples
+#' data("sce_control_subset", package = "CiteFuse")
+#' visualiseKNN(sce_control_subset, colour_by = "SNF_W_louvain")
 #'
 #' @importFrom S4Vectors metadata
 #' @importFrom dbscan sNN

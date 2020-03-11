@@ -38,3 +38,10 @@ A list indicates the spectral clustering results
 \description{
 A function to perform spectral clustering
 }
+\examples{
+
+data("sce_control_subset", package = "CiteFuse")
+SNF_W_clust <- spectralClustering(S4Vectors::metadata(sce_control_subset)[["SNF_W"]],
+K = 5)
+
+}

@@ -17,15 +17,24 @@ visualiseDim(
 
 \item{dimNames}{indicates the name of the reduced dimension results.}
 
-\item{colour_by}{the method of visualisation, which can be UMAP, tSNE and diffusion map}
+\item{colour_by}{the method of visualisation, which can be UMAP,
+tSNE and diffusion map}
 
-\item{shape_by}{the method of visualisation, which can be UMAP, tSNE and diffusion map}
+\item{shape_by}{the method of visualisation, which can be UMAP,
+tSNE and diffusion map}
 
-\item{dim}{a vector of numeric with length of 2 indicates which component is being plot}
+\item{dim}{a vector of numeric with length of 2 indicates
+which component is being plot}
 }
 \value{
 A ggplot of the reduced dimension visualisation
 }
 \description{
 A function to visualise the reduced dimension
+}
+\examples{
+data("sce_control_subset", package = "CiteFuse")
+visualiseDim(sce_control_subset, dimNames = "tSNE_joint",
+colour_by = "SNF_W_clust")
+
 }
