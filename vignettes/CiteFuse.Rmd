@@ -4,15 +4,15 @@ output:
   rmarkdown::html_vignette:
     number_sections: yes
 vignette: >
-%\VignetteIndexEntry{CiteFuse}
+  %\VignetteIndexEntry{CiteFuse}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
-  ---
+---
   
   
   
   
-  ```{r setup, include=FALSE}
+```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 ```
 
