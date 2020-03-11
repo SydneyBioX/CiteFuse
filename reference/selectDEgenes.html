@@ -121,7 +121,8 @@
     </div>
 
     <pre class="usage"><span class='fu'>selectDEgenes</span>(
-  <span class='no'>de_res</span>,
+  <span class='no'>sce</span>,
+  <span class='kw'>altExp_name</span> <span class='kw'>=</span> <span class='st'>"none"</span>,
   <span class='kw'>pval_adj</span> <span class='kw'>=</span> <span class='fl'>0.05</span>,
   <span class='kw'>mean_diff</span> <span class='kw'>=</span> <span class='fl'>0</span>,
   <span class='kw'>pct_diff</span> <span class='kw'>=</span> <span class='fl'>0.1</span>,
@@ -132,8 +133,12 @@
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>de_res</th>
-      <td><p>The de results returned by `DEgenes()``</p></td>
+      <th>sce</th>
+      <td><p>A SingleCellExperiment object with DE results stored in meta data DE_res list.</p></td>
+    </tr>
+    <tr>
+      <th>altExp_name</th>
+      <td><p>A character indicates which expression matrix is used. by default is none (i.e. RNA).</p></td>
     </tr>
     <tr>
       <th>pval_adj</th>
@@ -141,21 +146,25 @@
     </tr>
     <tr>
       <th>mean_diff</th>
-      <td><p>A numeric indicates the threshold of difference of average expression.</p></td>
+      <td><p>A numeric indicates the threshold of
+difference of average expression.</p></td>
     </tr>
     <tr>
       <th>pct_diff</th>
-      <td><p>A numeric indicates the threshold of difference of percentage expression.</p></td>
+      <td><p>A numeric indicates the threshold of
+difference of percentage expression.</p></td>
     </tr>
     <tr>
       <th>topN</th>
-      <td><p>A numeric indicates the top number of genes will be included in the list.</p></td>
+      <td><p>A numeric indicates the top number of genes
+will be included in the list.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A list of DE results of significant DE genes</p>
+    <p>A SingleCellExperiment With filtered DE results in
+DE_res_filter list of metadata</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

@@ -125,6 +125,7 @@
   <span class='kw'>plot</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"boxplot"</span>, <span class='st'>"violin"</span>, <span class='st'>"jitter"</span>, <span class='st'>"density"</span>, <span class='st'>"pairwise"</span>),
   <span class='kw'>altExp_name</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"none"</span>),
   <span class='kw'>exprs_value</span> <span class='kw'>=</span> <span class='st'>"logcounts"</span>,
+  <span class='kw'>group_by</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>feature_subset</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>cell_subset</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>n</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
@@ -140,23 +141,33 @@
     </tr>
     <tr>
       <th>plot</th>
-      <td><p>Type of plot, includes boxplot, violin, jitter, density, and pairwise. By default is boxplot</p></td>
+      <td><p>Type of plot, includes boxplot, violin, jitter, density,
+and pairwise. By default is boxplot</p></td>
     </tr>
     <tr>
       <th>altExp_name</th>
-      <td><p>A character indicates which expression matrix is used. by default is none (i.e. RNA).</p></td>
+      <td><p>A character indicates which expression matrix is used.
+by default is none (i.e. RNA).</p></td>
     </tr>
     <tr>
       <th>exprs_value</th>
-      <td><p>A character indicates which expression value in assayNames is used.</p></td>
+      <td><p>A character indicates which expression value
+in assayNames is used.</p></td>
+    </tr>
+    <tr>
+      <th>group_by</th>
+      <td><p>A character indicates how is the expression
+will be group in the plots (stored in colData).</p></td>
     </tr>
     <tr>
       <th>feature_subset</th>
-      <td><p>A vector of characters indicates the subset of features that are used for visualisation</p></td>
+      <td><p>A vector of characters indicates
+the subset of features that are used for visualisation</p></td>
     </tr>
     <tr>
       <th>cell_subset</th>
-      <td><p>A vector of characters indicates the subset of cells that are used for visualisation</p></td>
+      <td><p>A vector of characters indicates
+the subset of cells that are used for visualisation</p></td>
     </tr>
     <tr>
       <th>n</th>
@@ -164,7 +175,8 @@
     </tr>
     <tr>
       <th>threshold</th>
-      <td><p>Thresholds of high expresion for features (only is used for pairwise plot).</p></td>
+      <td><p>Thresholds of high expresion for features
+(only is used for pairwise plot).</p></td>
     </tr>
     </table>
 
