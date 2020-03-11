@@ -21,3 +21,12 @@ A plot visualising the HTO expression
 \description{
 A function to plot HTO expression
 }
+\examples{
+data("CITEseq_example", package = "CiteFuse")
+sce_citeseq <- preprocessing(CITEseq_example)
+sce_citeseq <- normaliseExprs(sce = sce_citeseq,
+altExp_name = "HTO",
+transform = "log")
+plotHTO(sce_citeseq, 1:4)
+
+}

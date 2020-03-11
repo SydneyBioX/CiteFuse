@@ -248,6 +248,11 @@ reducedDimSNF <- function(sce,
   }
 
   if ("tSNE" %in% method) {
+
+    if (nrow(W) - 1 < 3 * 30) {
+      stop("Please set a smaller perplexity number for Rtsne()")
+    }
+
     dimred <- Rtsne::Rtsne(as.dist(0.5 - W), is_distance = TRUE, ...)$Y
     colnames(dimred) <- paste("tSNE", seq_len(ncol(dimred)), sep = " ")
 

@@ -4,15 +4,14 @@ output:
   rmarkdown::html_vignette:
     number_sections: yes
 vignette: >
-  %\VignetteEngine{knitr::knitr}
-  %\VignetteIndexEntry{Getting started: CiteFuse}
-  %\usepackage[UTF-8]{inputenc}
+  %\VignetteIndexEntry{CiteFuse}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
-  
-  
-  
-  
-  
+
+
+
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 ```
@@ -195,7 +194,9 @@ sce_citeseq$RNA_clust <- as.factor(SNF_W2_clust$labels)
 
 ```{r fig.height=12, fig.width=8}
 
-sce_citeseq <- reducedDimSNF(sce_citeseq, method = "tSNE", dimNames = "tSNE_joint")
+sce_citeseq <- reducedDimSNF(sce_citeseq,
+                             method = "tSNE", 
+                             dimNames = "tSNE_joint")
 
 g1 <- visualiseDim(sce_citeseq, dimNames = "tSNE_joint", colour_by = "SNF_W_clust") +
   labs(title = "tSNE (SNF clustering)")

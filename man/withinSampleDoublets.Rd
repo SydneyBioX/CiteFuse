@@ -21,3 +21,15 @@ A SingleCellExperiment object
 \description{
 doublet identification within batch
 }
+\examples{
+
+data("CITEseq_example", package = "CiteFuse")
+sce_citeseq <- preprocessing(CITEseq_example)
+sce_citeseq <- normaliseExprs(sce = sce_citeseq,
+altExp_name = "HTO",
+transform = "log")
+sce_citeseq <- crossSampleDoublets(sce_citeseq)
+sce_citeseq <- withinSampleDoublets(sce_citeseq,
+minPts = 10)
+
+}

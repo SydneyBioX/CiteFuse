@@ -431,7 +431,16 @@ normaliseExprs <- function(sce,
 #' @param totalExp_threshold the threshold indicates for the HTO less than this threshold
 #' will be filtered from the analysis
 #'
+#'
 #' @return A SingleCellExperiment Object
+#'
+#' @examples
+#' data("CITEseq_example", package = "CiteFuse")
+#' sce_citeseq <- preprocessing(CITEseq_example)
+#' sce_citeseq <- normaliseExprs(sce = sce_citeseq,
+#' altExp_name = "HTO",
+#' transform = "log")
+#' sce_citeseq <- crossSampleDoublets(sce_citeseq)
 #'
 #' @importFrom SummarizedExperiment assay assayNames
 #' @importFrom SingleCellExperiment altExpNames altExp
@@ -541,6 +550,14 @@ crossSampleDoublets <- function(sce,
 #' @param ncol ncol
 #'
 #' @return A plot visualising the HTO expression
+#'
+#' @examples
+#' data("CITEseq_example", package = "CiteFuse")
+#' sce_citeseq <- preprocessing(CITEseq_example)
+#' sce_citeseq <- normaliseExprs(sce = sce_citeseq,
+#' altExp_name = "HTO",
+#' transform = "log")
+#' plotHTO(sce_citeseq, 1:4)
 #'
 #' @importFrom SummarizedExperiment assay assayNames
 #' @importFrom SingleCellExperiment altExpNames altExp
@@ -686,7 +703,19 @@ plotHTOSingle <- function(sce,
 #' @param eps eps of DBSCAN
 #' @param minPts minPts of DBSCAN
 #'
+#'
 #' @return A SingleCellExperiment object
+#'
+#' @examples
+#'
+#' data("CITEseq_example", package = "CiteFuse")
+#' sce_citeseq <- preprocessing(CITEseq_example)
+#' sce_citeseq <- normaliseExprs(sce = sce_citeseq,
+#' altExp_name = "HTO",
+#' transform = "log")
+#' sce_citeseq <- crossSampleDoublets(sce_citeseq)
+#' sce_citeseq <- withinSampleDoublets(sce_citeseq,
+#' minPts = 10)
 #'
 #' @importFrom SummarizedExperiment assay assayNames
 #' @importFrom SingleCellExperiment altExpNames altExp counts

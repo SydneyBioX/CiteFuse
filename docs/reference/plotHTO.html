@@ -147,12 +147,21 @@
 
     <p>A plot visualising the HTO expression</p>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"CITEseq_example"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"CiteFuse"</span>)
+<span class='no'>sce_citeseq</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='preprocessing.html'>preprocessing</a></span>(<span class='no'>CITEseq_example</span>)
+<span class='no'>sce_citeseq</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='normaliseExprs.html'>normaliseExprs</a></span>(<span class='kw'>sce</span> <span class='kw'>=</span> <span class='no'>sce_citeseq</span>,
+<span class='kw'>altExp_name</span> <span class='kw'>=</span> <span class='st'>"HTO"</span>,
+<span class='kw'>transform</span> <span class='kw'>=</span> <span class='st'>"log"</span>)
+<span class='fu'>plotHTO</span>(<span class='no'>sce_citeseq</span>, <span class='fl'>1</span>:<span class='fl'>4</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Haven't performed doubletClassify() yet!</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Haven't performed doubletClassify() yet!</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Haven't performed doubletClassify() yet!</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Haven't performed doubletClassify() yet!</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Haven't performed doubletClassify() yet!</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Haven't performed doubletClassify() yet!</span></div><div class='img'><img src='plotHTO-1.png' alt='' width='700' height='433' /></div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       <li><a href="#value">Value</a></li>
+      <li><a href="#examples">Examples</a></li>
     </ul>
 
   </div>

@@ -123,22 +123,22 @@ visualiseExprs <- function(sce,
 
       if (!is.null(group_by)) {
 
-        g <- ggplot(df_toPlot, aes(x = df_toPlot$group,
-                                   y = df_toPlot$value,
-                                   fill = df_toPlot$group)) +
+        g <- ggplot(df_toPlot, aes(x = group,
+                                   y = value,
+                                   fill = group)) +
           geom_boxplot(outlier.size = 1, outlier.stroke = 0.3,
                        outlier.alpha = 0.8, width = 0.3) +
           scale_fill_manual(values = cite_colorPal(nlevels(df_toPlot$group))) +
           theme_bw() +
           ylab(exprs_value) +
-          facet_wrap(~df_toPlot$features) +
+          facet_wrap(~features) +
           xlab("") +
           labs(fill = group_by)
 
       } else {
-        g <- ggplot(df_toPlot, aes(x = df_toPlot$features,
-                                   y = df_toPlot$value,
-                                   fill = df_toPlot$features)) +
+        g <- ggplot(df_toPlot, aes(x = features,
+                                   y = value,
+                                   fill = features)) +
           geom_boxplot(outlier.size = 1, outlier.stroke = 0.3, outlier.alpha = 0.8,
                        width = 0.3) +
           scale_fill_viridis_d(direction = -1, end = 0.95) +
@@ -153,22 +153,22 @@ visualiseExprs <- function(sce,
     if (plot == "violin") {
       if (!is.null(group_by)) {
 
-        g <- ggplot(df_toPlot, aes(x = df_toPlot$group,
-                                   y = df_toPlot$value)) +
-          geom_violin(aes(fill = df_toPlot$group)) +
+        g <- ggplot(df_toPlot, aes(x = group,
+                                   y = value)) +
+          geom_violin(aes(fill = group)) +
           geom_boxplot(outlier.size = 1, outlier.stroke = 0.3, outlier.alpha = 0.8,
                        width = 0.05) +
           scale_fill_manual(values = cite_colorPal(nlevels(df_toPlot$group))) +
           theme_bw() +
           ylab(exprs_value) +
-          facet_wrap(~df_toPlot$features) +
+          facet_wrap(~features) +
           xlab("") +
           labs(fill = group_by)
 
       } else {
-        g <- ggplot(df_toPlot, aes(x = df_toPlot$features,
-                                   y = df_toPlot$value)) +
-          geom_violin(aes(fill = df_toPlot$features)) +
+        g <- ggplot(df_toPlot, aes(x = features,
+                                   y = value)) +
+          geom_violin(aes(fill = features)) +
           geom_boxplot(outlier.size = 1, outlier.stroke = 0.3, outlier.alpha = 0.8,
                        width = 0.05) +
           scale_fill_viridis_d(direction = -1, end = 0.95) +
@@ -182,19 +182,19 @@ visualiseExprs <- function(sce,
     if (plot == "jitter")  {
       if (!is.null(group_by)) {
 
-        g <- ggplot(df_toPlot, aes(x = df_toPlot$group,
-                                   y = df_toPlot$value)) +
-          geom_jitter(aes(color = df_toPlot$group), size = 0.5, alpha = 0.5) +
+        g <- ggplot(df_toPlot, aes(x = group,
+                                   y = value)) +
+          geom_jitter(aes(color = group), size = 0.5, alpha = 0.5) +
           scale_color_manual(values = cite_colorPal(nlevels(df_toPlot$group))) +
           theme_bw() +
           ylab(exprs_value) +
-          facet_wrap(~df_toPlot$features) +
+          facet_wrap(~features) +
           xlab("") +
           labs(color = group_by)
 
       } else {
-        g <- ggplot(df_toPlot, aes(x = df_toPlot$features, y = df_toPlot$value)) +
-          geom_jitter(aes(color = df_toPlot$features), size = 0.5, alpha = 0.5) +
+        g <- ggplot(df_toPlot, aes(x = features, y = value)) +
+          geom_jitter(aes(color = features), size = 0.5, alpha = 0.5) +
           scale_color_viridis_d(direction = -1, end = 0.95) +
           coord_flip() +
           theme_bw() +
@@ -207,21 +207,21 @@ visualiseExprs <- function(sce,
     if (plot == "density")  {
       if (!is.null(group_by)) {
 
-        g <- ggplot(df_toPlot, aes(y = df_toPlot$group,
-                                   x = df_toPlot$value)) +
-          ggridges::geom_density_ridges2(aes(fill = df_toPlot$group),
+        g <- ggplot(df_toPlot, aes(y = group,
+                                   x = value)) +
+          ggridges::geom_density_ridges2(aes(fill = group),
                                          alpha = 0.5) +
-          scale_fill_manual(values = cite_colorPal(nlevels(df_toPlot$group))) +
+          scale_color_manual(values = cite_colorPal(nlevels(df_toPlot$group))) +
           theme_bw() +
           ylab(group_by) +
-          facet_wrap(~df_toPlot$features) +
+          facet_wrap(~features) +
           xlab(exprs_value) +
           labs(fill = group_by)
 
       } else {
-        g <- ggplot(df_toPlot, aes(x = df_toPlot$value,
-                                   y = df_toPlot$features)) +
-          ggridges::geom_density_ridges2(aes(fill = df_toPlot$features),
+        g <- ggplot(df_toPlot, aes(x = value,
+                                   y = features)) +
+          ggridges::geom_density_ridges2(aes(fill = features),
                                          alpha = 0.5) +
           scale_fill_viridis_d(direction = -1, end = 0.95) +
           theme_bw() +
