@@ -30,7 +30,7 @@ Imports:
     S4Vectors (>= 0.24.0),
     igraph,
     scales,
-    scran (>= 1.14.1),
+    scran (>= 1.14.6),
     graphics,
     methods,
     stats,

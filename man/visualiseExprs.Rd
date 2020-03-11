@@ -9,6 +9,7 @@ visualiseExprs(
   plot = c("boxplot", "violin", "jitter", "density", "pairwise"),
   altExp_name = c("none"),
   exprs_value = "logcounts",
+  group_by = NULL,
   feature_subset = NULL,
   cell_subset = NULL,
   n = NULL,
@@ -18,19 +19,28 @@ visualiseExprs(
 \arguments{
 \item{sce}{A singlecellexperiment object}
 
-\item{plot}{Type of plot, includes boxplot, violin, jitter, density, and pairwise. By default is boxplot}
+\item{plot}{Type of plot, includes boxplot, violin, jitter, density,
+and pairwise. By default is boxplot}
 
-\item{altExp_name}{A character indicates which expression matrix is used. by default is none (i.e. RNA).}
+\item{altExp_name}{A character indicates which expression matrix is used.
+by default is none (i.e. RNA).}
 
-\item{exprs_value}{A character indicates which expression value in assayNames is used.}
+\item{exprs_value}{A character indicates which expression value
+in assayNames is used.}
 
-\item{feature_subset}{A vector of characters indicates the subset of features that are used for visualisation}
+\item{group_by}{A character indicates how is the expression
+will be group in the plots (stored in colData).}
 
-\item{cell_subset}{A vector of characters indicates the subset of cells that are used for visualisation}
+\item{feature_subset}{A vector of characters indicates
+the subset of features that are used for visualisation}
+
+\item{cell_subset}{A vector of characters indicates
+the subset of cells that are used for visualisation}
 
 \item{n}{A numeric indicates the top expressed features to show.}
 
-\item{threshold}{Thresholds of high expresion for features (only is used for pairwise plot).}
+\item{threshold}{Thresholds of high expresion for features
+(only is used for pairwise plot).}
 }
 \value{
 A ggplot to visualise te features distribution

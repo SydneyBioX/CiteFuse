@@ -4,20 +4,28 @@
 #'
 #'
 #' @param sce A singlecellexperiment object
-#' @param plot Type of plot, includes boxplot, violin, jitter, density, and pairwise. By default is boxplot
-#' @param altExp_name A character indicates which expression matrix is used. by default is none (i.e. RNA).
-#' @param exprs_value A character indicates which expression value in assayNames is used.
-#' @param feature_subset A vector of characters indicates the subset of features that are used for visualisation
-#' @param cell_subset A vector of characters indicates the subset of cells that are used for visualisation
+#' @param plot Type of plot, includes boxplot, violin, jitter, density,
+#' and pairwise. By default is boxplot
+#' @param altExp_name A character indicates which expression matrix is used.
+#' by default is none (i.e. RNA).
+#' @param exprs_value A character indicates which expression value
+#' in assayNames is used.
+#' @param group_by A character indicates how is the expression
+#' will be group in the plots (stored in colData).
+#' @param feature_subset A vector of characters indicates
+#' the subset of features that are used for visualisation
+#' @param cell_subset A vector of characters indicates
+#' the subset of cells that are used for visualisation
 #' @param n A numeric indicates the top expressed features to show.
-#' @param threshold Thresholds of high expresion for features (only is used for pairwise plot).
+#' @param threshold Thresholds of high expresion for features
+#' (only is used for pairwise plot).
 #'
 #' @return A ggplot to visualise te features distribution
 #'
 #' @importFrom Matrix rowMeans
 #' @importFrom reshape2 melt
 #' @importFrom SingleCellExperiment altExp altExpNames
-#' @importFrom SummarizedExperiment assayNames assay
+#' @importFrom SummarizedExperiment assayNames assay colData
 #' @importFrom  ggridges geom_density_ridges2
 #' @importFrom gridExtra grid.arrange
 #' @importFrom utils combn
@@ -25,16 +33,19 @@
 #' @export
 
 visualiseExprs <- function(sce,
-                           plot = c("boxplot", "violin", "jitter", "density", "pairwise"),
+                           plot = c("boxplot", "violin", "jitter",
+                                    "density", "pairwise"),
                            altExp_name = c("none"),
                            exprs_value = "logcounts",
+                           group_by = NULL,
                            feature_subset = NULL,
                            cell_subset = NULL,
                            n = NULL,
                            threshold = NULL
-                           ) {
+) {
 
-  plot <- match.arg(plot, c("boxplot", "violin", "jitter", "density", "pairwise"))
+  plot <- match.arg(plot, c("boxplot", "violin", "jitter",
+                            "density", "pairwise"))
 
   if (!is.null(cell_subset)) {
     if (sum(!cell_subset %in% colnames(sce)) != 0) {
@@ -63,6 +74,16 @@ visualiseExprs <- function(sce,
     exprsMat <- SummarizedExperiment::assay(sce[, cell_subset], exprs_value)
   }
 
+  if (!is.null(group_by)) {
+    if (!group_by %in% colnames(SummarizedExperiment::colData(sce))) {
+      stop("group_by is not a column name of sce's colData")
+    }
+
+    group_by_info <- as.factor(colData(sce)[, group_by])
+    names(group_by_info) <- colnames(sce)
+  } else {
+    group_by_info <- NULL
+  }
 
 
 
@@ -93,56 +114,121 @@ visualiseExprs <- function(sce,
 
     do.call(gridExtra::grid.arrange, c(ggList, ncol = min(length(ggList), 2)))
   } else {
+
     df_toPlot <- reshape2::melt(exprsMat)
     colnames(df_toPlot) <- c("features", "cells", "value")
-
+    df_toPlot$group <- group_by_info[df_toPlot$cells]
 
     if (plot == "boxplot") {
-      g <- ggplot(df_toPlot, aes(x = df_toPlot$features,
-                                 y = df_toPlot$value,
-                                 color = df_toPlot$features)) +
-        geom_boxplot(outlier.size = 1, outlier.stroke = 0.3, outlier.alpha = 0.8,
-                     width = 0.3) +
-        scale_colour_viridis_d(direction = -1, end = 0.95) +
-        coord_flip() +
-        theme_bw() +
-        ylab(exprs_value) +
-        xlab("") +
-        theme(legend.position = "none")
+
+      if (!is.null(group_by)) {
+
+        g <- ggplot(df_toPlot, aes(x = df_toPlot$group,
+                                   y = df_toPlot$value,
+                                   fill = df_toPlot$group)) +
+          geom_boxplot(outlier.size = 1, outlier.stroke = 0.3,
+                       outlier.alpha = 0.8, width = 0.3) +
+          scale_fill_manual(values = cite_colorPal(nlevels(df_toPlot$group))) +
+          theme_bw() +
+          ylab(exprs_value) +
+          facet_wrap(~df_toPlot$features) +
+          xlab("") +
+          labs(fill = group_by)
+
+      } else {
+        g <- ggplot(df_toPlot, aes(x = df_toPlot$features,
+                                   y = df_toPlot$value,
+                                   fill = df_toPlot$features)) +
+          geom_boxplot(outlier.size = 1, outlier.stroke = 0.3, outlier.alpha = 0.8,
+                       width = 0.3) +
+          scale_fill_viridis_d(direction = -1, end = 0.95) +
+          theme_bw() +
+          ylab(exprs_value) +
+          xlab("") +
+          theme(legend.position = "none")
+      }
+
     }
 
     if (plot == "violin") {
-      g <- ggplot(df_toPlot, aes(x = df_toPlot$features, y = df_toPlot$value)) +
-        geom_violin(aes(fill = df_toPlot$features)) +
-        geom_boxplot(outlier.size = 1, outlier.stroke = 0.3, outlier.alpha = 0.8,
-                     width = 0.05) +
-        scale_fill_viridis_d(direction = -1, end = 0.95) +
-        coord_flip() +
-        theme_bw() +
-        ylab(exprs_value) +
-        xlab("") +
-        theme(legend.position = "none")
+      if (!is.null(group_by)) {
+
+        g <- ggplot(df_toPlot, aes(x = df_toPlot$group,
+                                   y = df_toPlot$value)) +
+          geom_violin(aes(fill = df_toPlot$group)) +
+          geom_boxplot(outlier.size = 1, outlier.stroke = 0.3, outlier.alpha = 0.8,
+                       width = 0.05) +
+          scale_fill_manual(values = cite_colorPal(nlevels(df_toPlot$group))) +
+          theme_bw() +
+          ylab(exprs_value) +
+          facet_wrap(~df_toPlot$features) +
+          xlab("") +
+          labs(fill = group_by)
+
+      } else {
+        g <- ggplot(df_toPlot, aes(x = df_toPlot$features,
+                                   y = df_toPlot$value)) +
+          geom_violin(aes(fill = df_toPlot$features)) +
+          geom_boxplot(outlier.size = 1, outlier.stroke = 0.3, outlier.alpha = 0.8,
+                       width = 0.05) +
+          scale_fill_viridis_d(direction = -1, end = 0.95) +
+          theme_bw() +
+          ylab(exprs_value) +
+          xlab("") +
+          theme(legend.position = "none")
+      }
     }
 
     if (plot == "jitter")  {
-      g <- ggplot(df_toPlot, aes(x = df_toPlot$features, y = df_toPlot$value)) +
-        geom_jitter(aes(color = df_toPlot$features), size = 0.5, alpha = 0.5) +
-        scale_color_viridis_d(direction = -1, end = 0.95) +
-        coord_flip() +
-        theme_bw() +
-        ylab(exprs_value) +
-        xlab("") +
-        theme(legend.position = "none")
+      if (!is.null(group_by)) {
+
+        g <- ggplot(df_toPlot, aes(x = df_toPlot$group,
+                                   y = df_toPlot$value)) +
+          geom_jitter(aes(color = df_toPlot$group), size = 0.5, alpha = 0.5) +
+          scale_color_manual(values = cite_colorPal(nlevels(df_toPlot$group))) +
+          theme_bw() +
+          ylab(exprs_value) +
+          facet_wrap(~df_toPlot$features) +
+          xlab("") +
+          labs(color = group_by)
+
+      } else {
+        g <- ggplot(df_toPlot, aes(x = df_toPlot$features, y = df_toPlot$value)) +
+          geom_jitter(aes(color = df_toPlot$features), size = 0.5, alpha = 0.5) +
+          scale_color_viridis_d(direction = -1, end = 0.95) +
+          coord_flip() +
+          theme_bw() +
+          ylab(exprs_value) +
+          xlab("") +
+          theme(legend.position = "none")
+      }
     }
 
     if (plot == "density")  {
-      g <- ggplot(df_toPlot, aes(x = df_toPlot$value, y = df_toPlot$features)) +
-        ggridges::geom_density_ridges2(aes(fill = df_toPlot$features), alpha = 0.5) +
-        scale_fill_viridis_d(direction = -1, end = 0.95) +
-        theme_bw() +
-        ylab(exprs_value) +
-        xlab("") +
-        theme(legend.position = "none")
+      if (!is.null(group_by)) {
+
+        g <- ggplot(df_toPlot, aes(y = df_toPlot$group,
+                                   x = df_toPlot$value)) +
+          ggridges::geom_density_ridges2(aes(fill = df_toPlot$group),
+                                         alpha = 0.5) +
+          scale_fill_manual(values = cite_colorPal(nlevels(df_toPlot$group))) +
+          theme_bw() +
+          ylab(group_by) +
+          facet_wrap(~df_toPlot$features) +
+          xlab(exprs_value) +
+          labs(fill = group_by)
+
+      } else {
+        g <- ggplot(df_toPlot, aes(x = df_toPlot$value,
+                                   y = df_toPlot$features)) +
+          ggridges::geom_density_ridges2(aes(fill = df_toPlot$features),
+                                         alpha = 0.5) +
+          scale_fill_viridis_d(direction = -1, end = 0.95) +
+          theme_bw() +
+          ylab(exprs_value) +
+          xlab("") +
+          theme(legend.position = "none")
+      }
     }
     return(g)
   }

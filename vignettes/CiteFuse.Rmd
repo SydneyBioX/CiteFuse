@@ -232,21 +232,24 @@ visualiseKNN(sce_citeseq, colour_by = "SNF_W_louvain")
 ## Exploration of features expression 
 
 ```{r fig.height = 8, fig.width = 8}
-g1 <- visualiseExprs(sce_citeseq, 
-                     plot = "boxplot", 
-                     feature_subset = c("hg19_CD2", "hg19_CD4", "hg19_CD8A", "hg19_CD19"))
-g2 <- visualiseExprs(sce_citeseq, 
-                     plot = "violin", 
-                     feature_subset = c("hg19_CD2", "hg19_CD4", "hg19_CD8A", "hg19_CD19"))
-g3 <- visualiseExprs(sce_citeseq, 
-                     plot = "jitter", 
-                     feature_subset = c("hg19_CD2", "hg19_CD4", "hg19_CD8A", "hg19_CD19"))
-g4 <- visualiseExprs(sce_citeseq, 
-                     plot = "density", 
-                     feature_subset = c("hg19_CD2", "hg19_CD4", "hg19_CD8A", "hg19_CD19"))
+visualiseExprs(sce_citeseq, 
+               plot = "boxplot", 
+               group_by = "SNF_W_louvain",
+               feature_subset = c("hg19_CD2", "hg19_CD4", "hg19_CD8A", "hg19_CD19"))
+visualiseExprs(sce_citeseq, 
+               plot = "violin", 
+               group_by = "SNF_W_louvain",
+               feature_subset = c("hg19_CD2", "hg19_CD4", "hg19_CD8A", "hg19_CD19"))
+visualiseExprs(sce_citeseq, 
+               plot = "jitter", 
+               group_by = "SNF_W_louvain",
+               feature_subset = c("hg19_CD2", "hg19_CD4", "hg19_CD8A", "hg19_CD19"))
+visualiseExprs(sce_citeseq, 
+               plot = "density", 
+               group_by = "SNF_W_louvain",
+               feature_subset = c("hg19_CD2", "hg19_CD4", "hg19_CD8A", "hg19_CD19"))
 
-library(gridExtra)
-grid.arrange(g1, g2, g3, g4, ncol = 2)
+
 ```
 
 
@@ -254,27 +257,28 @@ grid.arrange(g1, g2, g3, g4, ncol = 2)
 sce_citeseq <- normaliseExprs(sce_citeseq, altExp_name = "ADT", transform = "log")
 visualiseExprs(sce_citeseq, 
                altExp_name = "ADT", 
-               n = 30)
-g1 <- visualiseExprs(sce_citeseq, 
-                     altExp_name = "ADT", 
-                     plot = "violin", n = 5)
-g2 <- visualiseExprs(sce_citeseq, altExp_name = "ADT", 
-                     plot = "jitter", 
-                     feature_subset = c("CD2", "CD8", "CD4", "CD19"))
-g3 <- visualiseExprs(sce_citeseq, altExp_name = "ADT", 
-                     plot = "density", 
-                     feature_subset = c("CD2", "CD8", "CD4", "CD19"))
-
-grid.arrange(g1, g2, g3, ncol = 2)
+               n = 30) +
+  coord_flip()
 ```
 
 
 ```{r fig.height = 8, fig.width = 8}
+visualiseExprs(sce_citeseq, 
+               altExp_name = "ADT", 
+               group_by = "SNF_W_louvain",
+               plot = "violin", n = 5)
 visualiseExprs(sce_citeseq, altExp_name = "ADT", 
-               plot = "boxplot", 
-               feature_subset = c("CD2", "CD8", "CD4", "CD19")) + 
-  facet_wrap(~sce_citeseq$SNF_W_louvain, nrow = 7)
+               plot = "jitter", 
+               group_by = "SNF_W_louvain", 
+               feature_subset = c("CD2", "CD8", "CD4", "CD19"))
+visualiseExprs(sce_citeseq, altExp_name = "ADT", 
+               plot = "density", 
+               group_by = "SNF_W_louvain",
+               feature_subset = c("CD2", "CD8", "CD4", "CD19"))
+
 ```
+
+
 
 
 ```{r fig.height = 8, fig.width = 8}

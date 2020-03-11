@@ -15,6 +15,10 @@
 #'
 #' @return either a SingleCellExperiment object or a preprocessed expression matrix
 #'
+#' @examples
+#' data("CITEseq_example", package = "CiteFuse")
+#' sce_citeseq <- preprocessing(CITEseq_example)
+#'
 #' @importFrom SingleCellExperiment SingleCellExperiment
 #' @importFrom Matrix rowSums
 #' @importFrom SummarizedExperiment SummarizedExperiment
@@ -280,6 +284,12 @@ readFrom10X <- function(dir,
 #' @param transform type of transformation, either log or clr (Centered log ratio transform)
 #' @param log_offset Numeric scalar specifying the pseudo-count to add when log-transforming expression values. Default is 1
 #'
+#' @examples
+#' data("CITEseq_example", package = "CiteFuse")
+#' sce_citeseq <- preprocessing(CITEseq_example)
+#' sce_citeseq <- normaliseExprs(sce = sce_citeseq,
+#' altExp_name = "ADT",
+#' transform = "log")
 #' @importFrom SummarizedExperiment assay assayNames
 #' @importFrom SingleCellExperiment altExpNames altExp
 #' @importFrom Matrix rowMeans
