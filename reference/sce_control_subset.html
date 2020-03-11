@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>withinSampleDoublets — withinSampleDoublets • CiteFuse</title>
+<title>A SingleCellExperiment of ECCITE-seq data — sce_control_subset • CiteFuse</title>
 
 
 <!-- jquery -->
@@ -35,8 +35,8 @@
 
 
 
-<meta property="og:title" content="withinSampleDoublets — withinSampleDoublets" />
-<meta property="og:description" content="doublet identification within batch" />
+<meta property="og:title" content="A SingleCellExperiment of ECCITE-seq data — sce_control_subset" />
+<meta property="og:description" content="Data from Mimitou et al. ECCITE-seq PBMC Control sample data" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -111,61 +111,37 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>withinSampleDoublets</h1>
+    <h1>A SingleCellExperiment of ECCITE-seq data</h1>
     
-    <div class="hidden name"><code>withinSampleDoublets.Rd</code></div>
+    <div class="hidden name"><code>sce_control_subset.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>doublet identification within batch</p>
+    <p>Data from Mimitou et al. ECCITE-seq PBMC Control sample data</p>
     </div>
 
-    <pre class="usage"><span class='fu'>withinSampleDoublets</span>(<span class='no'>sce</span>, <span class='kw'>altExp_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>eps</span> <span class='kw'>=</span> <span class='fl'>200</span>, <span class='kw'>minPts</span> <span class='kw'>=</span> <span class='fl'>50</span>)</pre>
+    <pre class="usage"><span class='no'>sce_control_subset</span></pre>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>sce</th>
-      <td><p>a SingleCellExperiment</p></td>
-    </tr>
-    <tr>
-      <th>altExp_name</th>
-      <td><p>expression name of HTO matrix</p></td>
-    </tr>
-    <tr>
-      <th>eps</th>
-      <td><p>eps of DBSCAN</p></td>
-    </tr>
-    <tr>
-      <th>minPts</th>
-      <td><p>minPts of DBSCAN</p></td>
-    </tr>
-    </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>A SingleCellExperiment object</p>
+    <p>An object of class <code>SingleCellExperiment</code> with 617 rows and 437 columns.</p>
+    <h2 class="hasAnchor" id="source"><a class="anchor" href="#source"></a>Source</h2>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"CITEseq_example"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"CiteFuse"</span>)
-<span class='no'>sce_citeseq</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='preprocessing.html'>preprocessing</a></span>(<span class='no'>CITEseq_example</span>)
-<span class='no'>sce_citeseq</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='normaliseExprs.html'>normaliseExprs</a></span>(<span class='kw'>sce</span> <span class='kw'>=</span> <span class='no'>sce_citeseq</span>,
-<span class='kw'>altExp_name</span> <span class='kw'>=</span> <span class='st'>"HTO"</span>,
-<span class='kw'>transform</span> <span class='kw'>=</span> <span class='st'>"log"</span>)
-<span class='no'>sce_citeseq</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='crossSampleDoublets.html'>crossSampleDoublets</a></span>(<span class='no'>sce_citeseq</span>)</div><div class='output co'>#&gt; number of iterations= 20 
-#&gt; number of iterations= 24 
-#&gt; number of iterations= 46 
-#&gt; number of iterations= 50 </div><div class='input'><span class='no'>sce_citeseq</span> <span class='kw'>&lt;-</span> <span class='fu'>withinSampleDoublets</span>(<span class='no'>sce_citeseq</span>,
-<span class='kw'>minPts</span> <span class='kw'>=</span> <span class='fl'>10</span>)</div></pre>
+    <p>Gene Expression Omnibus with the accession code GSE126310.</p>
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <p>Mimitou, E. P., Cheng, A., Montalbano, A., et al. (2019). Multiplexed detection
+of proteins, transcriptomes, clonotypes and CRISPR perturbations in single cells.
+Nature Methods, 16(5), 409–412.</p>
+
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#examples">Examples</a></li>
+      <li><a href="#format">Format</a></li>
+      <li><a href="#source">Source</a></li>
+      <li><a href="#references">References</a></li>
     </ul>
 
   </div>

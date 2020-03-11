@@ -126,6 +126,7 @@
   <span class='kw'>altExp_name</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"none"</span>),
   <span class='kw'>exprs_value</span> <span class='kw'>=</span> <span class='st'>"logcounts"</span>,
   <span class='kw'>group_by</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>facet_by</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>feature_subset</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>cell_subset</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>n</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
@@ -160,6 +161,11 @@ in assayNames is used.</p></td>
 will be group in the plots (stored in colData).</p></td>
     </tr>
     <tr>
+      <th>facet_by</th>
+      <td><p>A character indicates how is the expression
+will be lay out panels in a grid in the plots (stored in colData).</p></td>
+    </tr>
+    <tr>
       <th>feature_subset</th>
       <td><p>A vector of characters indicates
 the subset of features that are used for visualisation</p></td>
@@ -184,12 +190,25 @@ the subset of cells that are used for visualisation</p></td>
 
     <p>A ggplot to visualise te features distribution</p>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"sce_control_subset"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"CiteFuse"</span>)
+<span class='fu'>visualiseExprs</span>(<span class='no'>sce_control_subset</span>,
+<span class='kw'>plot</span> <span class='kw'>=</span> <span class='st'>"boxplot"</span>,
+<span class='kw'>group_by</span> <span class='kw'>=</span> <span class='st'>"SNF_W_louvain"</span>,
+<span class='kw'>feature_subset</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"hg19_CD8A"</span>))</div><div class='img'><img src='visualiseExprs-1.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'>visualiseExprs</span>(<span class='no'>sce_control_subset</span>,
+<span class='kw'>plot</span> <span class='kw'>=</span> <span class='st'>"density"</span>,
+<span class='kw'>altExp_name</span> <span class='kw'>=</span> <span class='st'>"ADT"</span>,
+<span class='kw'>group_by</span> <span class='kw'>=</span> <span class='st'>"SNF_W_louvain"</span>,
+<span class='kw'>feature_subset</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"CD8"</span>, <span class='st'>"CD4"</span>))</div><div class='output co'>#&gt; <span class='message'>Picking joint bandwidth of 0.404</span></div><div class='output co'>#&gt; <span class='message'>Picking joint bandwidth of 0.293</span></div><div class='img'><img src='visualiseExprs-2.png' alt='' width='700' height='433' /></div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       <li><a href="#value">Value</a></li>
+      <li><a href="#examples">Examples</a></li>
     </ul>
 
   </div>

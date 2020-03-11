@@ -137,11 +137,13 @@
     </tr>
     <tr>
       <th>metadata</th>
-      <td><p>indicates the meta data name of affinity matrix to virsualise</p></td>
+      <td><p>indicates the meta data name of affinity matrix
+to virsualise</p></td>
     </tr>
     <tr>
       <th>method</th>
-      <td><p>A character indicates the method for finding communities from igraph. Default is louvain clustering.</p></td>
+      <td><p>A character indicates the method for finding communities f
+rom igraph. Default is louvain clustering.</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -153,12 +155,18 @@
 
     <p>A vector indicates the membership (clustering) results</p>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"sce_control_subset"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"CiteFuse"</span>)
+<span class='no'>SNF_W_louvain</span> <span class='kw'>&lt;-</span> <span class='fu'>igraphClustering</span>(<span class='no'>sce_control_subset</span>,
+<span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"louvain"</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       <li><a href="#value">Value</a></li>
+      <li><a href="#examples">Examples</a></li>
     </ul>
 
   </div>

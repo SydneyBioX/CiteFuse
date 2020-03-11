@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>withinSampleDoublets — withinSampleDoublets • CiteFuse</title>
+<title>visualiseExprsList — visualiseExprsList • CiteFuse</title>
 
 
 <!-- jquery -->
@@ -35,8 +35,9 @@
 
 
 
-<meta property="og:title" content="withinSampleDoublets — withinSampleDoublets" />
-<meta property="og:description" content="doublet identification within batch" />
+<meta property="og:title" content="visualiseExprsList — visualiseExprsList" />
+<meta property="og:description" content="A function to visualise the features distribtuion for
+a list of SingleCellExperiment" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -111,54 +112,86 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>withinSampleDoublets</h1>
+    <h1>visualiseExprsList</h1>
     
-    <div class="hidden name"><code>withinSampleDoublets.Rd</code></div>
+    <div class="hidden name"><code>visualiseExprsList.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>doublet identification within batch</p>
+    <p>A function to visualise the features distribtuion for
+a list of SingleCellExperiment</p>
     </div>
 
-    <pre class="usage"><span class='fu'>withinSampleDoublets</span>(<span class='no'>sce</span>, <span class='kw'>altExp_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>eps</span> <span class='kw'>=</span> <span class='fl'>200</span>, <span class='kw'>minPts</span> <span class='kw'>=</span> <span class='fl'>50</span>)</pre>
+    <pre class="usage"><span class='fu'>visualiseExprsList</span>(
+  <span class='no'>sce_list</span>,
+  <span class='kw'>plot</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"boxplot"</span>, <span class='st'>"violin"</span>, <span class='st'>"jitter"</span>, <span class='st'>"density"</span>),
+  <span class='kw'>altExp_name</span> <span class='kw'>=</span> <span class='st'>"none"</span>,
+  <span class='kw'>exprs_value</span> <span class='kw'>=</span> <span class='st'>"logcounts"</span>,
+  <span class='kw'>group_by</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>feature_subset</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>cell_subset</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>n</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>sce</th>
-      <td><p>a SingleCellExperiment</p></td>
+      <th>sce_list</th>
+      <td><p>A list of SingleCellExperiment object</p></td>
+    </tr>
+    <tr>
+      <th>plot</th>
+      <td><p>Type of plot, includes boxplot, violin, jitter, density,
+and pairwise. By default is boxplot</p></td>
     </tr>
     <tr>
       <th>altExp_name</th>
-      <td><p>expression name of HTO matrix</p></td>
+      <td><p>A character indicates which expression matrix is used.
+by default is none (i.e. RNA).</p></td>
     </tr>
     <tr>
-      <th>eps</th>
-      <td><p>eps of DBSCAN</p></td>
+      <th>exprs_value</th>
+      <td><p>A character indicates which expression value
+in assayNames is used.</p></td>
     </tr>
     <tr>
-      <th>minPts</th>
-      <td><p>minPts of DBSCAN</p></td>
+      <th>group_by</th>
+      <td><p>A character indicates how is the expression
+will be group in the plots (stored in colData).</p></td>
+    </tr>
+    <tr>
+      <th>feature_subset</th>
+      <td><p>A vector of characters indicates
+the subset of features that are used for visualisation</p></td>
+    </tr>
+    <tr>
+      <th>cell_subset</th>
+      <td><p>A vector of characters indicates
+the subset of cells that are used for visualisation</p></td>
+    </tr>
+    <tr>
+      <th>n</th>
+      <td><p>A numeric indicates the top expressed features to show.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A SingleCellExperiment object</p>
+    <p>A ggplot to visualise te features distribution</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"CITEseq_example"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"CiteFuse"</span>)
-<span class='no'>sce_citeseq</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='preprocessing.html'>preprocessing</a></span>(<span class='no'>CITEseq_example</span>)
-<span class='no'>sce_citeseq</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='normaliseExprs.html'>normaliseExprs</a></span>(<span class='kw'>sce</span> <span class='kw'>=</span> <span class='no'>sce_citeseq</span>,
-<span class='kw'>altExp_name</span> <span class='kw'>=</span> <span class='st'>"HTO"</span>,
-<span class='kw'>transform</span> <span class='kw'>=</span> <span class='st'>"log"</span>)
-<span class='no'>sce_citeseq</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='crossSampleDoublets.html'>crossSampleDoublets</a></span>(<span class='no'>sce_citeseq</span>)</div><div class='output co'>#&gt; number of iterations= 20 
-#&gt; number of iterations= 24 
-#&gt; number of iterations= 46 
-#&gt; number of iterations= 50 </div><div class='input'><span class='no'>sce_citeseq</span> <span class='kw'>&lt;-</span> <span class='fu'>withinSampleDoublets</span>(<span class='no'>sce_citeseq</span>,
-<span class='kw'>minPts</span> <span class='kw'>=</span> <span class='fl'>10</span>)</div></pre>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"sce_control_subset"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"CiteFuse"</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"sce_ctcl_subset"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"CiteFuse"</span>)
+<span class='fu'>visualiseExprsList</span>(<span class='kw'>sce_list</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>control</span> <span class='kw'>=</span> <span class='no'>sce_control_subset</span>,
+<span class='kw'>ctcl</span> <span class='kw'>=</span> <span class='no'>sce_ctcl_subset</span>),
+<span class='kw'>plot</span> <span class='kw'>=</span> <span class='st'>"boxplot"</span>,
+<span class='kw'>altExp_name</span> <span class='kw'>=</span> <span class='st'>"none"</span>,
+<span class='kw'>exprs_value</span> <span class='kw'>=</span> <span class='st'>"logcounts"</span>,
+<span class='kw'>feature_subset</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"hg19_CD19"</span>, <span class='st'>"hg19_CD8A"</span>),
+<span class='kw'>group_by</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"SNF_W_louvain"</span>, <span class='st'>"SNF_W_louvain"</span>))</div><div class='img'><img src='visualiseExprsList-1.png' alt='' width='700' height='433' /></div><div class='input'>
+
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
