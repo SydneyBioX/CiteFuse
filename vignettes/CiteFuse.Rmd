@@ -19,7 +19,7 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 
 # Introduction 
 
-`CiteFuse` is a computational framework that implements a suite of methods and tools for CITE-seq data from pre-processing through to integrative analytics. This includes doublet detection, network-based modality integration, cell type clustering, differential RNA and ADT expression analysis, ADT evaluation, ligand-receptor interaction analysis, and interactive web-based visualisation of the analyses. this vignette demostrates the usage of `CiteFuse` using a small subset data of CITE-seq data from PBMC as an example (Mimitou et al., 2019).
+`CiteFuse` is a computational framework that implements a suite of methods and tools for CITE-seq data from pre-processing through to integrative analytics. This includes doublet detection, network-based modality integration, cell type clustering, differential RNA and protein expression analysis, ADT evaluation, ligand-receptor interaction analysis, and interactive web-based visualisation of the analyses. This vignette demostrates the usage of `CiteFuse` by using a subset data of CITE-seq data from human PBMCs as an example (Mimitou et al., 2019).
 
 
 ```{r}
@@ -36,7 +36,7 @@ names(CITEseq_example)
 lapply(CITEseq_example, dim)
 ```
 
-Here, we started from a list of three matrices of RNA, ADT and HTO, which have common cell names. The `preprocessing` function will utilise the three matrices and its common cell names to create a `SingleCellExperiment` object, which stores RNA data in `assay`, and `ADT`, `HTO` data in `altExp` slot.
+Here, we start from a list of three matrices of UMI, ADT and HTO count, which have common cell names. The `preprocessing` function will utilise the three matrices and its common cell names to create a `SingleCellExperiment` object, which stores RNA data in an `assay` and `ADT` and `HTO` data in `altExp` slot.
 
 ```{r}
 sce_citeseq <- preprocessing(CITEseq_example)
@@ -51,7 +51,7 @@ sce_citeseq
 ## HTO Normalisation and Visualisation
 
 
-The function `notmaliseExprs` is used to scale the alternative expression. Here, we used it to perform log-transformation for the `HTO` expression, by setting `transform = "log"`.
+The function `normaliseExprs` is used to scale the alternative expression. Here, we used it to perform log-transformation of the `HTO` count, by setting `transform = "log"`.
 
 
 ```{r}
@@ -61,7 +61,7 @@ sce_citeseq <- normaliseExprs(sce = sce_citeseq,
 ```
 
 
-Then we can perform dimension reduction on the `HTO` expression using `runTSNE` or `runUMAP`, then use `visualiseDim` function to visualise the reduced dimension plot.
+Then we can perform dimension reduction on the `HTO` count by using `runTSNE` or `runUMAP`, then use `visualiseDim` function to visualise the reduced dimension plot.
 
 
 ```{r fig.height=6, fig.width=6}
@@ -89,7 +89,7 @@ visualiseDim(sce_citeseq,
 
 ## Doublet Identification (cross sample)
 
-We first identify the cross-sample doublets via function `crossSampleDoublets`.
+We first identify the cross-sample doublets via the `crossSampleDoublets` function.
 
 
 ```{r}
@@ -97,14 +97,14 @@ sce_citeseq <- crossSampleDoublets(sce_citeseq)
 ```
 
 
-The results of the cross sample doublets are then saved in the `colData` as `doubletClassify_between_label` and `doubletClassify_between_class`.
+The results of the cross sample doublets are then saved in `colData` as `doubletClassify_between_label` and `doubletClassify_between_class`.
 
 ```{r}
 table(sce_citeseq$doubletClassify_between_label)
 table(sce_citeseq$doubletClassify_between_class)
 ```
 
-We can then highlights the cross-sample doublets in our tSNE plot of HTO expression.
+We can then highlight the cross-sample doublets in our tSNE plot of HTO count.
 
 ```{r fig.height=6, fig.width=6}
 visualiseDim(sce_citeseq, 
@@ -113,7 +113,7 @@ visualiseDim(sce_citeseq,
 ```
 
 
-Further, `plotHTO` function allows us to plot the pairwise scatter HTO expression.
+Furthermore, `plotHTO` function allows us to plot the pairwise scatter HTO count.
 
 ```{r fig.height=12, fig.width=8}
 plotHTO(sce_citeseq, 1:4)
@@ -122,7 +122,7 @@ plotHTO(sce_citeseq, 1:4)
 
 ## Doublet Identification (within samples)
 
-We then identify the within-sample doublets via function `withinSampleDoublets`.
+We then identify the within-sample doublets via the `withinSampleDoublets` function.
 
 
 ```{r}
@@ -148,7 +148,7 @@ visualiseDim(sce_citeseq,
 
 
 
-Finally, we can filter out the doublets cells (Both within and between batches) for the downstream analysis.
+Finally, we can filter out the doublets cells (both within and between batches) for the downstream analysis.
 
 
 ```{r}
@@ -179,8 +179,6 @@ which.max(abs(diff(SNF_W_clust$eigen_values)))
 SNF_W_clust <- spectralClustering(metadata(sce_citeseq)[["SNF_W"]], K = 5)
 sce_citeseq$SNF_W_clust <- as.factor(SNF_W_clust$labels)
 
-
-
 SNF_W1_clust <- spectralClustering(metadata(sce_citeseq)[["ADT_W"]], K = 5)
 sce_citeseq$ADT_clust <- as.factor(SNF_W1_clust$labels)
 
@@ -209,7 +207,7 @@ grid.arrange(g3, g2, g1, ncol = 2)
 ```
 
 
-## Louvain Clustering
+## Louvain clustering
 
 ```{r fig.height=8, fig.width=8}
 SNF_W_louvain <- igraphClustering(sce_citeseq, method = "louvain")
@@ -229,7 +227,7 @@ visualiseKNN(sce_citeseq, colour_by = "SNF_W_louvain")
 
 # Differential Expression Analysis
 
-## Exploration of features expression 
+## Exploration of feature expression 
 
 ```{r fig.height = 4, fig.width = 8}
 visualiseExprs(sce_citeseq, 
@@ -292,8 +290,7 @@ visualiseExprs(sce_citeseq, altExp_name = "ADT",
 ```
 
 
-## Perform DE analysis using Wilcoxon Rank Sum test
-
+## Perform DE Analysis with Wilcoxon Rank Sum test
 
 ### For RNA expression
 ```{r}
@@ -311,7 +308,7 @@ datatable(format(do.call(rbind, metadata(sce_citeseq)[["DE_res_RNA_filter"]]),
                  digits = 2))
 ```
 
-### For ADT 
+### For ADT count
 ```{r}
 sce_citeseq <- DEgenes(sce_citeseq,
                        altExp_name = "ADT", 
@@ -327,7 +324,7 @@ datatable(format(do.call(rbind, metadata(sce_citeseq)[["DE_res_ADT_filter"]]),
 ```
 
 
-## Visualising DE results
+## Visualising DE Results
 
 ### circlepackPlot
 
@@ -366,7 +363,7 @@ DEcomparisonPlot(de_list = de_list,
 ```
 
 
-# ADT importance evaluation
+# ADT Importance Evaluation
 
 ```{r fig.height = 8, fig.width = 8}
 set.seed(2020)
@@ -381,7 +378,7 @@ sort(metadata(sce_citeseq)[["importanceADT"]], decreasing = TRUE)[1:20]
 ```
 
 
-Select the ADT with scores greater than 5 and perform SNF again
+Select the ADTs with scores greater than 5 and perform SNF again
 
 ```{r}
 subset_adt <- names(which(metadata(sce_citeseq)[["importanceADT"]] > 5))
@@ -478,16 +475,16 @@ visLigandReceptor(sce_citeseq,
                   receptor_type = "ADT")
 ```
 
-# Analysis cross condtions
+# Between-sample Analysis 
 
-Here we will jointly analysis the current data in control condtion, with the another subset in CTCL condition from Mimitou et al.. The data `sce_ctcl_subset` provided in `CiteFuse` package already contain the clustering inforamtion.
+Here we will jointly analyse the current PBMC CITE-seq data, taken from healthy human donors, and another subset of CITE-seq data from patients with cutaneous T-cell lymphoma (CTCL), again from Mimitou et al. (2019). The data `sce_ctcl_subset` provided in our `CiteFuse` package already contain the clustering information.
 
 ```{r}
 data("sce_ctcl_subset", package = "CiteFuse")
 ```
 
 
-To visualise jointly gene or protein expression data, we can use `visualiseExprsList` function.
+To visualise and compare gene or protein expression data, we can use `visualiseExprsList` function.
 
 
 ```{r}
@@ -509,7 +506,7 @@ visualiseExprsList(sce_list = list(control = sce_citeseq,
 ```
 
 
-We can then perform differential expression analysis in RNA epxression level across the two clusters that have high CD19 expression in ADT.
+We can then perform differential expression analysis of the RNA expression level across the two clusters that have high CD19 expression in ADT.
 
 ```{r}
 de_res <- DEgenesCross(sce_list = list(control = sce_citeseq,
@@ -519,6 +516,7 @@ de_res <- DEgenesCross(sce_list = list(control = sce_citeseq,
 de_res_filter <- selectDEgenes(de_res = de_res)
 de_res_filter
 ```
+
 
 # SessionInfo
 

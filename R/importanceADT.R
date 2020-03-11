@@ -192,12 +192,14 @@ visImportance <- function(sce,
       stop("sce does not contain altExp_name as altExpNames")
     }
 
-    if (!exprs_value %in% SummarizedExperiment::assayNames(SingleCellExperiment::altExp(sce, altExp_name))) {
+    if (!exprs_value %in% assayNames(altExp(sce, altExp_name))) {
       stop("sce does not contain exprs_value as assayNames for altExp")
     }
 
 
-    corMat_adt <- cor(t(as.matrix(SummarizedExperiment::assay(SingleCellExperiment::altExp(sce, altExp_name), exprs_value))))
+    corMat_adt <- cor(t(as.matrix(assay(altExp(sce, altExp_name),
+                                        exprs_value))))
+    corMat_adt[is.na(corMat_adt)] <- 0
 
 
     anno_col <- data.frame(importance = rowMeans(scores))
