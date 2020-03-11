@@ -207,12 +207,42 @@
 
     <p>A igraph object of gene-ADT network</p>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>SingleCellExperiment</span>)</div><div class='output co'>#&gt; <span class='message'>Loading required package: SummarizedExperiment</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: GenomicRanges</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: IRanges</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: GenomeInfoDb</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: Biobase</span></div><div class='output co'>#&gt; <span class='message'>Welcome to Bioconductor</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    Vignettes contain introductory material; view with</span>
+#&gt; <span class='message'>    'browseVignettes()'. To cite Bioconductor, see</span>
+#&gt; <span class='message'>    'citation("Biobase")', and for packages 'citation("pkgname")'.</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: DelayedArray</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: matrixStats</span></div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>Attaching package: ‘matrixStats’</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:Biobase’:</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    anyMissing, rowMedians</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: BiocParallel</span></div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>Attaching package: ‘DelayedArray’</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:matrixStats’:</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    colMaxs, colMins, colRanges, rowMaxs, rowMins, rowRanges</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:base’:</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    aperm, apply, rowsum</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>2020</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"sce_control_subset"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"CiteFuse"</span>)
+<span class='no'>RNA_feature_subset</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span>(<span class='no'>sce_control_subset</span>), <span class='fl'>50</span>)
+<span class='no'>ADT_feature_subset</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/SingleCellExperiment/man/altExps.html'>altExp</a></span>(<span class='no'>sce_control_subset</span>, <span class='st'>"ADT"</span>))
+
+<span class='fu'>geneADTnetwork</span>(<span class='no'>sce_control_subset</span>,
+               <span class='kw'>RNA_feature_subset</span> <span class='kw'>=</span> <span class='no'>RNA_feature_subset</span>,
+               <span class='kw'>ADT_feature_subset</span> <span class='kw'>=</span> <span class='no'>ADT_feature_subset</span>,
+               <span class='kw'>cor_method</span> <span class='kw'>=</span> <span class='st'>"pearson"</span>,
+              <span class='kw'>network_layout</span> <span class='kw'>=</span> <span class='kw pkg'>igraph</span><span class='kw ns'>::</span><span class='no'><a href='https://rdrr.io/pkg/igraph/man/layout_with_fr.html'>layout_with_fr</a></span>)</div><div class='img'><img src='geneADTnetwork-1.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt; IGRAPH 10f99b5 UN-B 2 1 -- 
+#&gt; + attr: name (v/c), label (v/c), class (v/c), type (v/l), shape (v/c),
+#&gt; | color (v/c), size (v/n), label.cex (v/n), label.color (v/c), value
+#&gt; | (e/n), color (e/c), weights (e/n)
+#&gt; + edge from 10f99b5 (vertex names):
+#&gt; [1] RNA_hg19_HCST--ADT_CD8</div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       <li><a href="#value">Value</a></li>
+      <li><a href="#examples">Examples</a></li>
     </ul>
 
   </div>

@@ -121,7 +121,8 @@
     </div>
 
     <pre class="usage"><span class='fu'>selectDEgenes</span>(
-  <span class='no'>sce</span>,
+  <span class='kw'>sce</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>de_res</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>altExp_name</span> <span class='kw'>=</span> <span class='st'>"none"</span>,
   <span class='kw'>pval_adj</span> <span class='kw'>=</span> <span class='fl'>0.05</span>,
   <span class='kw'>mean_diff</span> <span class='kw'>=</span> <span class='fl'>0</span>,
@@ -135,6 +136,10 @@
     <tr>
       <th>sce</th>
       <td><p>A SingleCellExperiment object with DE results stored in meta data DE_res list.</p></td>
+    </tr>
+    <tr>
+      <th>de_res</th>
+      <td><p>DE_res returned by DEgenesCross().</p></td>
     </tr>
     <tr>
       <th>altExp_name</th>
@@ -166,12 +171,21 @@ will be included in the list.</p></td>
     <p>A SingleCellExperiment With filtered DE results in
 DE_res_filter list of metadata</p>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"sce_control_subset"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"CiteFuse"</span>)
+<span class='no'>sce_control_subset</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='DEgenes.html'>DEgenes</a></span>(<span class='no'>sce_control_subset</span>,
+<span class='kw'>group</span> <span class='kw'>=</span> <span class='no'>sce_control_subset</span>$<span class='no'>SNF_W_louvain</span>,
+<span class='kw'>return_all</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+<span class='kw'>exprs_pct</span> <span class='kw'>=</span> <span class='fl'>0.5</span>)
+
+<span class='no'>sce_control_subset</span> <span class='kw'>&lt;-</span> <span class='fu'>selectDEgenes</span>(<span class='no'>sce_control_subset</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       <li><a href="#value">Value</a></li>
+      <li><a href="#examples">Examples</a></li>
     </ul>
 
   </div>
