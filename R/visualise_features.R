@@ -104,11 +104,28 @@ visualiseExprs <- function(sce,
   exprsMat <- as.matrix(exprsMat)
 
 
+
+
   if (plot == "pairwise") {
+
+
+
+    if (!is.null(threshold)) {
+      if (length(threshold) == 1) {
+        threshold <- rep(threshold, length(feature_subset))
+      }
+
+      if (length(threshold) != length(feature_subset)) {
+        stop("length of threshold is not equal to the length of the features subset.")
+      }
+
+      names(threshold) <- feature_subset
+    }
+
     combination <- utils::combn(feature_subset, 2)
 
     ggList <- apply(combination, 2, function(x) {
-      suppressMessages(scatterSingle(exprsMat[x, ], threshold = threshold))
+      suppressMessages(scatterSingle(exprsMat[x, ], threshold = threshold[x]))
     })
 
 
@@ -267,11 +284,9 @@ scatterSingle <- function(exprsMat, group = NULL, threshold = NULL) {
       threshold <- apply(exprsMat, 1, fitMixtures)
     }
 
+    threshold_matrix <- t(sapply(threshold, rep, times = ncol(exprsMat)))
 
-
-    exprsMat_pass <- exprsMat > matrix(threshold,
-                                       ncol = ncol(exprsMat),
-                                       nrow = nrow(exprsMat))
+    exprsMat_pass <- exprsMat > threshold_matrix
 
     nn <- paste(c(rownames(exprsMat), ""), collapse = "-")
     pp <- paste(c(rownames(exprsMat), ""), collapse = "+")
