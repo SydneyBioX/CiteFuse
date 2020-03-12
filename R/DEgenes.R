@@ -4,17 +4,24 @@
 #' A function to perform DE analysis on CITE seq data
 #'
 #' @param sce A SingleCellExperiment object
-#' @param altExp_name A character indicates which expression matrix is used. by default is none (i.e. RNA).
-#' @param exprs_value A character indicates which expression value in assayNames is used.
+#' @param altExp_name A character indicates which expression matrix is used.
+#' by default is none (i.e. RNA).
+#' @param exprs_value A character indicates which expression value
+#' in assayNames is used.
 #' @param group A vector indicates the grouping of the data
 #' @param method A character indicates the method used in DE analysis
-#' @param exprs_pct A numeric indicates the threshold expression percentage of a gene to be considered in DE analysis
-#' @param exprs_threshold A numeric indicates the threshold of expression. By default is 0.
+#' @param exprs_pct A numeric indicates the threshold expression percentage
+#' of a gene to be considered in DE analysis
+#' @param exprs_threshold A numeric indicates the threshold of expression.
+#' By default is 0.
 #' @param return_all Whether return full list of DE genes
 #' @param pval_adj A numeric indicates the threshold of adjusted p-value.
-#' @param mean_diff A numeric indicates the threshold of difference of average expression.
-#' @param pct_diff A numeric indicates the threshold of difference of percentage expression.
-#' @param topN A numeric indicates the top number of genes will be included in the list.
+#' @param mean_diff A numeric indicates the threshold of
+#' difference of average expression.
+#' @param pct_diff A numeric indicates the threshold of
+#' difference of percentage expression.
+#' @param topN A numeric indicates the top number of genes
+#' will be included in the list.
 #'
 #' @return A SingleCellExeperiment with DE results stored in meta data DE_res
 #'
@@ -55,15 +62,15 @@ DEgenes <- function(sce,
   }
 
   if (!altExp_name %in% c("none", "RNA")) {
-    if (!altExp_name %in% SingleCellExperiment::altExpNames(sce)) {
+    if (!altExp_name %in% altExpNames(sce)) {
       stop("sce does not contain altExp_name as altExpNames")
     }
 
-    if (!exprs_value %in% SummarizedExperiment::assayNames(SingleCellExperiment::altExp(sce, altExp_name))) {
+    if (!exprs_value %in% assayNames(altExp(sce, altExp_name))) {
       stop("sce does not contain exprs_value as assayNames for altExp")
     }
 
-    exprsMat <- SummarizedExperiment::assay(SingleCellExperiment::altExp(sce, altExp_name), exprs_value)
+    exprsMat <- assay(altExp(sce, altExp_name), exprs_value)
 
   } else {
 
@@ -224,9 +231,11 @@ DEgenesCross <- function(sce_list,
 #'
 #' A function to select DE genes
 #'
-#' @param sce A SingleCellExperiment object with DE results stored in meta data DE_res list.
+#' @param sce A SingleCellExperiment object with DE results stored
+#' in meta data DE_res list.
 #' @param de_res DE_res returned by DEgenesCross().
-#' @param altExp_name A character indicates which expression matrix is used. by default is none (i.e. RNA).
+#' @param altExp_name A character indicates which expression
+#' matrix is used. by default is none (i.e. RNA).
 #' @param pval_adj A numeric indicates the threshold of adjusted p-value.
 #' @param mean_diff A numeric indicates the threshold of
 #' difference of average expression.
@@ -284,7 +293,8 @@ selectDEgenes <- function(sce = NULL,
   })
 
   if (!is.null(sce)) {
-    S4Vectors::metadata(sce)[[paste(meta_name, "filter", sep = "_")]] <- de_res_filter
+    S4Vectors::metadata(sce)[[paste(meta_name,
+                                    "filter", sep = "_")]] <- de_res_filter
 
     return(sce)
   } else {
@@ -312,7 +322,8 @@ doWilcox <- function(exprsMat, cellTypes,
     }))
 
     meanPct <- do.call(cbind, lapply(c(0,1), function(i){
-      rowSums(exprsMat[, tmp_celltype == i] > exprs_threshold)/sum(tmp_celltype == i)
+      rowSums(exprsMat[, tmp_celltype == i] >
+                exprs_threshold)/sum(tmp_celltype == i)
     }))
 
     meandiff <- meanPct[, 2] - meanPct[, 1]
@@ -345,7 +356,8 @@ doWilcox <- function(exprsMat, cellTypes,
                        meanPct[rownames(tt[[i]]), 1])
 
     tt[[i]] <- data.frame(tt[[i]])
-    tt[[i]] <- tt[[i]][order(ifelse(tt[[i]]$meanDiff > 0, 0, 1), tt[[i]]$p.adjust),]
+    tt[[i]] <- tt[[i]][order(ifelse(tt[[i]]$meanDiff > 0, 0, 1),
+                             tt[[i]]$p.adjust),]
     tt[[i]] <- cbind(tt[[i]], name = rownames(tt[[i]]))
     tt[[i]] <- cbind(tt[[i]], group = levels(cellTypes)[i])
   }
@@ -360,7 +372,8 @@ doWilcox <- function(exprsMat, cellTypes,
 
 #' DEbubblePlot
 #'
-#' A function to generate circlepack plot to visualise the marker for each cluster
+#' A function to generate circlepack plot to visualise
+#' the marker for each cluster
 #'
 #' @param de_list A list of results from `DE genes ()`
 #'
@@ -429,7 +442,9 @@ DEbubblePlot <- function(de_list) {
 
 
   edges <-  rbind(data.frame(from = data$root, to = data$group),
-                  data.frame(from = data$group, to = paste(data$subgroup, data$subsubgroup, sep = "|")))
+                  data.frame(from = data$group,
+                             to = paste(data$subgroup,
+                                        data$subsubgroup, sep = "|")))
 
   labels <- unlist(lapply(strsplit(as.character(unique(unlist(edges))),"\\|"),
                           function(x) x[length(x)]))
@@ -471,7 +486,8 @@ DEbubblePlot <- function(de_list) {
                                             function(x) tmp[tmp$group == x, ]),
                                      function(x) x$labels))
     if (length(common_features) != 0) {
-      common[vertices$originalGroup == group_list[i]][tmp$labels %in% common_features] <- TRUE
+      common[vertices$originalGroup ==
+               group_list[i]][tmp$labels %in% common_features] <- TRUE
     }
 
   }
@@ -506,9 +522,10 @@ DEbubblePlot <- function(de_list) {
     ggraph::geom_node_text(aes(label = labels,
                                filter = leaf),
                            size = text_size) +
-    ggraph::geom_node_label(aes(label = ifelse(grepl("group",
-                                                     as.character(vertices$labels)),
-                                               as.character(vertices$labels), "")),
+    ggraph::geom_node_label(aes(label =
+                                  ifelse(grepl("group",
+                                               as.character(vertices$labels)),
+                                         as.character(vertices$labels), "")),
                             fill = "white",
                             repel = TRUE,
                             size = 3,
@@ -522,7 +539,8 @@ DEbubblePlot <- function(de_list) {
 
 #' DEcomparisonPlot
 #'
-#' A function to visualise the pairwise comparison of pvalue in different data modality.
+#' A function to visualise the pairwise comparison of pvalue in
+#' different data modality.
 #'
 #' @param de_list A list including two lists results from `DE genes ()`.
 #' @param feature_list A list including two lists features indicating
@@ -559,7 +577,8 @@ DEcomparisonPlot <- function(de_list, feature_list) {
     df <- data.frame(log10(de_pvalue_list[[1]][[i]]),
                      -log10(de_pvalue_list[[2]][[i]]))
     df <- cbind(df, do.call(cbind, feature_list))
-    colnames(df) <- c(names(de_list), paste(names(de_list), "name", sep = "_"))
+    colnames(df) <- c(names(de_list),
+                      paste(names(de_list), "name", sep = "_"))
 
 
     df <- df[rowSums(df[, seq_len(2)]) != 0, ]
@@ -592,7 +611,8 @@ DEcomparisonPlot <- function(de_list, feature_list) {
                                            labels = c(as.character(df[, 4])))) +
     facet_grid(group~., scales = "free_y", space = "free_y",
                switch = "both") +
-    ylab("") + xlab("log10(p.adjust)                              -log10(p.adjust)") +
+    ylab("") +
+    xlab("log10(p.adjust)                              -log10(p.adjust)") +
     theme_bw() +
     theme(strip.placement = "outside", strip.text = element_text(size = 5)) +
     NULL

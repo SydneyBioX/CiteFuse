@@ -9,3 +9,4 @@ src/*.dll
 .Rproj
 .DS_Store
 .git
+*/.DS_Store

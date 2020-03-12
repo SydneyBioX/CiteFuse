@@ -16,8 +16,9 @@ Data from Mimitou et al. ECCITE-seq PBMC control sample data, which is a list
 of three matrices of RNA, ADT and HTO
 }
 \references{
-Mimitou, E. P., Cheng, A., Montalbano, A., et al. (2019). Multiplexed detection
-of proteins, transcriptomes, clonotypes and CRISPR perturbations in single cells.
+Mimitou, E. P., Cheng, A., Montalbano, A., et al. (2019).
+Multiplexed detection of proteins, transcriptomes, clonotypes and
+CRISPR perturbations in single cells.
 Nature Methods, 16(5), 409–412.
 }
 \keyword{datasets}

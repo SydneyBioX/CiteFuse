@@ -293,10 +293,14 @@ reducedDimSNF <- function(sce,
 #'
 #' @param sce A singlecellexperiment object
 #' @param dimNames indicates the name of the reduced dimension results.
-#' @param colour_by the method of visualisation, which can be UMAP,
-#' tSNE and diffusion map
-#' @param shape_by the method of visualisation, which can be UMAP,
-#' tSNE and diffusion map
+#' @param colour_by A character indicates how the cells coloured by.
+#' The information either stored in colData, assay, or altExp.
+#' @param shape_by A character indicates how the cells shaped by.
+#' The information either stored in colData, assay, or altExp.
+#' @param data_from A character indicates where the colour by data stored
+#' @param assay_name A character indicates the assay name of the expression
+#' @param altExp_name A character indicates the name of alternative expression
+#' @param altExp_assay_name A character indicates the assay name of alternative expression
 #' @param dim a vector of numeric with length of 2 indicates
 #' which component is being plot
 #'
@@ -322,6 +326,10 @@ visualiseDim <- function(sce,
                          dimNames = NULL,
                          colour_by = NULL,
                          shape_by = NULL,
+                         data_from = c("colData", "assay", "altExp"),
+                         assay_name = NULL,
+                         altExp_name = NULL,
+                         altExp_assay_name = NULL,
                          dim = seq_len(2)){
 
 
@@ -329,6 +337,13 @@ visualiseDim <- function(sce,
     stop("sce does not contain dimNames")
   }
 
+  data_from <- match.arg(data_from,
+                         c("colData", "assay", "altExp"),
+                         several.ok = TRUE)
+
+
+
+  cts <- FALSE
 
   if (is.null(colour_by)) {
 
@@ -336,15 +351,11 @@ visualiseDim <- function(sce,
 
   }else if (class(colour_by) == "character" & length(colour_by) == 1) {
 
-    if (!colour_by %in% names(colData(sce))) {
-
-      stop("There is no colData with name colour_by")
-
-    } else {
-
-      colour_by <- as.factor(SummarizedExperiment::colData(sce)[, colour_by])
-
-    }
+    df_colour_by <- .get_color_by(sce, colour_by, data_from,
+                               assay_name, altExp_name,
+                               altExp_assay_name)
+    colour_by <- df_colour_by$colour_by_info
+    cts <- df_colour_by$cts
 
   } else if (length(colour_by) != ncol(sce)) {
 
@@ -394,12 +405,18 @@ visualiseDim <- function(sce,
 
   dimred <- data.frame(dimred)
 
+  if (cts) {
+    g_color <- scale_color_viridis_c()
+  } else {
+    g_color <- scale_color_manual(values = cite_colorPal(length(unique(colour_by))))
+  }
+
   ggplot2::ggplot(dimred, aes(x = dimred[, dim[1]],
                               y = dimred[, dim[2]],
                               col = colour_by,
                               shape = shape_by)) +
     geom_point() +
-    scale_color_manual(values = cite_colorPal(length(unique(colour_by)))) +
+    g_color +
     scale_shape_manual(values = cite_shapePal(length(unique(shape_by)))) +
     theme_bw() +
     theme(aspect.ratio = 1) +
@@ -410,6 +427,87 @@ visualiseDim <- function(sce,
 
 
 
+}
+
+
+.get_color_by <- function(sce,
+                          colour_by,
+                          data_from = c("colData", "assay", "altExp"),
+                          assay_name = NULL,
+                          altExp_name = NULL,
+                          altExp_assay_name = NULL) {
+
+
+
+  data_from <- match.arg(data_from,
+                         c("colData", "assay", "altExp"),
+                         several.ok = TRUE)
+
+  colour_by_info <- NULL
+  cts <- TRUE
+
+  if ("colData" %in% data_from & is.null(colour_by_info)) {
+    if (colour_by %in% names(colData(sce))) {
+      colour_by_info <- SummarizedExperiment::colData(sce)[, colour_by]
+      cts <- FALSE
+    }
+  }
+
+  if ("assay" %in% data_from & is.null(colour_by_info)) {
+    if (colour_by %in% rownames(sce)) {
+
+
+      if (is.null(assay_name)) {
+        if ("logcounts" %in% SummarizedExperiment::assayNames(sce)) {
+          assay_name <- "logcounts"
+        } else {
+          assay_name <- SummarizedExperiment::assayNames(sce)[1]
+        }
+      } else {
+        if (!assay_name %in% SummarizedExperiment::assayNames(sce)) {
+          stop("There is no assay_name in assayNames of the sce")
+        }
+      }
+      colour_by_info <- SummarizedExperiment::assay(sce, assay_name)[colour_by, ]
+
+    }
+  }
+
+  if ("altExp" %in% data_from &
+      !is.null(SingleCellExperiment::altExpNames(sce))  &
+      is.null(colour_by_info)) {
+    if (is.null(altExp_name)) {
+      if ("ADT" %in% SingleCellExperiment::altExpNames(sce)) {
+        altExp_name <- "ADT"
+      } else {
+        altExp_name <-  SingleCellExperiment::altExpNames(sce)[1]
+      }
+    }
+    alt_se <- SingleCellExperiment::altExp(sce, altExp_name)
+
+    if (colour_by %in% rownames(alt_se)) {
+
+      if (is.null(altExp_assay_name)) {
+        if ("logcounts" %in% SummarizedExperiment::assayNames(alt_se)) {
+          altExp_assay_name <- "logcounts"
+        } else {
+          altExp_assay_name <- SummarizedExperiment::assayNames(alt_se)[1]
+        }
+      } else {
+        if (!altExp_assay_name %in% SummarizedExperiment::assayNames(alt_se)) {
+          stop("There is no altExp_assay_name in assayNames of the altExp")
+        }
+      }
+      colour_by_info <- SummarizedExperiment::assay(alt_se,
+                                                    altExp_assay_name)[colour_by, ]
+    }
+  }
+
+  if (is.null(colour_by_info)) {
+    warning("Can not find the required colour_by info,
+            please check input data_from, assay_name, altExp_name, altExp_assay_name")
+  }
+  return(list(colour_by_info = colour_by_info, cts = cts))
 }
 
 
@@ -447,15 +545,17 @@ visualiseDim <- function(sce,
 #' @importFrom dbscan sNN
 #' @importFrom igraph graph_from_adjacency_matrix cluster_louvain
 #' cluster_walktrap cluster_spinglass cluster_optimal
-#' cluster_edge_betweenness cluster_fast_greedy cluster_label_prop cluster_leading_eigen
+#' cluster_edge_betweenness cluster_fast_greedy cluster_label_prop
+#' cluster_leading_eigen
 #' @importFrom stats median as.dist
 #' @export
 
 igraphClustering <- function(sce,
                              metadata = "SNF_W",
-                             method = c("louvain", "walktrap", "spinglass", "optimal",
-                                        "leading_eigen", "label_prop",
-                                        "fast_greedy", "edge_betweenness"),
+                             method = c("louvain", "walktrap", "spinglass",
+                                        "optimal", "leading_eigen",
+                                        "label_prop", "fast_greedy",
+                                        "edge_betweenness"),
                              ...) {
 
   method <- match.arg(method, c("louvain", "walktrap", "spinglass", "optimal",

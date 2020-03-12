@@ -19,14 +19,14 @@ CiteFuse(
 )
 }
 \arguments{
-\item{sce}{a SingleCellExperiment#' @param return_sce A logical input indicates whether a \code{SingleCellExperiment}
-object will be return}
+\item{sce}{a SingleCellExperiment}
 
 \item{altExp_name}{expression name of ADT matrix}
 
 \item{W_list}{affinity list, if it is NULL, the function will calculate it.}
 
-\item{gene_select}{whether highly variable genes will be selected for RNA-seq to calcualte simlarity matrix}
+\item{gene_select}{whether highly variable genes will be selected
+for RNA-seq to calcualte simlarity matrix}
 
 \item{dist_cal_RNA}{similarity metrics used for RNA matrix}
 

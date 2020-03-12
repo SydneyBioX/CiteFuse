@@ -7,7 +7,9 @@
 SNF_fast(Wall, K = 20, t = 20)
 }
 \arguments{
-\item{Wall}{List of matrices. Each element of the list is a square, symmetric matrix that shows affinities of the data points from a certain view.}
+\item{Wall}{List of matrices. Each element of the list is a square,
+symmetric matrix that shows affinities of the data points
+from a certain view.}
 
 \item{K}{Number of neighbors in K-nearest neighbors part of the algorithm.}
 

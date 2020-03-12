@@ -1,5 +1,5 @@
 ---
-title: "CiteFuse: getting start"
+title: "CiteFuse: getting started"
 output: 
   rmarkdown::html_vignette:
     number_sections: yes
@@ -165,6 +165,7 @@ sce_citeseq
 
 ```{r}
 sce_citeseq <- scater::logNormCounts(sce_citeseq)
+sce_citeseq <- normaliseExprs(sce_citeseq, altExp_name = "ADT", transform = "log")
 system.time(sce_citeseq <- CiteFuse(sce_citeseq))
 ```
 
@@ -204,6 +205,22 @@ g3 <- visualiseDim(sce_citeseq, dimNames = "tSNE_joint",  colour_by = "RNA_clust
 
 library(gridExtra)
 grid.arrange(g3, g2, g1, ncol = 2)
+```
+
+```{r fig.height=8}
+
+g1 <- visualiseDim(sce_citeseq, dimNames = "tSNE_joint", 
+                   colour_by = "hg19_CD8A",
+                   data_from = "assay",
+                   assay_name = "logcounts") +
+  labs(title = "tSNE: hg19_CD8A (RNA expression)")
+g2 <- visualiseDim(sce_citeseq,dimNames = "tSNE_joint", 
+                   colour_by = "CD8",
+                   data_from = "altExp",
+                   altExp_assay_name = "logcounts") +
+  labs(title = "tSNE: CD8 (ADT expression)")
+
+grid.arrange(g1, g2, ncol = 2)
 ```
 
 
@@ -252,7 +269,6 @@ visualiseExprs(sce_citeseq,
 
 
 ```{r fig.height = 8, fig.width = 8}
-sce_citeseq <- normaliseExprs(sce_citeseq, altExp_name = "ADT", transform = "log")
 visualiseExprs(sce_citeseq, 
                altExp_name = "ADT", 
                n = 30) +

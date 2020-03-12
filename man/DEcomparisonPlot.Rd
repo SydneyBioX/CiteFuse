@@ -16,5 +16,6 @@ the selected subset of features will be visualised}
 A ggplot2 to visualise the comparison plot of DE.
 }
 \description{
-A function to visualise the pairwise comparison of pvalue in different data modality.
+A function to visualise the pairwise comparison of pvalue in
+different data modality.
 }

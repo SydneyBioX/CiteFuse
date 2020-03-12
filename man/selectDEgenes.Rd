@@ -15,11 +15,13 @@ selectDEgenes(
 )
 }
 \arguments{
-\item{sce}{A SingleCellExperiment object with DE results stored in meta data DE_res list.}
+\item{sce}{A SingleCellExperiment object with DE results stored
+in meta data DE_res list.}
 
 \item{de_res}{DE_res returned by DEgenesCross().}
 
-\item{altExp_name}{A character indicates which expression matrix is used. by default is none (i.e. RNA).}
+\item{altExp_name}{A character indicates which expression
+matrix is used. by default is none (i.e. RNA).}
 
 \item{pval_adj}{A numeric indicates the threshold of adjusted p-value.}
 

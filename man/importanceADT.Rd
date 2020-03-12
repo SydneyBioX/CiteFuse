@@ -21,9 +21,11 @@ importanceADT(
 \arguments{
 \item{sce}{A singlecellexperiment object}
 
-\item{altExp_name}{A character indicates which expression matrix is used. by default is none (i.e. RNA).}
+\item{altExp_name}{A character indicates which expression
+matrix is used. by default is none (i.e. RNA).}
 
-\item{exprs_value}{A character indicates which expression value in assayNames is used.}
+\item{exprs_value}{A character indicates which expression value
+in assayNames is used.}
 
 \item{method}{A character indicates the method of ADT importance calculation,
 either randomForest or PCA}
@@ -32,13 +34,17 @@ either randomForest or PCA}
 
 \item{subsample}{Whether perform subsampling (for random forest)}
 
-\item{times}{A numeric indicates the times of subsampling is performed (for random forest)}
+\item{times}{A numeric indicates the times of subsampling is performed
+(for random forest)}
 
-\item{prop}{A numeric indicates the proportion of cells are subsampled from the whole data (for random forest)}
+\item{prop}{A numeric indicates the proportion of cells are subsampled
+from the whole data (for random forest)}
 
-\item{k_pca}{Number of principal component will be used to calculate the loading scores (for PCA)}
+\item{k_pca}{Number of principal component will be used to
+calculate the loading scores (for PCA)}
 
-\item{remove_first_PC}{A logical input indicates whether the first component will be removed from calculation (for PCA).}
+\item{remove_first_PC}{A logical input indicates whether
+the first component will be removed from calculation (for PCA).}
 
 \item{...}{other arguments to `randomForest()` or `prcomp()` function}
 }
@@ -50,7 +56,8 @@ A function to calculate the importance score of ADT
 }
 \details{
 For random forest, the importance scores are based on features importance.
-For PCA, it implements the method proposed in Levin et al (based on the loading of features).
+For PCA, it implements the method proposed in Levin et al
+(based on the loading of features).
 }
 \examples{
 data("sce_control_subset", package = "CiteFuse")
@@ -60,8 +67,9 @@ subsample = TRUE)
 
 }
 \references{
-Levine, J.H., Simonds, E.F., Bendall, S.C., Davis, K.L., El-ad, D.A., Tadmor, M.D.,
-Litvin, O., Fienberg, H.G., Jager, A., Zunder, E.R. and Finck, R., 2015.
+Levine, J.H., Simonds, E.F., Bendall, S.C., Davis, K.L.,
+El-ad, D.A., Tadmor, M.D., Litvin, O., Fienberg, H.G., Jager, A.,
+Zunder, E.R. and Finck, R., 2015.
 Data-driven phenotypic dissection of AML reveals progenitor-like cells that
 correlate with prognosis. Cell, 162(1), pp.184-197.
 }

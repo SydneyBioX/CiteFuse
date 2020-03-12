@@ -9,6 +9,10 @@ visualiseDim(
   dimNames = NULL,
   colour_by = NULL,
   shape_by = NULL,
+  data_from = c("colData", "assay", "altExp"),
+  assay_name = NULL,
+  altExp_name = NULL,
+  altExp_assay_name = NULL,
   dim = seq_len(2)
 )
 }
@@ -17,11 +21,19 @@ visualiseDim(
 
 \item{dimNames}{indicates the name of the reduced dimension results.}
 
-\item{colour_by}{the method of visualisation, which can be UMAP,
-tSNE and diffusion map}
+\item{colour_by}{A character indicates how the cells coloured by.
+The information either stored in colData, assay, or altExp.}
 
-\item{shape_by}{the method of visualisation, which can be UMAP,
-tSNE and diffusion map}
+\item{shape_by}{A character indicates how the cells shaped by.
+The information either stored in colData, assay, or altExp.}
+
+\item{data_from}{A character indicates where the colour by data stored}
+
+\item{assay_name}{A character indicates the assay name of the expression}
+
+\item{altExp_name}{A character indicates the name of alternative expression}
+
+\item{altExp_assay_name}{A character indicates the assay name of alternative expression}
 
 \item{dim}{a vector of numeric with length of 2 indicates
 which component is being plot}

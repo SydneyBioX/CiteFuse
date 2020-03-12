@@ -233,13 +233,15 @@ readFrom10X <- function(dir,
     exprs_mat <- methods::as(exprs_mat, "dgCMatrix")
 
     barcodes_path <- paste0(dir, "barcodes.tsv.gz")
-    barcodes <- utils::read.delim(barcodes_path, header = FALSE, stringsAsFactors = FALSE)
+    barcodes <- utils::read.delim(barcodes_path, header = FALSE,
+                                  stringsAsFactors = FALSE)
     barcodes <- barcodes[, 1]
 
 
 
     feature_path <- paste0(dir, "features.tsv.gz")
-    features <- utils::read.delim(feature_path, header = FALSE, stringsAsFactors = FALSE)
+    features <- utils::read.delim(feature_path, header = FALSE,
+                                  stringsAsFactors = FALSE)
     colnames(features) <- c("gene_id", "gene_symbol", "gene_type")
 
 

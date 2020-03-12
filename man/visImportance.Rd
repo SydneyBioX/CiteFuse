@@ -14,14 +14,18 @@ visImportance(
 \arguments{
 \item{sce}{A singlecellexperiment object}
 
-\item{plot}{A string indicates the type of the plot (either boxplot or heatmap)}
+\item{plot}{A string indicates the type of the plot
+(either boxplot or heatmap)}
 
-\item{altExp_name}{A character indicates which expression matrix is used. by default is none (i.e. RNA).}
+\item{altExp_name}{A character indicates which expression matrix
+is used. by default is none (i.e. RNA).}
 
-\item{exprs_value}{A character indicates which expression value in assayNames is used.}
+\item{exprs_value}{A character indicates which expression value
+in assayNames is used.}
 }
 \value{
-A plot (either ggplot or pheatmap) to visualise the ADT importance results
+A plot (either ggplot or pheatmap) to visualise
+the ADT importance results
 }
 \description{
 A function to visualise the features distribtuion

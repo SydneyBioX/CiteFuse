@@ -2,7 +2,9 @@
 #'
 #' Fast similarity network fusion method
 #'
-#' @param Wall List of matrices. Each element of the list is a square, symmetric matrix that shows affinities of the data points from a certain view.
+#' @param Wall List of matrices. Each element of the list is a square,
+#' symmetric matrix that shows affinities of the data points
+#' from a certain view.
 #' @param K Number of neighbors in K-nearest neighbors part of the algorithm.
 #' @param t Number of iterations for the diffusion process.
 #' @return W is the overall status matrix derived
@@ -21,7 +23,8 @@ SNF_fast <- function(Wall, K = 20, t = 20)
   wall.name.check <- check_wall_names(Wall)
   wall.names <- dimnames(Wall[[1]])
   if (!wall.name.check) {
-    warning("Dim names not consistent across all matrices in Wall.\n            Returned matrix will have no dim names.")
+    warning("Dim names not consistent across all matrices in Wall.\n
+            Returned matrix will have no dim names.")
   }
   LW <- length(Wall)
 

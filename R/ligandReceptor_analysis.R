@@ -6,11 +6,14 @@
 #' @param sce A singlecellexperiment object
 #' @param ligandReceptor_list A data.frame indicates the ligand receptor list
 #' @param cluster A vector indicates the cluster results
-#' @param RNA_exprs_value A character indicates which expression value for RNA in assayNames is used.
-#' @param use_alt_exp A logical vector indicates whether receptors expression will
-#' use alternative expression matrix to quantify.
-#' @param altExp_name A character indicates which expression matrix is used. by default is ADT .
-#' @param altExp_exprs_value A character indicates which expression value in assayNames is used.
+#' @param RNA_exprs_value A character indicates which expression value
+#' for RNA in assayNames is used.
+#' @param use_alt_exp A logical vector indicates whether receptors
+#' expression will use alternative expression matrix to quantify.
+#' @param altExp_name A character indicates which expression matrix is used.
+#' by default is ADT .
+#' @param altExp_exprs_value A character indicates which expression value
+#' in assayNames is used.
 #' @param num_permute Number of permutation.
 #' @param p_sig A numeric indicates threshold of the pvalue significance
 #'
@@ -66,21 +69,22 @@ ligandReceptorTest <- function(sce,
       stop("sce does not contain altExp_name as altExpNames")
     }
 
-    if (!altExp_exprs_value %in% SummarizedExperiment::assayNames(SingleCellExperiment::altExp(sce, altExp_name))) {
+    if (!altExp_exprs_value %in% assayNames(altExp(sce, altExp_name))) {
       stop("sce does not contain altExp_exprs_value as assayNames for altExp")
     }
 
     # ADT exprssion matrix
-    exprsMat2 <- SummarizedExperiment::assay(SingleCellExperiment::altExp(sce, altExp_name), altExp_exprs_value)
+    exprsMat2 <- assay(altExp(sce, altExp_name), altExp_exprs_value)
 
   } else {
-    exprsMat2 <- SummarizedExperiment::assay(sce, RNA_exprs_value)
+    exprsMat2 <- assay(sce, RNA_exprs_value)
   }
 
 
 
   if (length(cluster) != ncol(sce)) {
-    stop("The length of the cluster is not matched with the number of column of sce")
+    stop("The length of the cluster is not matched with
+         the number of column of sce")
   }
 
   cluster_level <- levels(as.factor(droplevels(cluster)))
@@ -167,7 +171,8 @@ ligandReceptorTest <- function(sce,
 
   pvalue <- do.call(rbind, pvalue)
 
-  rownames(pvalue) <- paste(ligandReceptor_list[, 1], ligandReceptor_list[, 2], sep = "|")
+  rownames(pvalue) <- paste(ligandReceptor_list[, 1],
+                            ligandReceptor_list[, 2], sep = "|")
 
   pvalue_filter <- pvalue[apply(pvalue, 1, function(x) sum(x < p_sig)) != 0,]
 
@@ -206,12 +211,17 @@ ligandReceptorTest <- function(sce,
 
 
   idx_sig <- which(pvalue_filter < p_sig, arr.ind = TRUE)
-  df_sig_list <- data.frame(lr_pair = rownames(idx_sig), cluster_pair = colnames(pvalue_filter)[idx_sig[, 2]])
+  df_sig_list <- data.frame(lr_pair = rownames(idx_sig),
+                            cluster_pair = colnames(pvalue_filter)[idx_sig[, 2]])
 
-  df_sig_list$ligand <- unlist(lapply(strsplit(rownames(idx_sig), "\\|"), "[[", 1))
-  df_sig_list$receptor <- unlist(lapply(strsplit(rownames(idx_sig), "\\|"), "[[", 2))
-  df_sig_list$ligand_cluster <- unlist(lapply(strsplit(as.character(df_sig_list$cluster_pair), "\\|"), "[[", 1))
-  df_sig_list$receptor_cluster <- unlist(lapply(strsplit(as.character(df_sig_list$cluster_pair), "\\|"), "[[", 2))
+  df_sig_list$ligand <- unlist(lapply(strsplit(rownames(idx_sig),
+                                               "\\|"), "[[", 1))
+  df_sig_list$receptor <- unlist(lapply(strsplit(rownames(idx_sig),
+                                                 "\\|"), "[[", 2))
+  df_sig_list$ligand_cluster <- unlist(lapply(strsplit(as.character(df_sig_list$cluster_pair),
+                                                       "\\|"), "[[", 1))
+  df_sig_list$receptor_cluster <- unlist(lapply(strsplit(as.character(df_sig_list$cluster_pair),
+                                                         "\\|"), "[[", 2))
 
 
   #

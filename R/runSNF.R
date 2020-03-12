@@ -3,11 +3,11 @@
 #' A function to runSNF for CITE seq data
 #'
 #'
-#' @param sce a SingleCellExperiment#' @param return_sce A logical input indicates whether a \code{SingleCellExperiment}
-#' object will be return
+#' @param sce a SingleCellExperiment
 #' @param altExp_name expression name of ADT matrix
 #' @param W_list affinity list, if it is NULL, the function will calculate it.
-#' @param gene_select whether highly variable genes will be selected for RNA-seq to calcualte simlarity matrix
+#' @param gene_select whether highly variable genes will be selected
+#' for RNA-seq to calcualte simlarity matrix
 #' @param dist_cal_RNA similarity metrics used for RNA matrix
 #' @param dist_cal_ADT similarity metrics used for ADT matrix
 #' @param ADT_subset A vector  indicates the subset that will be used.
@@ -34,22 +34,23 @@
 
 
 CiteFuse <- function(sce,
-                   altExp_name = "ADT",
-                   W_list = NULL,
-                   gene_select = TRUE,
-                   dist_cal_RNA = "correlation",
-                   dist_cal_ADT = "propr",
-                   ADT_subset = NULL,
-                   K_knn = 20,
-                   t = 20,
-                   metadata_names = NULL,
-                   verbose = TRUE
-                   ) {
+                     altExp_name = "ADT",
+                     W_list = NULL,
+                     gene_select = TRUE,
+                     dist_cal_RNA = "correlation",
+                     dist_cal_ADT = "propr",
+                     ADT_subset = NULL,
+                     K_knn = 20,
+                     t = 20,
+                     metadata_names = NULL,
+                     verbose = TRUE
+) {
 
 
 
   if (!"logcounts" %in% SummarizedExperiment::assayNames(sce)) {
-    stop("sce does not contain logcounts... we will perform normalize() to get logcounts")
+    stop("sce does not contain logcounts...
+         we will perform normalize() to get logcounts")
   }
 
 
@@ -63,11 +64,6 @@ CiteFuse <- function(sce,
     }
 
 
-    # if (!"logcounts" %in% SummarizedExperiment::assayNames(altExp(sce, altExp_name))) {
-    #   warning("ADT does not contain logcounts... we will perform normaliseExprs() to get clr counts")
-    #   sce <- normaliseExprs(sce, altExp_name, "clr")
-    # }
-
 
     rna_mat <- as.matrix(SingleCellExperiment::logcounts(sce)[hvg,])
 
@@ -75,7 +71,7 @@ CiteFuse <- function(sce,
       dist_rna <- as.matrix(1 - stats::cor(rna_mat))
     }
 
-    adt_mat <- SummarizedExperiment::assay(SingleCellExperiment::altExp(sce, altExp_name), "counts")
+    adt_mat <- assay(altExp(sce, altExp_name), "counts")
 
     if (is.null(ADT_subset)) {
       ADT_subset <- rownames(adt_mat)

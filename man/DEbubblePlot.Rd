@@ -13,7 +13,8 @@ DEbubblePlot(de_list)
 A ggplot to visualise the DE results via bubble plot
 }
 \description{
-A function to generate circlepack plot to visualise the marker for each cluster
+A function to generate circlepack plot to visualise
+the marker for each cluster
 }
 \examples{
 library(S4Vectors)

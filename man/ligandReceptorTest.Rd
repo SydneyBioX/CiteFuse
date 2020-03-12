@@ -23,14 +23,17 @@ ligandReceptorTest(
 
 \item{cluster}{A vector indicates the cluster results}
 
-\item{RNA_exprs_value}{A character indicates which expression value for RNA in assayNames is used.}
+\item{RNA_exprs_value}{A character indicates which expression value
+for RNA in assayNames is used.}
 
-\item{use_alt_exp}{A logical vector indicates whether receptors expression will
-use alternative expression matrix to quantify.}
+\item{use_alt_exp}{A logical vector indicates whether receptors
+expression will use alternative expression matrix to quantify.}
 
-\item{altExp_name}{A character indicates which expression matrix is used. by default is ADT .}
+\item{altExp_name}{A character indicates which expression matrix is used.
+by default is ADT .}
 
-\item{altExp_exprs_value}{A character indicates which expression value in assayNames is used.}
+\item{altExp_exprs_value}{A character indicates which expression value
+in assayNames is used.}
 
 \item{num_permute}{Number of permutation.}
 

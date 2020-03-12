@@ -125,6 +125,10 @@
   <span class='kw'>dimNames</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>colour_by</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>shape_by</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>data_from</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"colData"</span>, <span class='st'>"assay"</span>, <span class='st'>"altExp"</span>),
+  <span class='kw'>assay_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>altExp_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>altExp_assay_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>dim</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq_len</a></span>(<span class='fl'>2</span>)
 )</pre>
 
@@ -141,13 +145,29 @@
     </tr>
     <tr>
       <th>colour_by</th>
-      <td><p>the method of visualisation, which can be UMAP,
-tSNE and diffusion map</p></td>
+      <td><p>A character indicates how the cells coloured by.
+The information either stored in colData, assay, or altExp.</p></td>
     </tr>
     <tr>
       <th>shape_by</th>
-      <td><p>the method of visualisation, which can be UMAP,
-tSNE and diffusion map</p></td>
+      <td><p>A character indicates how the cells shaped by.
+The information either stored in colData, assay, or altExp.</p></td>
+    </tr>
+    <tr>
+      <th>data_from</th>
+      <td><p>A character indicates where the colour by data stored</p></td>
+    </tr>
+    <tr>
+      <th>assay_name</th>
+      <td><p>A character indicates the assay name of the expression</p></td>
+    </tr>
+    <tr>
+      <th>altExp_name</th>
+      <td><p>A character indicates the name of alternative expression</p></td>
+    </tr>
+    <tr>
+      <th>altExp_assay_name</th>
+      <td><p>A character indicates the assay name of alternative expression</p></td>
     </tr>
     <tr>
       <th>dim</th>

@@ -3,16 +3,22 @@
 #' A function to calculate the importance score of ADT
 #'
 #' @param sce A singlecellexperiment object
-#' @param altExp_name A character indicates which expression matrix is used. by default is none (i.e. RNA).
-#' @param exprs_value A character indicates which expression value in assayNames is used.
+#' @param altExp_name A character indicates which expression
+#' matrix is used. by default is none (i.e. RNA).
+#' @param exprs_value A character indicates which expression value
+#' in assayNames is used.
 #' @param method A character indicates the method of ADT importance calculation,
 #' either randomForest or PCA
 #' @param group A vector indicates the grouping of the data (for random forest)
 #' @param subsample Whether perform subsampling (for random forest)
-#' @param times A numeric indicates the times of subsampling is performed (for random forest)
-#' @param prop A numeric indicates the proportion of cells are subsampled from the whole data (for random forest)
-#' @param k_pca Number of principal component will be used to calculate the loading scores (for PCA)
-#' @param remove_first_PC A logical input indicates whether the first component will be removed from calculation (for PCA).
+#' @param times A numeric indicates the times of subsampling is performed
+#' (for random forest)
+#' @param prop A numeric indicates the proportion of cells are subsampled
+#' from the whole data (for random forest)
+#' @param k_pca Number of principal component will be used to
+#' calculate the loading scores (for PCA)
+#' @param remove_first_PC A logical input indicates whether
+#' the first component will be removed from calculation (for PCA).
 #' @param ... other arguments to `randomForest()` or `prcomp()` function
 #'
 #' @return A SingleCellExperiment object
@@ -31,11 +37,13 @@
 #'
 #' @details
 #' For random forest, the importance scores are based on features importance.
-#' For PCA, it implements the method proposed in Levin et al (based on the loading of features).
+#' For PCA, it implements the method proposed in Levin et al
+#' (based on the loading of features).
 #'
 #' @references
-#' Levine, J.H., Simonds, E.F., Bendall, S.C., Davis, K.L., El-ad, D.A., Tadmor, M.D.,
-#' Litvin, O., Fienberg, H.G., Jager, A., Zunder, E.R. and Finck, R., 2015.
+#' Levine, J.H., Simonds, E.F., Bendall, S.C., Davis, K.L.,
+#' El-ad, D.A., Tadmor, M.D., Litvin, O., Fienberg, H.G., Jager, A.,
+#' Zunder, E.R. and Finck, R., 2015.
 #' Data-driven phenotypic dissection of AML reveals progenitor-like cells that
 #' correlate with prognosis. Cell, 162(1), pp.184-197.
 #'
@@ -57,7 +65,7 @@ importanceADT <- function(sce,
     stop("sce does not contain altExp_name as altExpNames")
   }
 
-  if (!exprs_value %in% SummarizedExperiment::assayNames(SingleCellExperiment::altExp(sce, altExp_name))) {
+  if (!exprs_value %in% assayNames(altExp(sce, altExp_name))) {
     stop("sce does not contain exprs_value as assayNames for altExp")
   }
 
@@ -106,7 +114,8 @@ importanceADT <- function(sce,
     }
     pca_eigenvalue <- adt_pca$sdev[use_k]^2
     # eigenvalue
-    ev_mat <- matrix(1, ncol = 1, nrow = nrow(adt_pca$rotation)) %*% matrix(pca_eigenvalue, ncol = length(use_k))
+    ev_mat <- matrix(1, ncol = 1, nrow = nrow(adt_pca$rotation)) %*%
+      matrix(pca_eigenvalue, ncol = length(use_k))
 
     NRS <- Matrix::rowSums(abs(adt_pca$rotation[, use_k]) * ev_mat)
     S4Vectors::metadata(sce)[["importanceADT_matrix"]] <- as.matrix(NRS)
@@ -124,11 +133,15 @@ importanceADT <- function(sce,
 #'
 #'
 #' @param sce A singlecellexperiment object
-#' @param plot A string indicates the type of the plot (either boxplot or heatmap)
-#' @param altExp_name A character indicates which expression matrix is used. by default is none (i.e. RNA).
-#' @param exprs_value A character indicates which expression value in assayNames is used.
+#' @param plot A string indicates the type of the plot
+#'  (either boxplot or heatmap)
+#' @param altExp_name A character indicates which expression matrix
+#' is used. by default is none (i.e. RNA).
+#' @param exprs_value A character indicates which expression value
+#' in assayNames is used.
 #'
-#' @return A plot (either ggplot or pheatmap) to visualise the ADT importance results
+#' @return A plot (either ggplot or pheatmap) to visualise
+#' the ADT importance results
 #'
 #' @examples
 #' data("sce_control_subset", package = "CiteFuse")
@@ -164,15 +177,19 @@ visImportance <- function(sce,
 
 
   if (plot == "boxplot") {
-    scores <- scores[order(Matrix::rowMeans(as.matrix(scores))), , drop = FALSE]
+    scores <- scores[order(Matrix::rowMeans(as.matrix(scores))), ,
+                     drop = FALSE]
 
 
 
     df_toPlot <- reshape2::melt(scores)
     colnames(df_toPlot) <- c("features", "iter", "importance")
 
-    g <- ggplot(df_toPlot, aes(x = df_toPlot$features, y = df_toPlot$importance, color = df_toPlot$features)) +
-      geom_boxplot(outlier.size = 1, outlier.stroke = 0.3, outlier.alpha = 0.8,
+    g <- ggplot(df_toPlot, aes(x = df_toPlot$features,
+                               y = df_toPlot$importance,
+                               color = df_toPlot$features)) +
+      geom_boxplot(outlier.size = 1, outlier.stroke = 0.3,
+                   outlier.alpha = 0.8,
                    width = 0.3) +
       scale_colour_viridis_d(direction = -1, end = 0.95) +
       coord_flip() +
