@@ -380,6 +380,8 @@ normaliseExprs <- function(sce,
     new_assay_name <- transform
   }
 
+  colnames(exprs_norm) <- colnames(exprs)
+  rownames(exprs_norm) <- rownames(exprs)
 
   if (altExp_name != "none") {
     SummarizedExperiment::assay(SingleCellExperiment::altExp(sce, altExp_name),
