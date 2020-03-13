@@ -69,7 +69,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">CiteFuse</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.0</span>
       </span>
     </div>
 
@@ -77,13 +77,13 @@
       <ul class="nav navbar-nav">
         <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Getting start
+    Getting started
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/CiteFuse.html">Getting start with CiteFuse</a>
+      <a href="../articles/CiteFuse.html">Getting started with CiteFuse</a>
     </li>
   </ul>
 </li>
@@ -147,27 +147,33 @@
     </tr>
     <tr>
       <th>RNA_exprs_value</th>
-      <td><p>A character indicates which expression value for RNA in assayNames is used.</p></td>
+      <td><p>A character indicates which expression value for
+RNA in assayNames is used.</p></td>
     </tr>
     <tr>
       <th>altExp_name</th>
-      <td><p>A character indicates which expression matrix is used. by default is none (i.e. RNA).</p></td>
+      <td><p>A character indicates which expression matrix is used.
+by default is none (i.e. RNA).</p></td>
     </tr>
     <tr>
       <th>altExp_exprs_value</th>
-      <td><p>A character indicates which expression value in assayNames is used.</p></td>
+      <td><p>A character indicates which expression value
+in assayNames is used.</p></td>
     </tr>
     <tr>
       <th>RNA_feature_subset</th>
-      <td><p>A vector of characters indicates the subset of features of RNA that are used for visualisation</p></td>
+      <td><p>A vector of characters indicates
+the subset of features of RNA that are used for visualisation</p></td>
     </tr>
     <tr>
       <th>ADT_feature_subset</th>
-      <td><p>A vector of characters indicates the subset of features of ADT that are used for visualisation</p></td>
+      <td><p>A vector of characters indicates
+the subset of features of ADT that are used for visualisation</p></td>
     </tr>
     <tr>
       <th>cell_subset</th>
-      <td><p>A vector of characters indicates the subset of cells that are used for visualisation</p></td>
+      <td><p>A vector of characters indicates
+the subset of cells that are used for visualisation</p></td>
     </tr>
     <tr>
       <th>cor_threshold</th>
@@ -175,23 +181,29 @@
     </tr>
     <tr>
       <th>cor_method</th>
-      <td><p>a character string indicating which correlation coefficient (or covariance) is to be computed. One of "pearson" (default), "kendall", or "spearman": can be abbreviated.</p></td>
+      <td><p>a character string indicating which
+correlation coefficient (or covariance) is to be computed.
+One of "pearson" (default), "kendall", or "spearman": can be abbreviated.</p></td>
     </tr>
     <tr>
       <th>RNA_exprs_pct</th>
-      <td><p>A numeric indicates the threshold expression percentage of a gene to be considered in correlation analysis</p></td>
+      <td><p>A numeric indicates the threshold
+expression percentage of a gene to be considered in correlation analysis</p></td>
     </tr>
     <tr>
       <th>ADT_exprs_pct</th>
-      <td><p>A numeric indicates the threshold expression percentage of a gene to be considered in correlation analysis</p></td>
+      <td><p>A numeric indicates the threshold
+expression percentage of a gene to be considered in correlation analysis</p></td>
     </tr>
     <tr>
       <th>RNA_exprs_threshold</th>
-      <td><p>A numeric indicates the threshold of RNA expression. By default is 0.</p></td>
+      <td><p>A numeric indicates the threshold
+of RNA expression. By default is 0.</p></td>
     </tr>
     <tr>
       <th>ADT_exprs_threshold</th>
-      <td><p>A numeric indicates the threshold of ADT expression. By default is 0.</p></td>
+      <td><p>A numeric indicates the threshold
+of ADT expression. By default is 0.</p></td>
     </tr>
     <tr>
       <th>network_layout</th>
@@ -229,11 +241,11 @@
                <span class='kw'>RNA_feature_subset</span> <span class='kw'>=</span> <span class='no'>RNA_feature_subset</span>,
                <span class='kw'>ADT_feature_subset</span> <span class='kw'>=</span> <span class='no'>ADT_feature_subset</span>,
                <span class='kw'>cor_method</span> <span class='kw'>=</span> <span class='st'>"pearson"</span>,
-              <span class='kw'>network_layout</span> <span class='kw'>=</span> <span class='kw pkg'>igraph</span><span class='kw ns'>::</span><span class='no'><a href='https://rdrr.io/pkg/igraph/man/layout_with_fr.html'>layout_with_fr</a></span>)</div><div class='img'><img src='geneADTnetwork-1.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt; IGRAPH 0a738f6 UN-B 2 1 -- 
+              <span class='kw'>network_layout</span> <span class='kw'>=</span> <span class='kw pkg'>igraph</span><span class='kw ns'>::</span><span class='no'><a href='https://rdrr.io/pkg/igraph/man/layout_with_fr.html'>layout_with_fr</a></span>)</div><div class='img'><img src='geneADTnetwork-1.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt; IGRAPH 3782ec8 UN-B 2 1 -- 
 #&gt; + attr: name (v/c), label (v/c), class (v/c), type (v/l), shape (v/c),
 #&gt; | color (v/c), size (v/n), label.cex (v/n), label.color (v/c), value
 #&gt; | (e/n), color (e/c), weights (e/n)
-#&gt; + edge from 0a738f6 (vertex names):
+#&gt; + edge from 3782ec8 (vertex names):
 #&gt; [1] RNA_hg19_HCST--ADT_CD8</div><div class='input'>
 </div></pre>
   </div>
