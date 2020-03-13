@@ -9,10 +9,12 @@ crossSampleDoublets(sce, altExp_name = NULL, totalExp_threshold = 10)
 \arguments{
 \item{sce}{A \code{SingleCellExperiment} object}
 
-\item{altExp_name}{Name of alternative expression that will be used to perform normalisation.
+\item{altExp_name}{Name of alternative expression that will be
+used to perform normalisation.
 If it is NULL, it will set to HTO.}
 
-\item{totalExp_threshold}{the threshold indicates for the HTO less than this threshold
+\item{totalExp_threshold}{the threshold indicates for the HTO
+less than this threshold
 will be filtered from the analysis}
 }
 \value{

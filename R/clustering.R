@@ -32,24 +32,10 @@ spectralClustering <- function(affinity, K = 20, type = 4,
                                t = 0, neigen = NULL)
 {
 
-  # if(kernel) {
-  #   eps.val <- diffusionMap::epsilonCompute(1-affinity, 0.01)
-  #   L <- exp(-(1-affinity)^2/(eps.val))
-  #   d <- rowSums(L)
-  #   D <- diag(d)
-  #   d[d == 0] <- .Machine$double.eps
-  # } else {
-  #
-  # }
-
-
   d <- rowSums(affinity)
   d[d == 0] <- .Machine$double.eps
   D <- diag(d)
   L <- affinity
-
-  # add kernel???
-
 
 
   neff <- K + 1

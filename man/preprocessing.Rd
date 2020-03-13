@@ -20,7 +20,8 @@ testing datasets (each matrix must be \code{matrix} or \code{dgCMatrix} class)}
 \item{return_sce}{A logical input indicates whether a \code{SingleCellExperiment}
 object will be return}
 
-\item{assay_matrix}{A integer indicates which list will be used as `assay` input of `SingleCellExperiment`}
+\item{assay_matrix}{A integer indicates which list will be
+used as `assay` input of `SingleCellExperiment`}
 
 \item{filter_features}{A logical input indicates whether the features with all zeros will be removed}
 
@@ -32,9 +33,10 @@ object will be return}
 either a SingleCellExperiment object or a preprocessed expression matrix
 }
 \description{
-This function will keep the samples that are common across the list of expression matrix,
-and filter the features that are all zeros across samples, and finally construct a \code{SingleCellExperiment}
-object
+This function will keep the samples that are
+common across the list of expression matrix,
+and filter the features that are all zeros across samples,
+and finally construct a \code{SingleCellExperiment} object
 }
 \examples{
 data("CITEseq_example", package = "CiteFuse")

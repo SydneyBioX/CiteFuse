@@ -4,9 +4,9 @@ template:
 navbar:
   title: ~
   left:
-    - text: Getting start
+    - text: Getting started
       menu:
-        - text: Getting start with CiteFuse
+        - text: Getting started with CiteFuse
           href: articles/CiteFuse.html
     - text: Functions
       href: reference/index.html

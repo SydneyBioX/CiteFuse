@@ -1,14 +1,16 @@
 #' A function to preprocess the list of expression matrix
 #'
-#' @description  This function will keep the samples that are common across the list of expression matrix,
-#' and filter the features that are all zeros across samples, and finally construct a \code{SingleCellExperiment}
-#' object
+#' @description  This function will keep the samples that are
+#' common across the list of expression matrix,
+#' and filter the features that are all zeros across samples,
+#' and finally construct a \code{SingleCellExperiment} object
 #'
 #' @param exprsMat A list or a matrix indicates the expression matrices of the
 #' testing datasets (each matrix must be \code{matrix} or \code{dgCMatrix} class)
 #' @param return_sce A logical input indicates whether a \code{SingleCellExperiment}
 #' object will be return
-#' @param assay_matrix A integer indicates which list will be used as `assay` input of `SingleCellExperiment`
+#' @param assay_matrix A integer indicates which list will be
+#' used as `assay` input of `SingleCellExperiment`
 #' @param filter_features A logical input indicates whether the features with all zeros will be removed
 #' @param rowData A DataFrame indicates the rowData to be stored in the sce object
 #' @param colData A DataFrame indicates the colData to be stored in the sce object
@@ -281,10 +283,14 @@ readFrom10X <- function(dir,
 #' A function that perform normalisation for alternative expression
 #'
 #' @param sce A \code{SingleCellExperiment} object
-#' @param altExp_name Name of alternative expression that will be used to perform normalisation
-#' @param exprs_value A character indicates which expression value in assayNames is used.
-#' @param transform type of transformation, either log or clr (Centered log ratio transform)
-#' @param log_offset Numeric scalar specifying the pseudo-count to add when log-transforming expression values. Default is 1
+#' @param altExp_name Name of alternative expression
+#' that will be used to perform normalisation
+#' @param exprs_value A character indicates
+#' which expression value in assayNames is used.
+#' @param transform type of transformation,
+#' either log or clr (Centered log ratio transform)
+#' @param log_offset Numeric scalar specifying the pseudo-count
+#' to add when log-transforming expression values. Default is 1
 #'
 #' @examples
 #' data("CITEseq_example", package = "CiteFuse")
@@ -325,7 +331,8 @@ normaliseExprs <- function(sce,
 
   } else {
 
-    # if altExp_name is "none", then the assay in SingleCellExperiment is extracted (RNA in most of the cases)
+    # if altExp_name is "none", then the assay in SingleCellExperiment
+    # is extracted (RNA in most of the cases)
 
     assaynames <- SummarizedExperiment::assayNames(sce)
     if (!exprs_value %in% assaynames) {
@@ -353,12 +360,6 @@ normaliseExprs <- function(sce,
 
   if (transform %in% "zi_minMax") {
 
-    # if (!"logcounts" %in% SummarizedExperiment::assayNames(SingleCellExperiment::altExp(sce, altExp_name))) {
-    #   exprs_log <- log(exprs + log_offset)
-    # } else {
-    #   exprs_log <- SummarizedExperiment::assay(SingleCellExperiment::altExp(sce, altExp_name), "logcounts")
-    # }
-    #
     exprs_norm <- apply(exprs, 1, .ziMinMax)
     exprs_norm <- t(exprs_norm)
 
@@ -366,11 +367,6 @@ normaliseExprs <- function(sce,
 
   if (transform %in% "minMax") {
 
-    # if (!"logcounts" %in% assaynames) {
-    #   exprs_log <- log(exprs + log_offset)
-    # } else {
-    #   exprs_log <- SummarizedExperiment::assay(SingleCellExperiment::altExp(sce, altExp_name), "logcounts")
-    # }
 
     exprs_norm <- apply(exprs, 1, .minMax)
     exprs_norm <- t(exprs_norm)
@@ -428,9 +424,11 @@ normaliseExprs <- function(sce,
 #' A function that perform normalisation for alternative expression
 #'
 #' @param sce A \code{SingleCellExperiment} object
-#' @param altExp_name Name of alternative expression that will be used to perform normalisation.
+#' @param altExp_name Name of alternative expression that will be
+#' used to perform normalisation.
 #' If it is NULL, it will set to HTO.
-#' @param totalExp_threshold the threshold indicates for the HTO less than this threshold
+#' @param totalExp_threshold the threshold indicates for the HTO
+#' less than this threshold
 #' will be filtered from the analysis
 #'
 #'
@@ -621,7 +619,8 @@ plotHTOSingle <- function(sce,
   }
 
   if (!"logcounts" %in% SummarizedExperiment::assayNames(altExp(sce, altExp_name))) {
-    warning("HTO does not contain logcounts... we will perform normaliseExprs() to get logcounts")
+    warning("HTO does not contain logcounts...
+            we will perform normaliseExprs() to get logcounts")
     sce <- normaliseExprs(sce, altExp_name, "log")
   }
 
@@ -780,7 +779,9 @@ withinSampleDoublets <- function(sce,
     }
   })
 
-  doubletClassify_within_class <- ifelse(doubletClassify_within_label == "NotDoublets(Within)", "Singlet", "Doublet")
+  doubletClassify_within_class <- ifelse(doubletClassify_within_label ==
+                                           "NotDoublets(Within)",
+                                         "Singlet", "Doublet")
 
   sce$doubletClassify_within_label <- doubletClassify_within_label
   sce$doubletClassify_within_class <- doubletClassify_within_class
@@ -815,7 +816,8 @@ getThreshold <- function(mixmdl, verbose = FALSE){
     idx2 <- as.numeric(names(mu_list)[order(mu_list)][2])
 
     root <- try(stats::uniroot(funMixModel,
-                               interval = c(mixmdl$mu[idx1] - mixmdl$sigma[idx1], mixmdl$mu[idx2] + mixmdl$sigma[idx2]),
+                               interval = c(mixmdl$mu[idx1] - mixmdl$sigma[idx1],
+                                            mixmdl$mu[idx2] + mixmdl$sigma[idx2]),
                                mu1 = mixmdl$mu[idx1], mu2 = mixmdl$mu[idx2],
                                sd1 = mixmdl$sigma[idx1], sd2 = mixmdl$sigma[idx2],
                                rho1 = mixmdl$lambda[idx1], rho2 = mixmdl$lambda[idx2]),
@@ -843,7 +845,8 @@ getThreshold <- function(mixmdl, verbose = FALSE){
 
 funMixModel <- function(x, mu1, mu2, sd1, sd2, rho1, rho2) {
 
-  stats::dnorm(x, mean = mu1, sd = sd1) * rho1 - stats::dnorm(x, mean = mu2, sd = sd2) * rho2
+  stats::dnorm(x, mean = mu1, sd = sd1) * rho1 -
+    stats::dnorm(x, mean = mu2, sd = sd2) * rho2
 
 
 }

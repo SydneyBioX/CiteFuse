@@ -15,13 +15,17 @@ normaliseExprs(
 \arguments{
 \item{sce}{A \code{SingleCellExperiment} object}
 
-\item{altExp_name}{Name of alternative expression that will be used to perform normalisation}
+\item{altExp_name}{Name of alternative expression
+that will be used to perform normalisation}
 
-\item{exprs_value}{A character indicates which expression value in assayNames is used.}
+\item{exprs_value}{A character indicates
+which expression value in assayNames is used.}
 
-\item{transform}{type of transformation, either log or clr (Centered log ratio transform)}
+\item{transform}{type of transformation,
+either log or clr (Centered log ratio transform)}
 
-\item{log_offset}{Numeric scalar specifying the pseudo-count to add when log-transforming expression values. Default is 1}
+\item{log_offset}{Numeric scalar specifying the pseudo-count
+to add when log-transforming expression values. Default is 1}
 }
 \value{
 a SingleCellExperiment object

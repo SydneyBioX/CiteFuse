@@ -129,7 +129,6 @@ selectHVG <- function(sce,
 
   decomp <- scran::modelGeneVar(sce)
   decomp <- decomp[order(decomp$bio, decreasing = TRUE), ]
-  # top.hvgs <- order(decomp$bio, decreasing=TRUE)
   hvg <- rownames(decomp)[decomp$FDR < FDR & decomp$bio > bio]
 
   return(hvg)

@@ -4,18 +4,30 @@
 #'
 #'
 #' @param sce A singlecellexperiment object
-#' @param RNA_exprs_value A character indicates which expression value for RNA in assayNames is used.
-#' @param altExp_name A character indicates which expression matrix is used. by default is none (i.e. RNA).
-#' @param altExp_exprs_value A character indicates which expression value in assayNames is used.
-#' @param RNA_feature_subset A vector of characters indicates the subset of features of RNA that are used for visualisation
-#' @param ADT_feature_subset A vector of characters indicates the subset of features of ADT that are used for visualisation
-#' @param cell_subset A vector of characters indicates the subset of cells that are used for visualisation
+#' @param RNA_exprs_value A character indicates which expression value for
+#' RNA in assayNames is used.
+#' @param altExp_name A character indicates which expression matrix is used.
+#' by default is none (i.e. RNA).
+#' @param altExp_exprs_value A character indicates which expression value
+#' in assayNames is used.
+#' @param RNA_feature_subset A vector of characters indicates
+#' the subset of features of RNA that are used for visualisation
+#' @param ADT_feature_subset A vector of characters indicates
+#' the subset of features of ADT that are used for visualisation
+#' @param cell_subset A vector of characters indicates
+#' the subset of cells that are used for visualisation
 #' @param cor_threshold Thresholds of correlation.
-#' @param cor_method a character string indicating which correlation coefficient (or covariance) is to be computed. One of "pearson" (default), "kendall", or "spearman": can be abbreviated.
-#' @param RNA_exprs_pct A numeric indicates the threshold expression percentage of a gene to be considered in correlation analysis
-#' @param ADT_exprs_pct A numeric indicates the threshold expression percentage of a gene to be considered in correlation analysis
-#' @param RNA_exprs_threshold A numeric indicates the threshold of RNA expression. By default is 0.
-#' @param ADT_exprs_threshold A numeric indicates the threshold of ADT expression. By default is 0.
+#' @param cor_method a character string indicating which
+#' correlation coefficient (or covariance) is to be computed.
+#' One of "pearson" (default), "kendall", or "spearman": can be abbreviated.
+#' @param RNA_exprs_pct A numeric indicates the threshold
+#' expression percentage of a gene to be considered in correlation analysis
+#' @param ADT_exprs_pct A numeric indicates the threshold
+#' expression percentage of a gene to be considered in correlation analysis
+#' @param RNA_exprs_threshold A numeric indicates the threshold
+#' of RNA expression. By default is 0.
+#' @param ADT_exprs_threshold A numeric indicates the threshold
+#' of ADT expression. By default is 0.
 #' @param network_layout layout of the network
 #' @param return_igraph indicates whether return the igraph object
 #'
@@ -84,12 +96,15 @@ geneADTnetwork <- function(sce,
     stop("sce does not contain altExp_name as altExpNames")
   }
 
-  if (!altExp_exprs_value %in% SummarizedExperiment::assayNames(SingleCellExperiment::altExp(sce, altExp_name))) {
+  if (!altExp_exprs_value %in%
+      SummarizedExperiment::assayNames(SingleCellExperiment::altExp(sce, altExp_name))) {
     stop("sce does not contain altExp_exprs_value as assayNames for altExp")
   }
 
   # ADT exprssion matrix
-  exprsMat2 <- SummarizedExperiment::assay(SingleCellExperiment::altExp(sce[, cell_subset], altExp_name), altExp_exprs_value)
+  exprsMat2 <- SummarizedExperiment::assay(SingleCellExperiment::altExp(sce[, cell_subset],
+                                                                        altExp_name),
+                                           altExp_exprs_value)
 
 
   if (!is.null(RNA_feature_subset)) {
@@ -138,7 +153,8 @@ geneADTnetwork <- function(sce,
   g <- igraph::graph_from_data_frame(df_corMat,
                                      directed = FALSE)
 
-  igraph::V(g)$label <- unlist(lapply(strsplit(names(igraph::V(g)), "_"), function(x) paste(x[-1], collapse = "_")))
+  igraph::V(g)$label <- unlist(lapply(strsplit(names(igraph::V(g)), "_"),
+                                      function(x) paste(x[-1], collapse = "_")))
   igraph::V(g)$class <- unlist(lapply(strsplit(names(igraph::V(g)), "_"), "[[", 1))
   igraph::V(g)$type <- c(TRUE, FALSE)[as.numeric(as.factor(igraph::V(g)$class))]
   igraph::V(g)$shape <- c("circle", "square")[as.numeric(as.factor(igraph::V(g)$class))]
@@ -155,7 +171,8 @@ geneADTnetwork <- function(sce,
   graphics::plot(g, layout = network_layout)
 
   graphics::legend('topleft',
-                   legend = c(levels(as.factor(igraph::V(g)$class)), "positive", "negative"),
+                   legend = c(levels(as.factor(igraph::V(g)$class)),
+                              "positive", "negative"),
                    col = c("#A0CBE8", "#FFBE7D", "#E15759", "#4E79A7"),
                    pch = c(16, 15, 95, 95))
 

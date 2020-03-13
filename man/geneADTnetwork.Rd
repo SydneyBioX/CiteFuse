@@ -25,29 +25,41 @@ geneADTnetwork(
 \arguments{
 \item{sce}{A singlecellexperiment object}
 
-\item{RNA_exprs_value}{A character indicates which expression value for RNA in assayNames is used.}
+\item{RNA_exprs_value}{A character indicates which expression value for
+RNA in assayNames is used.}
 
-\item{altExp_name}{A character indicates which expression matrix is used. by default is none (i.e. RNA).}
+\item{altExp_name}{A character indicates which expression matrix is used.
+by default is none (i.e. RNA).}
 
-\item{altExp_exprs_value}{A character indicates which expression value in assayNames is used.}
+\item{altExp_exprs_value}{A character indicates which expression value
+in assayNames is used.}
 
-\item{RNA_feature_subset}{A vector of characters indicates the subset of features of RNA that are used for visualisation}
+\item{RNA_feature_subset}{A vector of characters indicates
+the subset of features of RNA that are used for visualisation}
 
-\item{ADT_feature_subset}{A vector of characters indicates the subset of features of ADT that are used for visualisation}
+\item{ADT_feature_subset}{A vector of characters indicates
+the subset of features of ADT that are used for visualisation}
 
-\item{cell_subset}{A vector of characters indicates the subset of cells that are used for visualisation}
+\item{cell_subset}{A vector of characters indicates
+the subset of cells that are used for visualisation}
 
 \item{cor_threshold}{Thresholds of correlation.}
 
-\item{cor_method}{a character string indicating which correlation coefficient (or covariance) is to be computed. One of "pearson" (default), "kendall", or "spearman": can be abbreviated.}
+\item{cor_method}{a character string indicating which
+correlation coefficient (or covariance) is to be computed.
+One of "pearson" (default), "kendall", or "spearman": can be abbreviated.}
 
-\item{RNA_exprs_pct}{A numeric indicates the threshold expression percentage of a gene to be considered in correlation analysis}
+\item{RNA_exprs_pct}{A numeric indicates the threshold
+expression percentage of a gene to be considered in correlation analysis}
 
-\item{ADT_exprs_pct}{A numeric indicates the threshold expression percentage of a gene to be considered in correlation analysis}
+\item{ADT_exprs_pct}{A numeric indicates the threshold
+expression percentage of a gene to be considered in correlation analysis}
 
-\item{RNA_exprs_threshold}{A numeric indicates the threshold of RNA expression. By default is 0.}
+\item{RNA_exprs_threshold}{A numeric indicates the threshold
+of RNA expression. By default is 0.}
 
-\item{ADT_exprs_threshold}{A numeric indicates the threshold of ADT expression. By default is 0.}
+\item{ADT_exprs_threshold}{A numeric indicates the threshold
+of ADT expression. By default is 0.}
 
 \item{network_layout}{layout of the network}
 

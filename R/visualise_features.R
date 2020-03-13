@@ -312,8 +312,6 @@ scatterSingle <- function(exprsMat, group = NULL, threshold = NULL) {
 
   pmain <- ggplot(df, aes(x = df[, 1], y = df[, 2], color = group)) +
     geom_point(alpha = 0.5) +
-    # geom_density2d(bins = 10) +
-    # stat_density2d(aes(alpha = ..level.., fill = ..level..), geom = "polygon", n = 100, bins = 10) +
     geom_hline(yintercept = threshold[2], col = "red", linetype = 2, size = 1) +
     geom_vline(xintercept = threshold[1], col = "red", linetype = 2, size = 1) +
     col_layer +
