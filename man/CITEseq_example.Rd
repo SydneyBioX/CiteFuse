@@ -4,7 +4,9 @@
 \name{CITEseq_example}
 \alias{CITEseq_example}
 \title{A subset of ECCITE-seq data (control)}
-\format{An object of class \code{list} of length 3.}
+\format{
+An object of class \code{list} of length 3.
+}
 \source{
 Gene Expression Omnibus with the accession code GSE126310.
 }

@@ -4,7 +4,9 @@
 \name{sce_ctcl_subset}
 \alias{sce_ctcl_subset}
 \title{A SingleCellExperiment of ECCITE-seq data}
-\format{An object of class \code{SingleCellExperiment} with 1450 rows and 173 columns.}
+\format{
+An object of class \code{SingleCellExperiment} with 1450 rows and 173 columns.
+}
 \source{
 Gene Expression Omnibus with the accession code GSE126310.
 }

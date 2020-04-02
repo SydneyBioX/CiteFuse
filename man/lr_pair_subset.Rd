@@ -4,7 +4,9 @@
 \name{lr_pair_subset}
 \alias{lr_pair_subset}
 \title{A subset of Ligand Receptor Pairs}
-\format{An object of class \code{matrix} with 50 rows and 2 columns.}
+\format{
+An object of class \code{matrix} (inherits from \code{array}) with 50 rows and 2 columns.
+}
 \usage{
 lr_pair_subset
 }

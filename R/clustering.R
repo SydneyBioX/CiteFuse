@@ -335,7 +335,7 @@ visualiseDim <- function(sce,
 
     colour_by <- NULL
 
-  }else if (class(colour_by) == "character" & length(colour_by) == 1) {
+  }else if ("character" %in% is(colour_by) & length(colour_by) == 1) {
 
     df_colour_by <- .get_color_by(sce, colour_by, data_from,
                                assay_name, altExp_name,
@@ -359,7 +359,7 @@ visualiseDim <- function(sce,
 
     shape_by <- NULL
 
-  }else if (class(shape_by) == "character" & length(shape_by) == 1) {
+  }else if ("character" %in% is(shape_by) & length(shape_by) == 1) {
 
     if (!shape_by %in% names(colData(sce))) {
 
