@@ -485,11 +485,11 @@ visLigandReceptor(sce_citeseq,
 ```
 
 
-<!-- ```{r fig.height=8, fig.width=8} -->
-<!-- visLigandReceptor(sce_citeseq,  -->
-<!--                   type = "lr_network", -->
-<!--                   receptor_type = "ADT") -->
-<!-- ``` -->
+```{r fig.height=8, fig.width=8}
+visLigandReceptor(sce_citeseq,
+                  type = "lr_network",
+                  receptor_type = "ADT")
+```
 
 # Between-sample Analysis 
 

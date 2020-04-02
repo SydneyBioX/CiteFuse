@@ -432,6 +432,7 @@ visLigandReceptor <- function(sce,
     igraph::V(g)$size <- 5
     igraph::V(g)$label.cex <- 0.4
     igraph::V(g)$label.color <- "black"
+    df_sig_list$cluster_pair <- as.factor(df_sig_list$cluster_pair)
 
     igraph::E(g)$color <- cite_colorPal(nlevels(df_sig_list$cluster_pair))[as.numeric(df_sig_list$cluster_pair)]
 

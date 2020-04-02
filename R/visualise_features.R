@@ -359,7 +359,7 @@ fitMixtures <- function(vec) {
 
 
 
-  if (class(mixmdl) == "try-error") {
+  if ("try-error" %in% methods::is(mixmdl)) {
     threshold <- min(max(vec[km$cluster == 1]), max(vec[km$cluster == 2]))
   } else {
     threshold <- getThreshold(mixmdl)
