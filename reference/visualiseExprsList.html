@@ -73,7 +73,7 @@ a list of SingleCellExperiment" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">CiteFuse</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.6</span>
       </span>
     </div>
 
@@ -116,7 +116,7 @@ a list of SingleCellExperiment" />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>visualiseExprsList</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/SydneyBioX/CiteFuse/blob/master/R/visualise_features.R'><code>R/visualise_features.R</code></a></small>
     <div class="hidden name"><code>visualiseExprsList.Rd</code></div>
     </div>
 
@@ -184,8 +184,8 @@ the subset of cells that are used for visualisation</p></td>
     <p>A ggplot to visualise te features distribution</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"sce_control_subset"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"CiteFuse"</span>)
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"sce_ctcl_subset"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"CiteFuse"</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>sce_control_subset</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>sce_ctcl_subset</span>)
 <span class='fu'>visualiseExprsList</span>(<span class='kw'>sce_list</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>control</span> <span class='kw'>=</span> <span class='no'>sce_control_subset</span>,
 <span class='kw'>ctcl</span> <span class='kw'>=</span> <span class='no'>sce_ctcl_subset</span>),
 <span class='kw'>plot</span> <span class='kw'>=</span> <span class='st'>"boxplot"</span>,
@@ -210,7 +210,7 @@ the subset of cells that are used for visualisation</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>

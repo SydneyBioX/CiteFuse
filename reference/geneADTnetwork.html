@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">CiteFuse</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.6</span>
       </span>
     </div>
 
@@ -115,7 +115,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>geneADTnetwork</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/SydneyBioX/CiteFuse/blob/master/R/geneADTnetwork.R'><code>R/geneADTnetwork.R</code></a></small>
     <div class="hidden name"><code>geneADTnetwork.Rd</code></div>
     </div>
 
@@ -236,7 +236,7 @@ of ADT expression. By default is 0.</p></td>
 #&gt; <span class='message'>    colMaxs, colMins, colRanges, rowMaxs, rowMins, rowRanges</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:base’:</span>
 #&gt; <span class='message'></span>
 #&gt; <span class='message'>    aperm, apply, rowsum</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>2020</span>)
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"sce_control_subset"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"CiteFuse"</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>sce_control_subset</span>)
 <span class='no'>RNA_feature_subset</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span>(<span class='no'>sce_control_subset</span>), <span class='fl'>50</span>)
 <span class='no'>ADT_feature_subset</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/SingleCellExperiment/man/altExps.html'>altExp</a></span>(<span class='no'>sce_control_subset</span>, <span class='st'>"ADT"</span>))
 
@@ -244,11 +244,11 @@ of ADT expression. By default is 0.</p></td>
                <span class='kw'>RNA_feature_subset</span> <span class='kw'>=</span> <span class='no'>RNA_feature_subset</span>,
                <span class='kw'>ADT_feature_subset</span> <span class='kw'>=</span> <span class='no'>ADT_feature_subset</span>,
                <span class='kw'>cor_method</span> <span class='kw'>=</span> <span class='st'>"pearson"</span>,
-              <span class='kw'>network_layout</span> <span class='kw'>=</span> <span class='kw pkg'>igraph</span><span class='kw ns'>::</span><span class='no'><a href='https://rdrr.io/pkg/igraph/man/layout_with_fr.html'>layout_with_fr</a></span>)</div><div class='img'><img src='geneADTnetwork-1.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt; IGRAPH 4a0b96d UN-B 2 1 -- 
+              <span class='kw'>network_layout</span> <span class='kw'>=</span> <span class='kw pkg'>igraph</span><span class='kw ns'>::</span><span class='no'><a href='https://rdrr.io/pkg/igraph/man/layout_with_fr.html'>layout_with_fr</a></span>)</div><div class='img'><img src='geneADTnetwork-1.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt; IGRAPH 6702d36 UN-B 2 1 -- 
 #&gt; + attr: name (v/c), label (v/c), class (v/c), type (v/l), shape (v/c),
 #&gt; | color (v/c), size (v/n), label.cex (v/n), label.color (v/c), value
 #&gt; | (e/n), color (e/c), weights (e/n)
-#&gt; + edge from 4a0b96d (vertex names):
+#&gt; + edge from 6702d36 (vertex names):
 #&gt; [1] RNA_hg19_HCST--ADT_CD8</div><div class='input'>
 </div></pre>
   </div>
@@ -266,7 +266,7 @@ of ADT expression. By default is 0.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>

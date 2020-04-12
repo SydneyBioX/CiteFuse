@@ -75,7 +75,7 @@ and finally construct a SingleCellExperiment object" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">CiteFuse</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.6</span>
       </span>
     </div>
 
@@ -118,7 +118,7 @@ and finally construct a SingleCellExperiment object" />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>A function to preprocess the list of expression matrix</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/SydneyBioX/CiteFuse/blob/master/R/QCfunctions.R'><code>R/QCfunctions.R</code></a></small>
     <div class="hidden name"><code>preprocessing.Rd</code></div>
     </div>
 
@@ -144,12 +144,13 @@ and finally construct a <code>SingleCellExperiment</code> object</p>
     <tr>
       <th>exprsMat</th>
       <td><p>A list or a matrix indicates the expression matrices of the
-testing datasets (each matrix must be <code>matrix</code> or <code>dgCMatrix</code> class)</p></td>
+testing datasets (each matrix must be <code>matrix</code> or
+<code>dgCMatrix</code> class)</p></td>
     </tr>
     <tr>
       <th>return_sce</th>
-      <td><p>A logical input indicates whether a <code>SingleCellExperiment</code>
-object will be return</p></td>
+      <td><p>A logical input indicates whether
+a <code>SingleCellExperiment</code> object will be return</p></td>
     </tr>
     <tr>
       <th>assay_matrix</th>
@@ -158,24 +159,28 @@ used as `assay` input of `SingleCellExperiment`</p></td>
     </tr>
     <tr>
       <th>filter_features</th>
-      <td><p>A logical input indicates whether the features with all zeros will be removed</p></td>
+      <td><p>A logical input indicates
+whether the features with all zeros will be removed</p></td>
     </tr>
     <tr>
       <th>rowData</th>
-      <td><p>A DataFrame indicates the rowData to be stored in the sce object</p></td>
+      <td><p>A DataFrame indicates the rowData to be stored
+in the sce object</p></td>
     </tr>
     <tr>
       <th>colData</th>
-      <td><p>A DataFrame indicates the colData to be stored in the sce object</p></td>
+      <td><p>A DataFrame indicates the colData to be stored
+in the sce object</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>either a SingleCellExperiment object or a preprocessed expression matrix</p>
+    <p>either a SingleCellExperiment object or
+a preprocessed expression matrix</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"CITEseq_example"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"CiteFuse"</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>CITEseq_example</span>)
 <span class='no'>sce_citeseq</span> <span class='kw'>&lt;-</span> <span class='fu'>preprocessing</span>(<span class='no'>CITEseq_example</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -192,7 +197,7 @@ used as `assay` input of `SingleCellExperiment`</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>
