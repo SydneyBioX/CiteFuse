@@ -16,9 +16,11 @@ readFrom10X(
 
 \item{type}{A character indicates the format of the data, sparse or HDF5}
 
-\item{feature_named_by}{A character indicates whehter the genes will be named by gene_id or gene_symbol}
+\item{feature_named_by}{A character indicates whehter the genes
+will be named by gene_id or gene_symbol}
 
-\item{filter_features}{A logical input indicates whether the features with all zeros will be removed}
+\item{filter_features}{A logical input indicates whether the features
+with all zeros will be removed}
 }
 \value{
 a SingleCellExperiment object

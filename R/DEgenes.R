@@ -26,7 +26,7 @@
 #' @return A SingleCellExeperiment with DE results stored in meta data DE_res
 #'
 #' @examples
-#' data("sce_control_subset", package = "CiteFuse")
+#' data(sce_control_subset)
 #' sce_control_subset <- DEgenes(sce_control_subset,
 #' group = sce_control_subset$SNF_W_louvain,
 #' return_all = TRUE,
@@ -248,7 +248,7 @@ DEgenesCross <- function(sce_list,
 #' DE_res_filter list of metadata
 #'
 #' @examples
-#' data("sce_control_subset", package = "CiteFuse")
+#' data(sce_control_subset)
 #' sce_control_subset <- DEgenes(sce_control_subset,
 #' group = sce_control_subset$SNF_W_louvain,
 #' return_all = TRUE,
@@ -278,7 +278,7 @@ selectDEgenes <- function(sce = NULL,
 
     if (!meta_name %in% names(S4Vectors::metadata(sce))) {
       stop("There is no DE_res in the sce object.
-         Please run DEgenes() with the same altExp_name first.")
+               Please run DEgenes() with the same altExp_name first.")
     }
 
     de_res <- S4Vectors::metadata(sce)[[meta_name]]
@@ -347,12 +347,18 @@ doWilcox <- function(exprsMat, cellTypes,
 
 
 
-    tt[[i]] <- cbind(tt[[i]], meanExprs.1 = meanExprs[rownames(tt[[i]]), 1])
-    tt[[i]] <- cbind(tt[[i]], meanExprs.2 = meanExprs[rownames(tt[[i]]), 2])
-    tt[[i]] <- cbind(tt[[i]], meanPct.1 = meanPct[rownames(tt[[i]]), 1])
-    tt[[i]] <- cbind(tt[[i]], meanPct.2 = meanPct[rownames(tt[[i]]), 2])
-    tt[[i]] <- cbind(tt[[i]], meanDiff = meandiff[rownames(tt[[i]])])
-    tt[[i]] <- cbind(tt[[i]], pctDiff = meanPct[rownames(tt[[i]]), 2] -
+    tt[[i]] <- cbind(tt[[i]],
+                     meanExprs.1 = meanExprs[rownames(tt[[i]]), 1])
+    tt[[i]] <- cbind(tt[[i]],
+                     meanExprs.2 = meanExprs[rownames(tt[[i]]), 2])
+    tt[[i]] <- cbind(tt[[i]],
+                     meanPct.1 = meanPct[rownames(tt[[i]]), 1])
+    tt[[i]] <- cbind(tt[[i]],
+                     meanPct.2 = meanPct[rownames(tt[[i]]), 2])
+    tt[[i]] <- cbind(tt[[i]],
+                     meanDiff = meandiff[rownames(tt[[i]])])
+    tt[[i]] <- cbind(tt[[i]],
+                     pctDiff = meanPct[rownames(tt[[i]]), 2] -
                        meanPct[rownames(tt[[i]]), 1])
 
     tt[[i]] <- data.frame(tt[[i]])
@@ -385,7 +391,7 @@ doWilcox <- function(exprsMat, cellTypes,
 #'
 #' @examples
 #' library(S4Vectors)
-#' data("sce_control_subset", package = "CiteFuse")
+#' data(sce_control_subset)
 #' sce_control_subset <- DEgenes(sce_control_subset,
 #' altExp_name = "none",
 #' group = sce_control_subset$SNF_W_louvain,
@@ -446,10 +452,12 @@ DEbubblePlot <- function(de_list) {
                              to = paste(data$subgroup,
                                         data$subsubgroup, sep = "|")))
 
-  labels <- unlist(lapply(strsplit(as.character(unique(unlist(edges))),"\\|"),
+  labels <- unlist(lapply(strsplit(as.character(unique(unlist(edges))),
+                                   "\\|"),
                           function(x) x[length(x)]))
 
-  group <- unlist(lapply(strsplit(as.character(unique(unlist(edges))),"\\|"),
+  group <- unlist(lapply(strsplit(as.character(unique(unlist(edges))),
+                                  "\\|"),
                          function(x) x[1]))
 
   vertices = data.frame(name = unique(unlist(edges)),
@@ -483,7 +491,8 @@ DEbubblePlot <- function(de_list) {
     tmp <- vertices[vertices$originalGroup == group_list[i], ]
     common_features <- Reduce(intersect,
                               lapply(lapply(unique(tmp$group),
-                                            function(x) tmp[tmp$group == x, ]),
+                                            function(x)
+                                              tmp[tmp$group == x, ]),
                                      function(x) x$labels))
     if (length(common_features) != 0) {
       common[vertices$originalGroup ==
@@ -496,7 +505,8 @@ DEbubblePlot <- function(de_list) {
   vertices$common <- vertices$fillColor
   vertices$common <- ifelse(common, "common", vertices$common)
   vertices$fillColor <- factor(vertices$fillColor,
-                               levels = c("root", "group", type, "common"))
+                               levels = c("root", "group",
+                                          type, "common"))
 
   mygraph <- igraph::graph_from_data_frame(edges, vertices = vertices )
 
@@ -508,11 +518,13 @@ DEbubblePlot <- function(de_list) {
   names(text_colors) <- c("root", "group", type, "common")
 
   text_size <- vertices[!grepl("root|group", vertices$group), ]$size
-  names(text_size) <- rownames(vertices[!grepl("root|group", vertices$group), ])
+  names(text_size) <- rownames(vertices[!grepl("root|group",
+                                               vertices$group), ])
   text_size <- text_size/max(text_size) * 3
   text_size <- ifelse(text_size < 1.8, 1.8, text_size)
 
-  g <- ggraph::ggraph(mygraph, layout = 'circlepack', weight = vertices$size) +
+  g <- ggraph::ggraph(mygraph, layout = 'circlepack',
+                      weight = vertices$size) +
     ggraph::geom_node_circle(aes(fill = vertices$fillColor,
                                  color = vertices$common), size = 0.5) +
     # scale_fill_viridis_d() +
@@ -522,10 +534,9 @@ DEbubblePlot <- function(de_list) {
     ggraph::geom_node_text(aes(label = labels,
                                filter = leaf),
                            size = text_size) +
-    ggraph::geom_node_label(aes(label =
-                                  ifelse(grepl("group",
-                                               as.character(vertices$labels)),
-                                         as.character(vertices$labels), "")),
+    ggraph::geom_node_label(aes(label = ifelse(grepl("group",
+                                        as.character(vertices$labels)),
+                                        as.character(vertices$labels), "")),
                             fill = "white",
                             repel = TRUE,
                             size = 3,
@@ -612,9 +623,10 @@ DEcomparisonPlot <- function(de_list, feature_list) {
     facet_grid(group~., scales = "free_y", space = "free_y",
                switch = "both") +
     ylab("") +
-    xlab("log10(p.adjust)                              -log10(p.adjust)") +
+    xlab("log10(p.adjust)                             -log10(p.adjust)") +
     theme_bw() +
-    theme(strip.placement = "outside", strip.text = element_text(size = 5)) +
+    theme(strip.placement = "outside",
+          strip.text = element_text(size = 5)) +
     NULL
   return(g)
 

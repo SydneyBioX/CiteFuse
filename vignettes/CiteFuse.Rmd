@@ -1,8 +1,10 @@
 ---
 title: "CiteFuse: getting started"
-output: 
-  rmarkdown::html_vignette:
-    number_sections: yes
+date: "`r BiocStyle::doc_date()`"
+output:
+  BiocStyle::html_document:
+    toc: true
+    toc_float: true
 vignette: >
   %\VignetteIndexEntry{CiteFuse}
   %\VignetteEngine{knitr::rmarkdown}
@@ -20,6 +22,16 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 # Introduction 
 
 `CiteFuse` is a computational framework that implements a suite of methods and tools for CITE-seq data from pre-processing through to integrative analytics. This includes doublet detection, network-based modality integration, cell type clustering, differential RNA and protein expression analysis, ADT evaluation, ligand-receptor interaction analysis, and interactive web-based visualisation of the analyses. This vignette demostrates the usage of `CiteFuse` by using a subset data of CITE-seq data from human PBMCs as an example (Mimitou et al., 2019).
+
+First, install `CiteFuse` using `BiocManager`.
+
+```{r eval=FALSE}
+if (!requireNamespace("BiocManager", quietly = TRUE)) {
+ install.packages("BiocManager")
+}
+BiocManager::install("CiteFuse")
+```
+
 
 
 ```{r}

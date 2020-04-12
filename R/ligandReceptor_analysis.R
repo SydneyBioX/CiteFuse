@@ -24,8 +24,8 @@
 #' @importFrom S4Vectors metadata
 #'
 #' @examples
-#' data("lr_pair_subset", package = "CiteFuse")
-#' data("sce_control_subset", package = "CiteFuse")
+#' data(lr_pair_subset)
+#' data(sce_control_subset)
 #'
 #' sce_control_subset <- normaliseExprs(sce = sce_control_subset,
 #' altExp_name = "ADT",
@@ -97,10 +97,13 @@ ligandReceptorTest <- function(sce,
   ligandReceptor_list <- ligandReceptor_list[keep, ]
 
 
-  l_zeros <- sapply(cluster_level, function(x)
-    apply(exprsMat1[ligandReceptor_list[, 1], cluster == x], 1, .zeroProp))
-  r_zeros <- sapply(cluster_level, function(x)
-    apply(exprsMat2[ligandReceptor_list[, 2], cluster == x], 1, .zeroProp))
+  l_zeros <- vapply(cluster_level, function(x)
+    apply(exprsMat1[ligandReceptor_list[, 1], cluster == x], 1, .zeroProp),
+    numeric(nrow(exprsMat1[ligandReceptor_list[, 1], ])))
+  r_zeros <- vapply(cluster_level, function(x)
+    apply(exprsMat2[ligandReceptor_list[, 2], cluster == x], 1, .zeroProp),
+    numeric(nrow(exprsMat2[ligandReceptor_list[, 2], ])))
+
 
 
   l_express <- l_zeros < 0.9
@@ -111,16 +114,17 @@ ligandReceptorTest <- function(sce,
 
   ligandReceptor_list <- ligandReceptor_list[keep_lr, ]
 
+
   lr_mean <- lapply(seq_len(nrow(ligandReceptor_list)), function(p) {
 
 
     pair <- ligandReceptor_list[p, ]
-    res <- sapply(cluster_level, function(x) {
+    res <- vapply(cluster_level, function(x) {
       rna <- mean((exprsMat1[pair[1], as.character(cluster) == x]))
       adt <- mean((exprsMat2[pair[2], as.character(cluster) == x]))
       df <- c(rna, adt)
 
-    })
+    }, numeric(2))
     rownames(res) <- pair
     res
   })
@@ -128,6 +132,8 @@ ligandReceptorTest <- function(sce,
 
 
   permute_lr_mean <- list()
+
+
 
 
   permute_lr_mean <- lapply(seq_len(num_permute), function(idx_per) {
@@ -138,17 +144,19 @@ ligandReceptorTest <- function(sce,
     l <- lapply(seq_len(nrow(ligandReceptor_list)), function(p) {
 
       pair <- ligandReceptor_list[p, ]
-      res <- sapply(cluster_level, function(x) {
+      res <- vapply(cluster_level, function(x) {
         rna <- mean((exprsMat1[pair[1], as.character(cluster_permute) == x]))
         adt <- mean((exprsMat2[pair[2], as.character(cluster_permute) == x]))
         df <- c(rna, adt)
 
-      })
+      }, numeric(2))
       rownames(res) <- pair
       res
     })
     l
   })
+
+
 
 
   pvalue <- list()
@@ -162,9 +170,9 @@ ligandReceptorTest <- function(sce,
     observed <- .get_expand_grid_average(lr_mean[[pair]][1, ],
                                          lr_mean[[pair]][2, ])
 
-    pvalue[[pair]] <- sapply(seq_len(length(observed)), function(idx) {
+    pvalue[[pair]] <- vapply(seq_len(length(observed)), function(idx) {
       p <- 1 - sum(observed[idx] > res[, idx])/length(res[, idx])
-    })
+    }, numeric(1))
   }
 
 
@@ -296,8 +304,8 @@ ligandReceptorTest <- function(sce,
 #' @import ggplot2
 #'
 #' @examples
-#' data("lr_pair_subset", package = "CiteFuse")
-#' data("sce_control_subset", package = "CiteFuse")
+#' data(lr_pair_subset)
+#' data(sce_control_subset)
 #'
 #' sce_control_subset <- normaliseExprs(sce = sce_control_subset,
 #' altExp_name = "ADT",
@@ -483,4 +491,3 @@ visLigandReceptor <- function(sce,
   }
 
 }
-

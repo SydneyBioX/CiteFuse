@@ -33,7 +33,8 @@ The information either stored in colData, assay, or altExp.}
 
 \item{altExp_name}{A character indicates the name of alternative expression}
 
-\item{altExp_assay_name}{A character indicates the assay name of alternative expression}
+\item{altExp_assay_name}{A character indicates the assay name
+of alternative expression}
 
 \item{dim}{a vector of numeric with length of 2 indicates
 which component is being plot}
@@ -45,7 +46,7 @@ A ggplot of the reduced dimension visualisation
 A function to visualise the reduced dimension
 }
 \examples{
-data("sce_control_subset", package = "CiteFuse")
+data(sce_control_subset)
 sce_control_subset <- CiteFuse(sce_control_subset)
 sce_control_subset <- reducedDimSNF(sce_control_subset,
 method = "tSNE",

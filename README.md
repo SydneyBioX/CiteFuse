@@ -31,5 +31,5 @@ You can find the vignette at our website: https://sydneybiox.github.io/CiteFuse/
 ## CiteFuse overview
 
 
-<img src="man/figures/CiteFuse_overview.png" align="center"/>
+<img src="https://raw.githubusercontent.com/SydneyBioX/CiteFuse/master/inst/figures/CiteFuse_overview.png" align="center"/>
 

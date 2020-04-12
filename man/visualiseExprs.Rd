@@ -53,7 +53,7 @@ A ggplot to visualise te features distribution
 A function to visualise the features distribtuion
 }
 \examples{
-data("sce_control_subset", package = "CiteFuse")
+data(sce_control_subset)
 visualiseExprs(sce_control_subset,
 plot = "boxplot",
 group_by = "SNF_W_louvain",

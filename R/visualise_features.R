@@ -26,7 +26,7 @@
 #' @return A ggplot to visualise te features distribution
 #'
 #' @examples
-#' data("sce_control_subset", package = "CiteFuse")
+#' data(sce_control_subset)
 #' visualiseExprs(sce_control_subset,
 #' plot = "boxplot",
 #' group_by = "SNF_W_louvain",
@@ -73,24 +73,6 @@ visualiseExprs <- function(sce,
   }
 
 
-  # if (altExp_name != "none") {
-  #   if (!altExp_name %in% SingleCellExperiment::altExpNames(sce)) {
-  #     stop("sce does not contain altExp_name as altExpNames")
-  #   }
-  #
-  #   if (!exprs_value %in% SummarizedExperiment::assayNames(SingleCellExperiment::altExp(sce, altExp_name))) {
-  #     stop("sce does not contain exprs_value as assayNames for altExp")
-  #   }
-  #
-  #   exprsMat <- SummarizedExperiment::assay(SingleCellExperiment::altExp(sce[, cell_subset], altExp_name), exprs_value)
-  #
-  # } else {
-  #
-  #   # if altExp_name is "none", then the assay in SingleCellExperiment is extracted (RNA in most of the cases)
-  #
-  #   exprsMat <- SummarizedExperiment::assay(sce[, cell_subset], exprs_value)
-  # }
-  #
 
   exprsMat <- .extract_exprsMat(sce, cell_subset, altExp_name, exprs_value)
 
@@ -116,7 +98,8 @@ visualiseExprs <- function(sce,
       }
 
       if (length(threshold) != length(feature_subset)) {
-        stop("length of threshold is not equal to the length of the features subset.")
+        stop("length of threshold is not equal to
+             the length of the features subset.")
       }
 
       names(threshold) <- feature_subset
@@ -165,7 +148,8 @@ visualiseExprs <- function(sce,
         g <- ggplot(df_toPlot, aes(x = features,
                                    y = value,
                                    fill = features)) +
-          geom_boxplot(outlier.size = 1, outlier.stroke = 0.3, outlier.alpha = 0.8,
+          geom_boxplot(outlier.size = 1, outlier.stroke = 0.3,
+                       outlier.alpha = 0.8,
                        width = 0.3) +
           scale_fill_viridis_d(direction = -1, end = 0.95) +
           theme_bw() +
@@ -182,7 +166,8 @@ visualiseExprs <- function(sce,
         g <- ggplot(df_toPlot, aes(x = group,
                                    y = value)) +
           geom_violin(aes(fill = group)) +
-          geom_boxplot(outlier.size = 1, outlier.stroke = 0.3, outlier.alpha = 0.8,
+          geom_boxplot(outlier.size = 1, outlier.stroke = 0.3,
+                       outlier.alpha = 0.8,
                        width = 0.05) +
           scale_fill_manual(values = cite_colorPal(nlevels(df_toPlot$group))) +
           theme_bw() +
@@ -195,7 +180,8 @@ visualiseExprs <- function(sce,
         g <- ggplot(df_toPlot, aes(x = features,
                                    y = value)) +
           geom_violin(aes(fill = features)) +
-          geom_boxplot(outlier.size = 1, outlier.stroke = 0.3, outlier.alpha = 0.8,
+          geom_boxplot(outlier.size = 1, outlier.stroke = 0.3,
+                       outlier.alpha = 0.8,
                        width = 0.05) +
           scale_fill_viridis_d(direction = -1, end = 0.95) +
           theme_bw() +
@@ -284,14 +270,18 @@ scatterSingle <- function(exprsMat, group = NULL, threshold = NULL) {
       threshold <- apply(exprsMat, 1, fitMixtures)
     }
 
-    threshold_matrix <- t(sapply(threshold, rep, times = ncol(exprsMat)))
+    threshold_matrix <- t(vapply(threshold, function(x) {
+      rep(x, ncol(exprsMat))
+    }, numeric(ncol(exprsMat))))
 
     exprsMat_pass <- exprsMat > threshold_matrix
 
     nn <- paste(c(rownames(exprsMat), ""), collapse = "-")
     pp <- paste(c(rownames(exprsMat), ""), collapse = "+")
-    np <- paste(rownames(exprsMat)[1], "-", rownames(exprsMat)[2], "+", sep = "")
-    pn <- paste(rownames(exprsMat)[1], "+", rownames(exprsMat)[2], "-", sep = "")
+    np <- paste(rownames(exprsMat)[1], "-",
+                rownames(exprsMat)[2], "+", sep = "")
+    pn <- paste(rownames(exprsMat)[1], "+",
+                rownames(exprsMat)[2], "-", sep = "")
     group <- rep(nn , ncol(exprsMat))
     group[exprsMat_pass[1, ] & exprsMat_pass[2, ]] <- pp
     group[exprsMat_pass[1, ] & !exprsMat_pass[2, ]] <- pn
@@ -326,19 +316,22 @@ scatterSingle <- function(exprsMat, group = NULL, threshold = NULL) {
 
 
   xdens <- cowplot::axis_canvas(pmain, axis = "x") +
-    geom_density(data = df, aes(x = df[, 1], fill = exprsMat_pass[1, ], alpha = 0.5)) +
+    geom_density(data = df, aes(x = df[, 1], fill = exprsMat_pass[1, ],
+                                alpha = 0.5)) +
     scale_fill_manual(values = c("grey50", "#E41A1C")) +
     scale_y_reverse() +
     NULL
 
   ydens <- cowplot::axis_canvas(pmain, axis = "y", coord_flip = TRUE) +
-    geom_density(data = df, aes(x = df[, 2], fill = exprsMat_pass[2, ], alpha = 0.5)) +
+    geom_density(data = df, aes(x = df[, 2],
+                                fill = exprsMat_pass[2, ], alpha = 0.5)) +
     coord_flip() +
     scale_y_reverse() +
     scale_fill_manual(values = c("grey50", "#377EB8")) +
     NULL
 
-  p1 <- cowplot::insert_xaxis_grob(pmain, xdens, grid::unit(.2, "null"), position = "bottom")
+  p1 <- cowplot::insert_xaxis_grob(pmain, xdens,
+                                   grid::unit(.2, "null"), position = "bottom")
 
   p2 <- cowplot::insert_yaxis_grob(p1, ydens,
                                    grid::unit(.2, "null"), position = "left")
@@ -393,8 +386,8 @@ fitMixtures <- function(vec) {
 #' @return A ggplot to visualise te features distribution
 #'
 #' @examples
-#' data("sce_control_subset", package = "CiteFuse")
-#' data("sce_ctcl_subset", package = "CiteFuse")
+#' data(sce_control_subset)
+#' data(sce_ctcl_subset)
 #' visualiseExprsList(sce_list = list(control = sce_control_subset,
 #' ctcl = sce_ctcl_subset),
 #' plot = "boxplot",
@@ -479,8 +472,6 @@ visualiseExprsList <- function(sce_list,
 
   group_by_info_list <- unlist(group_by_info_list)
 
-  #facet_by_info <- rep(dataset_name, sapply(sce_list, ncol))
-
   exprsMatList <- lapply(exprsMatList, .extract_filter_features,
                          feature_subset = feature_subset, n = n)
 
@@ -523,7 +514,8 @@ visualiseExprsList <- function(sce_list,
       g <- ggplot(df_toPlot, aes(x = features,
                                  y = value,
                                  fill = features)) +
-        geom_boxplot(outlier.size = 1, outlier.stroke = 0.3, outlier.alpha = 0.8,
+        geom_boxplot(outlier.size = 1, outlier.stroke = 0.3,
+                     outlier.alpha = 0.8,
                      width = 0.3) +
         scale_fill_viridis_d(direction = -1, end = 0.95) +
         theme_bw() +
@@ -541,7 +533,8 @@ visualiseExprsList <- function(sce_list,
       g <- ggplot(df_toPlot, aes(x = group,
                                  y = value)) +
         geom_violin(aes(fill = group)) +
-        geom_boxplot(outlier.size = 1, outlier.stroke = 0.3, outlier.alpha = 0.8,
+        geom_boxplot(outlier.size = 1, outlier.stroke = 0.3,
+                     outlier.alpha = 0.8,
                      width = 0.05) +
         scale_fill_manual(values = cite_colorPal(nlevels(df_toPlot$group))) +
         theme_bw() +
@@ -555,7 +548,8 @@ visualiseExprsList <- function(sce_list,
       g <- ggplot(df_toPlot, aes(x = features,
                                  y = value)) +
         geom_violin(aes(fill = features)) +
-        geom_boxplot(outlier.size = 1, outlier.stroke = 0.3, outlier.alpha = 0.8,
+        geom_boxplot(outlier.size = 1, outlier.stroke = 0.3,
+                     outlier.alpha = 0.8,
                      width = 0.05) +
         scale_fill_viridis_d(direction = -1, end = 0.95) +
         theme_bw() +
@@ -637,7 +631,8 @@ visualiseExprsList <- function(sce_list,
       stop("sce does not contain altExp_name as altExpNames")
     }
 
-    if (!exprs_value %in% SummarizedExperiment::assayNames(altExp(sce, altExp_name))) {
+    if (!exprs_value %in%
+        SummarizedExperiment::assayNames(altExp(sce, altExp_name))) {
       stop("sce does not contain exprs_value as assayNames for altExp")
     }
 

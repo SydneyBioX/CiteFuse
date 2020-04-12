@@ -42,7 +42,7 @@ DE_res_filter list of metadata
 A function to select DE genes
 }
 \examples{
-data("sce_control_subset", package = "CiteFuse")
+data(sce_control_subset)
 sce_control_subset <- DEgenes(sce_control_subset,
 group = sce_control_subset$SNF_W_louvain,
 return_all = TRUE,

@@ -6,25 +6,31 @@
 #' and finally construct a \code{SingleCellExperiment} object
 #'
 #' @param exprsMat A list or a matrix indicates the expression matrices of the
-#' testing datasets (each matrix must be \code{matrix} or \code{dgCMatrix} class)
-#' @param return_sce A logical input indicates whether a \code{SingleCellExperiment}
-#' object will be return
+#' testing datasets (each matrix must be \code{matrix} or
+#' \code{dgCMatrix} class)
+#' @param return_sce A logical input indicates whether
+#' a \code{SingleCellExperiment} object will be return
 #' @param assay_matrix A integer indicates which list will be
 #' used as `assay` input of `SingleCellExperiment`
-#' @param filter_features A logical input indicates whether the features with all zeros will be removed
-#' @param rowData A DataFrame indicates the rowData to be stored in the sce object
-#' @param colData A DataFrame indicates the colData to be stored in the sce object
+#' @param filter_features A logical input indicates
+#' whether the features with all zeros will be removed
+#' @param rowData A DataFrame indicates the rowData to be stored
+#' in the sce object
+#' @param colData A DataFrame indicates the colData to be stored
+#' in the sce object
 #'
-#' @return either a SingleCellExperiment object or a preprocessed expression matrix
+#' @return either a SingleCellExperiment object or
+#' a preprocessed expression matrix
 #'
 #' @examples
-#' data("CITEseq_example", package = "CiteFuse")
+#' data(CITEseq_example)
 #' sce_citeseq <- preprocessing(CITEseq_example)
 #'
-#' @importFrom SingleCellExperiment SingleCellExperiment
+#' @importFrom SingleCellExperiment SingleCellExperiment altExp
 #' @importFrom Matrix rowSums
-#' @importFrom SummarizedExperiment SummarizedExperiment
+#' @importFrom SummarizedExperiment SummarizedExperiment colData rowData
 #' @importFrom methods as is
+#' @importFrom S4Vectors DataFrame
 #'
 #' @export
 
@@ -60,7 +66,8 @@ preprocessing <- function(exprsMat = NULL,
   common_cells <- Reduce(intersect, lapply(exprsMat, colnames))
 
   if (length(common_cells) == 0) {
-    stop("There is no common cells in this list... please check the matrix input")
+    stop("There is no common cells in this list...
+         please check the matrix input")
   }
 
 
@@ -92,7 +99,7 @@ preprocessing <- function(exprsMat = NULL,
 
   if (return_sce) {
 
-    sce <- SingleCellExperiment::SingleCellExperiment(assays = list(counts = exprsMat[[assay_matrix]]))
+    sce <- SingleCellExperiment(assays = list(counts = exprsMat[[assay_matrix]]))
 
     list_idx <- seq_len(length(exprsMat))[-assay_matrix]
 
@@ -102,25 +109,28 @@ preprocessing <- function(exprsMat = NULL,
       } else {
         name_exprs <- names(exprsMat)[i]
       }
-      SingleCellExperiment::altExp(sce, name_exprs) <- SummarizedExperiment::SummarizedExperiment(assays = list(counts = exprsMat[[i]]))
+      SingleCellExperiment::altExp(sce, name_exprs) <-
+        SummarizedExperiment(assays = list(counts = exprsMat[[i]]))
     }
 
     if (!is.null(rowData)) {
 
       if (!all(rownames(sce) %in% rownames(rowData))) {
-        stop("Some rownames of the assay matrix does not have info in rowData (rownames of rowData)")
+        stop("Some rownames of the assay matrix
+             does not have info in rowData (rownames of rowData)")
       }
 
-      SummarizedExperiment::rowData(sce) <- S4Vectors::DataFrame(rowData[rownames(sce), ])
+      SummarizedExperiment::rowData(sce) <- DataFrame(rowData[rownames(sce), ])
     }
 
     if (!is.null(colData)) {
 
       if (!all(colnames(sce) %in% rownames(colData))) {
-        stop("Some colnames of the assay matrix does not have info in colData (rownames of colData)")
+        stop("Some colnames of the assay matrix
+             does not have info in colData (rownames of colData)")
       }
 
-      SummarizedExperiment::colData(sce) <- S4Vectors::DataFrame(colData[colnames(sce), ])
+      SummarizedExperiment::colData(sce) <- DataFrame(colData[colnames(sce), ])
     }
 
     return(sce)
@@ -140,8 +150,10 @@ preprocessing <- function(exprsMat = NULL,
 #'
 #' @param dir A character indicates the directory of the 10X files
 #' @param type A character indicates the format of the data, sparse or HDF5
-#' @param feature_named_by A character indicates whehter the genes will be named by gene_id or gene_symbol
-#' @param filter_features A logical input indicates whether the features with all zeros will be removed
+#' @param feature_named_by A character indicates whehter the genes
+#' will be named by gene_id or gene_symbol
+#' @param filter_features A logical input indicates whether the features
+#' with all zeros will be removed
 #'
 #' @return a SingleCellExperiment object
 #'
@@ -203,12 +215,19 @@ readFrom10X <- function(dir,
 
     #rhdf5::h5ls(h5_path, all = TRUE)
 
-    barcodes  <- as.character(h5read(h5_path, paste0("matrix", "/barcodes")))
+    barcodes  <- as.character(h5read(h5_path,
+                                     paste0("matrix", "/barcodes")))
 
 
-    gene_id  <- as.character(h5read(h5_path, paste0("matrix", "/features/id")))
-    gene_symbol  <- as.character(h5read(h5_path, paste0("matrix", "/features/name")))
-    gene_type  <- as.character(h5read(h5_path, paste0("matrix", "/features/feature_type")))
+    gene_id  <- as.character(h5read(h5_path,
+                                    paste0("matrix",
+                                           "/features/id")))
+    gene_symbol  <- as.character(h5read(h5_path,
+                                        paste0("matrix",
+                                               "/features/name")))
+    gene_type  <- as.character(h5read(h5_path,
+                                      paste0("matrix",
+                                             "/features/feature_type")))
 
     features <- data.frame(gene_id = gene_id,
                            gene_symbol = gene_symbol,
@@ -293,7 +312,7 @@ readFrom10X <- function(dir,
 #' to add when log-transforming expression values. Default is 1
 #'
 #' @examples
-#' data("CITEseq_example", package = "CiteFuse")
+#' data(CITEseq_example)
 #' sce_citeseq <- preprocessing(CITEseq_example)
 #' sce_citeseq <- normaliseExprs(sce = sce_citeseq,
 #' altExp_name = "ADT",
@@ -318,16 +337,16 @@ normaliseExprs <- function(sce,
                          several.ok = TRUE)
 
   if (altExp_name != "none") {
-    if (!altExp_name %in% SingleCellExperiment::altExpNames(sce)) {
+    if (!altExp_name %in% altExpNames(sce)) {
       stop("sce does not contain altExp_name as altExpNames")
     }
 
-    assaynames <- SummarizedExperiment::assayNames(SingleCellExperiment::altExp(sce, altExp_name))
+    assaynames <- SummarizedExperiment::assayNames(altExp(sce, altExp_name))
     if (!exprs_value %in% assaynames) {
       stop("sce does not contain exprs_value as assayNames for altExp")
     }
 
-    exprs <- SummarizedExperiment::assay(SingleCellExperiment::altExp(sce, altExp_name), exprs_value)
+    exprs <- SummarizedExperiment::assay(altExp(sce, altExp_name), exprs_value)
 
   } else {
 
@@ -437,7 +456,7 @@ normaliseExprs <- function(sce,
 #' @return A SingleCellExperiment Object
 #'
 #' @examples
-#' data("CITEseq_example", package = "CiteFuse")
+#' data(CITEseq_example)
 #' sce_citeseq <- preprocessing(CITEseq_example)
 #' sce_citeseq <- normaliseExprs(sce = sce_citeseq,
 #' altExp_name = "HTO",
@@ -468,12 +487,13 @@ crossSampleDoublets <- function(sce,
     }
   }
 
-  if (!"logcounts" %in% SummarizedExperiment::assayNames(altExp(sce, altExp_name))) {
-    warning("HTO does not contain logcounts... we will perform normaliseExprs() to get logcounts")
+  if (!"logcounts" %in% assayNames(altExp(sce, altExp_name))) {
+    warning("HTO does not contain logcounts...
+            we will perform normaliseExprs() to get logcounts")
     sce <- normaliseExprs(sce, altExp_name, "log")
   }
 
-  hto_cellHash_log <- SummarizedExperiment::assay(SingleCellExperiment::altExp(sce, altExp_name), "logcounts")
+  hto_cellHash_log <- assay(altExp(sce, altExp_name), "logcounts")
 
   hto_cellHash_log <- hto_cellHash_log[Matrix::rowSums(hto_cellHash_log) >
                                          totalExp_threshold, ]
@@ -495,7 +515,8 @@ crossSampleDoublets <- function(sce,
 
     if ("try-error" %in% methods::is(mixmdl)) {
       km <- stats::kmeans(vec, centers = 2)
-      hto_threshold[[i]] <- min(max(vec[km$cluster == 1]), max(vec[km$cluster == 2]))
+      hto_threshold[[i]] <- min(max(vec[km$cluster == 1]),
+                                max(vec[km$cluster == 2]))
     } else {
       hto_threshold[[i]] <- getThreshold(mixmdl)
     }
@@ -505,9 +526,11 @@ crossSampleDoublets <- function(sce,
   hto_threshold <- unlist(hto_threshold)
 
 
-  hto_cellHash_pass <- sapply(seq_len(nrow(hto_cellHash_log)), function(x) {
-    hto_cellHash_log[x,] > hto_threshold[x]
-  })
+  hto_cellHash_pass <- vapply(seq_len(nrow(hto_cellHash_log)),
+                              function(x) {
+                                hto_cellHash_log[x,] > hto_threshold[x]
+                              },
+                              logical(ncol(hto_cellHash_log)))
 
 
   colnames(hto_cellHash_pass) <- rownames(hto_cellHash_log)
@@ -530,10 +553,10 @@ crossSampleDoublets <- function(sce,
 
   sce$doubletClassify_between_label <- hto_cellHash_mix_label
   sce$doubletClassify_between_class <- doubletClassify_between_class
-
+  doublet_res <- list(doubletClassify_between_threshold = hto_threshold,
+                      doubletClassify_between_resultsMat = hto_cellHash_pass)
   S4Vectors::metadata(sce) <- c(S4Vectors::metadata(sce),
-                                list(doubletClassify_between_threshold = hto_threshold,
-                                     doubletClassify_between_resultsMat = hto_cellHash_pass))
+                                doublet_res)
 
 
   return(sce)
@@ -554,7 +577,7 @@ crossSampleDoublets <- function(sce,
 #' @return A plot visualising the HTO expression
 #'
 #' @examples
-#' data("CITEseq_example", package = "CiteFuse")
+#' data(CITEseq_example)
 #' sce_citeseq <- preprocessing(CITEseq_example)
 #' sce_citeseq <- normaliseExprs(sce = sce_citeseq,
 #' altExp_name = "HTO",
@@ -620,30 +643,33 @@ plotHTOSingle <- function(sce,
     }
   }
 
-  if (!"logcounts" %in% SummarizedExperiment::assayNames(altExp(sce, altExp_name))) {
+  if (!"logcounts" %in% assayNames(altExp(sce, altExp_name))) {
     warning("HTO does not contain logcounts...
             we will perform normaliseExprs() to get logcounts")
     sce <- normaliseExprs(sce, altExp_name, "log")
   }
 
   noThreshold <- FALSE
-  if (!"doubletClassify_between_label" %in% colnames(SummarizedExperiment::colData(sce))) {
+  if (!"doubletClassify_between_label" %in% colnames(colData(sce))) {
     warning("Haven't performed doubletClassify() yet!")
     noThreshold <- TRUE
   }
 
-  hto_cellHash_log <- assay(SingleCellExperiment::altExp(sce, altExp_name), "logcounts")
+  hto_cellHash_log <- assay(SingleCellExperiment::altExp(sce, altExp_name),
+                            "logcounts")
 
 
   df <- data.frame(t(as.matrix(hto_cellHash_log[which_idx, ])))
 
-  colnames(df) <- lapply(strsplit(rownames(hto_cellHash_log[which_idx, ]), "\\."), "[[", 1)
+  colnames(df) <- lapply(strsplit(rownames(hto_cellHash_log[which_idx, ]),
+                                  "\\."), "[[", 1)
 
 
   if (!noThreshold) {
     hto_cellHash_pass <- metadata(sce)[["doubletClassify_between_resultsMat"]]
 
-    doublets <- hto_cellHash_pass[, which_idx[1]] & hto_cellHash_pass[, which_idx[2]]
+    doublets <- hto_cellHash_pass[, which_idx[1]] &
+      hto_cellHash_pass[, which_idx[2]]
 
     hto_threshold <- metadata(sce)[["doubletClassify_between_threshold"]]
 
@@ -711,7 +737,7 @@ plotHTOSingle <- function(sce,
 #'
 #' @examples
 #'
-#' data("CITEseq_example", package = "CiteFuse")
+#' data(CITEseq_example)
 #' sce_citeseq <- preprocessing(CITEseq_example)
 #' sce_citeseq <- normaliseExprs(sce = sce_citeseq,
 #' altExp_name = "HTO",
@@ -741,20 +767,20 @@ withinSampleDoublets <- function(sce,
   }
 
 
-  if (!"logcounts" %in% SummarizedExperiment::assayNames(altExp(sce, altExp_name))) {
+  if (!"logcounts" %in% assayNames(altExp(sce, altExp_name))) {
     warning("HTO does not contain logcounts...
             we will perform normaliseExprs() to get logcounts")
     sce <- normaliseExprs(sce, altExp_name, "log")
   }
 
-  if (!"doubletClassify_between_label" %in% colnames(SummarizedExperiment::colData(sce))) {
+  if (!"doubletClassify_between_label" %in% colnames(colData(sce))) {
     stop("Haven't performed doubletClassify_between() yet!")
   }
 
   hto_threshold <- metadata(sce)[["doubletClassify_between_threshold"]]
 
 
-  hto_cellHash_log <- SummarizedExperiment::assay(SingleCellExperiment::altExp(sce, altExp_name), "logcounts")
+  hto_cellHash_log <- assay(altExp(sce, altExp_name), "logcounts")
 
   hto_cellHash_mix_label <- sce$doubletClassify_between_label
 
@@ -789,7 +815,8 @@ withinSampleDoublets <- function(sce,
   sce$doubletClassify_within_class <- doubletClassify_within_class
 
   S4Vectors::metadata(sce) <- c(S4Vectors::metadata(sce),
-                                list(doubletClassify_within_resultsMat = batch_doublets_mat))
+                                list(doubletClassify_within_resultsMat =
+                                       batch_doublets_mat))
 
   return(sce)
 
@@ -818,18 +845,19 @@ getThreshold <- function(mixmdl, verbose = FALSE){
     idx2 <- as.numeric(names(mu_list)[order(mu_list)][2])
 
     root <- try(stats::uniroot(funMixModel,
-                               interval = c(mixmdl$mu[idx1] - mixmdl$sigma[idx1],
-                                            mixmdl$mu[idx2] + mixmdl$sigma[idx2]),
-                               mu1 = mixmdl$mu[idx1], mu2 = mixmdl$mu[idx2],
-                               sd1 = mixmdl$sigma[idx1], sd2 = mixmdl$sigma[idx2],
-                               rho1 = mixmdl$lambda[idx1], rho2 = mixmdl$lambda[idx2]),
+                               interval = c(mixmdl$mu[idx1] -
+                                              mixmdl$sigma[idx1],
+                                            mixmdl$mu[idx2] +
+                                              mixmdl$sigma[idx2]),
+                               mu1 = mixmdl$mu[idx1],
+                               mu2 = mixmdl$mu[idx2],
+                               sd1 = mixmdl$sigma[idx1],
+                               sd2 = mixmdl$sigma[idx2],
+                               rho1 = mixmdl$lambda[idx1],
+                               rho2 = mixmdl$lambda[idx2]),
                 silent = TRUE)
 
     if (!"try-error" %in% methods::is(root)) {
-      # if (verbose) {
-      #   abline(v = root$root, col = "red")
-      #   abline(v = mixmdl$mu[idx1] + qnorm(0.99) * mixmdl$sigma[idx1], col = "blue")
-      # }
       t <- root$root
     }else{
       t <- 0

@@ -102,7 +102,8 @@ importanceADT <- function(sce,
     }
 
     S4Vectors::metadata(sce)[["importanceADT_matrix"]] <- as.matrix(importance)
-    S4Vectors::metadata(sce)[["importanceADT"]] <- Matrix::rowMeans(as.matrix(importance))
+    S4Vectors::metadata(sce)[["importanceADT"]] <-
+      Matrix::rowMeans(as.matrix(importance))
   }
   if (method == "PCA") {
     adt_pca <- stats::prcomp(t(exprsMat), scale = TRUE, center = TRUE)

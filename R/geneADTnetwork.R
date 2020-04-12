@@ -42,7 +42,7 @@
 #' @examples
 #' library(SingleCellExperiment)
 #' set.seed(2020)
-#' data("sce_control_subset", package = "CiteFuse")
+#' data(sce_control_subset)
 #' RNA_feature_subset <- sample(rownames(sce_control_subset), 50)
 #' ADT_feature_subset <- rownames(altExp(sce_control_subset, "ADT"))
 #'
@@ -86,25 +86,23 @@ geneADTnetwork <- function(sce,
 
   # RNA exprssion matrix
 
-  if (!RNA_exprs_value %in% SummarizedExperiment::assayNames(sce)) {
+  if (!RNA_exprs_value %in% assayNames(sce)) {
     stop("sce does not contain RNA_exprs_value")
   }
 
-  exprsMat1 <- SummarizedExperiment::assay(sce[, cell_subset], RNA_exprs_value)
+  exprsMat1 <- assay(sce[, cell_subset], RNA_exprs_value)
 
-  if (!altExp_name %in% SingleCellExperiment::altExpNames(sce)) {
+  if (!altExp_name %in% altExpNames(sce)) {
     stop("sce does not contain altExp_name as altExpNames")
   }
 
-  if (!altExp_exprs_value %in%
-      SummarizedExperiment::assayNames(SingleCellExperiment::altExp(sce, altExp_name))) {
+  if (!altExp_exprs_value %in% assayNames(altExp(sce, altExp_name))) {
     stop("sce does not contain altExp_exprs_value as assayNames for altExp")
   }
 
   # ADT exprssion matrix
-  exprsMat2 <- SummarizedExperiment::assay(SingleCellExperiment::altExp(sce[, cell_subset],
-                                                                        altExp_name),
-                                           altExp_exprs_value)
+  exprsMat2 <- assay(altExp(sce[, cell_subset], altExp_name),
+                     altExp_exprs_value)
 
 
   if (!is.null(RNA_feature_subset)) {
@@ -155,10 +153,12 @@ geneADTnetwork <- function(sce,
 
   igraph::V(g)$label <- unlist(lapply(strsplit(names(igraph::V(g)), "_"),
                                       function(x) paste(x[-1], collapse = "_")))
-  igraph::V(g)$class <- unlist(lapply(strsplit(names(igraph::V(g)), "_"), "[[", 1))
-  igraph::V(g)$type <- c(TRUE, FALSE)[as.numeric(as.factor(igraph::V(g)$class))]
-  igraph::V(g)$shape <- c("circle", "square")[as.numeric(as.factor(igraph::V(g)$class))]
-  igraph::V(g)$color <- c("#A0CBE8", "#FFBE7D")[as.numeric(as.factor(igraph::V(g)$class))]
+  igraph::V(g)$class <- unlist(lapply(strsplit(names(igraph::V(g)), "_"),
+                                      "[[", 1))
+  numeric_class <- as.numeric(as.factor(igraph::V(g)$class))
+  igraph::V(g)$type <- c(TRUE, FALSE)[numeric_class]
+  igraph::V(g)$shape <- c("circle", "square")[numeric_class]
+  igraph::V(g)$color <- c("#A0CBE8", "#FFBE7D")[numeric_class]
   igraph::V(g)$size <- 10
   igraph::V(g)$label.cex <- 0.4
   igraph::V(g)$label.color <- "black"

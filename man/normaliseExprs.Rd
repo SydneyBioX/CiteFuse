@@ -34,7 +34,7 @@ a SingleCellExperiment object
 A function that perform normalisation for alternative expression
 }
 \examples{
-data("CITEseq_example", package = "CiteFuse")
+data(CITEseq_example)
 sce_citeseq <- preprocessing(CITEseq_example)
 sce_citeseq <- normaliseExprs(sce = sce_citeseq,
 altExp_name = "ADT",

@@ -46,8 +46,8 @@ A SingleCellExperiment object with ligand receptor results
 A function to perform ligand receptor analysis
 }
 \examples{
-data("lr_pair_subset", package = "CiteFuse")
-data("sce_control_subset", package = "CiteFuse")
+data(lr_pair_subset)
+data(sce_control_subset)
 
 sce_control_subset <- normaliseExprs(sce = sce_control_subset,
 altExp_name = "ADT",

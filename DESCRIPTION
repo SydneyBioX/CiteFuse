@@ -52,5 +52,6 @@ Suggests:
     scater,
     ExPosition
 VignetteBuilder: knitr
-LazyData: true
+LazyData: false
 biocViews: SingleCell, GeneExpression
+BugReports: https://github.com/SydneyBioX/CiteFuse/issues

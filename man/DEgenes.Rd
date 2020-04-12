@@ -58,7 +58,7 @@ A SingleCellExeperiment with DE results stored in meta data DE_res
 A function to perform DE analysis on CITE seq data
 }
 \examples{
-data("sce_control_subset", package = "CiteFuse")
+data(sce_control_subset)
 sce_control_subset <- DEgenes(sce_control_subset,
 group = sce_control_subset$SNF_W_louvain,
 return_all = TRUE,
