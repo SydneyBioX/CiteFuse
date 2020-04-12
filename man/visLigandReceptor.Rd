@@ -28,8 +28,8 @@ A plot visualise the ligand receptor results
 A function to visualise ligand receptor analysis
 }
 \examples{
-data(lr_pair_subset)
-data(sce_control_subset)
+data(lr_pair_subset, package = "CiteFuse")
+data(sce_control_subset, package = "CiteFuse")
 
 sce_control_subset <- normaliseExprs(sce = sce_control_subset,
 altExp_name = "ADT",

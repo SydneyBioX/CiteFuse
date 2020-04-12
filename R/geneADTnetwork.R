@@ -42,7 +42,7 @@
 #' @examples
 #' library(SingleCellExperiment)
 #' set.seed(2020)
-#' data(sce_control_subset)
+#' data(sce_control_subset, package = "CiteFuse")
 #' RNA_feature_subset <- sample(rownames(sce_control_subset), 50)
 #' ADT_feature_subset <- rownames(altExp(sce_control_subset, "ADT"))
 #'
@@ -50,7 +50,7 @@
 #'                RNA_feature_subset = RNA_feature_subset,
 #'                ADT_feature_subset = ADT_feature_subset,
 #'                cor_method = "pearson",
-#'               network_layout = igraph::layout_with_fr)
+#'                network_layout = igraph::layout_with_fr)
 #'
 #' @export
 

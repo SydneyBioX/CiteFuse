@@ -386,8 +386,8 @@ fitMixtures <- function(vec) {
 #' @return A ggplot to visualise te features distribution
 #'
 #' @examples
-#' data(sce_control_subset)
-#' data(sce_ctcl_subset)
+#' data(sce_control_subset, package = "CiteFuse")
+#' data(sce_ctcl_subset, package = "CiteFuse")
 #' visualiseExprsList(sce_list = list(control = sce_control_subset,
 #' ctcl = sce_ctcl_subset),
 #' plot = "boxplot",

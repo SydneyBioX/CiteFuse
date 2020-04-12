@@ -46,8 +46,8 @@ A function to visualise the features distribtuion for
 a list of SingleCellExperiment
 }
 \examples{
-data(sce_control_subset)
-data(sce_ctcl_subset)
+data(sce_control_subset, package = "CiteFuse")
+data(sce_ctcl_subset, package = "CiteFuse")
 visualiseExprsList(sce_list = list(control = sce_control_subset,
 ctcl = sce_ctcl_subset),
 plot = "boxplot",

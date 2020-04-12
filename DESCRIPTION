@@ -50,7 +50,8 @@ Suggests:
     DT,
     mclust,
     scater,
-    ExPosition
+    ExPosition,
+    BiocStyle
 VignetteBuilder: knitr
 LazyData: false
 biocViews: SingleCell, GeneExpression

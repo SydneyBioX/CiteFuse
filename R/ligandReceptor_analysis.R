@@ -24,8 +24,8 @@
 #' @importFrom S4Vectors metadata
 #'
 #' @examples
-#' data(lr_pair_subset)
-#' data(sce_control_subset)
+#' data(lr_pair_subset, package = "CiteFuse")
+#' data(sce_control_subset, package = "CiteFuse")
 #'
 #' sce_control_subset <- normaliseExprs(sce = sce_control_subset,
 #' altExp_name = "ADT",
@@ -304,8 +304,8 @@ ligandReceptorTest <- function(sce,
 #' @import ggplot2
 #'
 #' @examples
-#' data(lr_pair_subset)
-#' data(sce_control_subset)
+#' data(lr_pair_subset, package = "CiteFuse")
+#' data(sce_control_subset, package = "CiteFuse")
 #'
 #' sce_control_subset <- normaliseExprs(sce = sce_control_subset,
 #' altExp_name = "ADT",

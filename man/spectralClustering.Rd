@@ -40,7 +40,7 @@ A function to perform spectral clustering
 }
 \examples{
 
-data(sce_control_subset)
+data(sce_control_subset, package = "CiteFuse")
 sce_control_subset <- CiteFuse(sce_control_subset)
 SNF_W <- S4Vectors::metadata(sce_control_subset)[["SNF_W"]]
 SNF_W_clust <- spectralClustering(SNF_W,

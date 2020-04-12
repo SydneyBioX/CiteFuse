@@ -18,7 +18,7 @@ the marker for each cluster
 }
 \examples{
 library(S4Vectors)
-data(sce_control_subset)
+data(sce_control_subset, package = "CiteFuse")
 sce_control_subset <- DEgenes(sce_control_subset,
 altExp_name = "none",
 group = sce_control_subset$SNF_W_louvain,

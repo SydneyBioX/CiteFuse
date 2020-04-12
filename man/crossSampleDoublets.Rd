@@ -24,7 +24,7 @@ A SingleCellExperiment Object
 A function that perform normalisation for alternative expression
 }
 \examples{
-data(CITEseq_example)
+data(CITEseq_example, package = "CiteFuse")
 sce_citeseq <- preprocessing(CITEseq_example)
 sce_citeseq <- normaliseExprs(sce = sce_citeseq,
 altExp_name = "HTO",

@@ -23,7 +23,7 @@
 #' a preprocessed expression matrix
 #'
 #' @examples
-#' data(CITEseq_example)
+#' data(CITEseq_example, package = "CiteFuse")
 #' sce_citeseq <- preprocessing(CITEseq_example)
 #'
 #' @importFrom SingleCellExperiment SingleCellExperiment altExp
@@ -312,7 +312,7 @@ readFrom10X <- function(dir,
 #' to add when log-transforming expression values. Default is 1
 #'
 #' @examples
-#' data(CITEseq_example)
+#' data(CITEseq_example, package = "CiteFuse")
 #' sce_citeseq <- preprocessing(CITEseq_example)
 #' sce_citeseq <- normaliseExprs(sce = sce_citeseq,
 #' altExp_name = "ADT",
@@ -456,7 +456,7 @@ normaliseExprs <- function(sce,
 #' @return A SingleCellExperiment Object
 #'
 #' @examples
-#' data(CITEseq_example)
+#' data(CITEseq_example, package = "CiteFuse")
 #' sce_citeseq <- preprocessing(CITEseq_example)
 #' sce_citeseq <- normaliseExprs(sce = sce_citeseq,
 #' altExp_name = "HTO",
@@ -577,7 +577,7 @@ crossSampleDoublets <- function(sce,
 #' @return A plot visualising the HTO expression
 #'
 #' @examples
-#' data(CITEseq_example)
+#' data(CITEseq_example, package = "CiteFuse")
 #' sce_citeseq <- preprocessing(CITEseq_example)
 #' sce_citeseq <- normaliseExprs(sce = sce_citeseq,
 #' altExp_name = "HTO",
@@ -737,7 +737,7 @@ plotHTOSingle <- function(sce,
 #'
 #' @examples
 #'
-#' data(CITEseq_example)
+#' data(CITEseq_example, package = "CiteFuse")
 #' sce_citeseq <- preprocessing(CITEseq_example)
 #' sce_citeseq <- normaliseExprs(sce = sce_citeseq,
 #' altExp_name = "HTO",
