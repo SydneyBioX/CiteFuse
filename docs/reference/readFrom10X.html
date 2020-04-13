@@ -157,6 +157,30 @@ with all zeros will be removed</p></td>
 
     <p>a SingleCellExperiment object</p>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'>
+<span class='no'>tmpdir</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>()
+<span class='no'>tenXdata</span> <span class='kw'>&lt;-</span> <span class='st'>"http://cf.10xgenomics.com/samples/cell-exp/3.1.0/connect_5k_pbmc_NGSC3_ch1/"</span>
+<span class='no'>file</span> <span class='kw'>&lt;-</span> <span class='st'>"connect_5k_pbmc_NGSC3_ch1_filtered_feature_bc_matrix.tar.gz"</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/download.file.html'>download.file</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='no'>tenXdata</span>, <span class='no'>file</span>),<span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='no'>tmpdir</span>, <span class='no'>file</span>))
+<span class='fu'><a href='https://rdrr.io/r/utils/untar.html'>untar</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='no'>tmpdir</span>,<span class='no'>file</span>),
+      <span class='kw'>exdir</span> <span class='kw'>=</span> <span class='no'>tmpdir</span>)
+<span class='no'>sce_citeseq_10X</span> <span class='kw'>&lt;-</span> <span class='fu'>readFrom10X</span>(<span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='no'>tmpdir</span>,
+<span class='st'>"filtered_feature_bc_matrix/"</span>))
+<span class='no'>sce_citeseq_10X</span></div><div class='output co'>#&gt; class: SingleCellExperiment 
+#&gt; dim: 33538 3996 
+#&gt; metadata(0):
+#&gt; assays(1): counts
+#&gt; rownames(33538): ENSG00000243485 ENSG00000237613 ... ENSG00000277475
+#&gt;   ENSG00000268674
+#&gt; rowData names(3): gene_id gene_symbol gene_type
+#&gt; colnames(3996): AAACCCAAGAGGTCAC-1 AAACGAAAGATGGTCG-1 ...
+#&gt;   TTTGTTGGTTCAGCTA-1 TTTGTTGTCCTTCAGC-1
+#&gt; colData names(0):
+#&gt; reducedDimNames(0):
+#&gt; altExpNames(1): ADT</div><div class='input'>
+
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

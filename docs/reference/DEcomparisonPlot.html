@@ -145,6 +145,45 @@ the selected subset of features will be visualised</p></td>
 
     <p>A ggplot2 to visualise the comparison plot of DE.</p>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>S4Vectors</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>sce_control_subset</span>)
+<span class='no'>sce_control_subset</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='DEgenes.html'>DEgenes</a></span>(<span class='no'>sce_control_subset</span>,
+<span class='kw'>group</span> <span class='kw'>=</span> <span class='no'>sce_control_subset</span>$<span class='no'>SNF_W_louvain</span>,
+<span class='kw'>return_all</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+<span class='kw'>exprs_pct</span> <span class='kw'>=</span> <span class='fl'>0.5</span>)
+
+<span class='no'>sce_control_subset</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='selectDEgenes.html'>selectDEgenes</a></span>(<span class='no'>sce_control_subset</span>)
+
+<span class='no'>sce_control_subset</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='DEgenes.html'>DEgenes</a></span>(<span class='no'>sce_control_subset</span>,
+                       <span class='kw'>altExp_name</span> <span class='kw'>=</span> <span class='st'>"ADT"</span>,
+                       <span class='kw'>group</span> <span class='kw'>=</span> <span class='no'>sce_control_subset</span>$<span class='no'>SNF_W_louvain</span>,
+                       <span class='kw'>return_all</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+                       <span class='kw'>exprs_pct</span> <span class='kw'>=</span> <span class='fl'>0.5</span>)
+
+
+<span class='no'>sce_control_subset</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='selectDEgenes.html'>selectDEgenes</a></span>(<span class='no'>sce_control_subset</span>,
+                             <span class='kw'>altExp_name</span> <span class='kw'>=</span> <span class='st'>"ADT"</span>)
+<span class='no'>rna_list</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/S4Vectors/man/Vector-class.html'>c</a></span>(<span class='st'>"hg19_CD4"</span>,
+<span class='st'>"hg19_CD8A"</span>,
+<span class='st'>"hg19_HLA-DRB1"</span>,
+<span class='st'>"hg19_ITGAX"</span>,
+<span class='st'>"hg19_NCAM1"</span>,
+<span class='st'>"hg19_CD27"</span>,
+<span class='st'>"hg19_CD19"</span>)
+
+<span class='no'>adt_list</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/S4Vectors/man/Vector-class.html'>c</a></span>(<span class='st'>"CD4"</span>, <span class='st'>"CD8"</span>, <span class='st'>"MHCII (HLA-DR)"</span>, <span class='st'>"CD11c"</span>, <span class='st'>"CD56"</span>, <span class='st'>"CD27"</span>, <span class='st'>"CD19"</span>)
+
+<span class='no'>rna_DEgenes_all</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>S4Vectors</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/S4Vectors/man/Annotated-class.html'>metadata</a></span>(<span class='no'>sce_control_subset</span>)<span class='kw'>[[</span><span class='st'>"DE_res_RNA"</span>]]
+<span class='no'>adt_DEgenes_all</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>S4Vectors</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/S4Vectors/man/Annotated-class.html'>metadata</a></span>(<span class='no'>sce_control_subset</span>)<span class='kw'>[[</span><span class='st'>"DE_res_ADT"</span>]]
+
+<span class='no'>feature_list</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>RNA</span> <span class='kw'>=</span> <span class='no'>rna_list</span>, <span class='kw'>ADT</span> <span class='kw'>=</span> <span class='no'>adt_list</span>)
+<span class='no'>de_list</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>RNA</span> <span class='kw'>=</span> <span class='no'>rna_DEgenes_all</span>, <span class='kw'>ADT</span> <span class='kw'>=</span> <span class='no'>adt_DEgenes_all</span>)
+
+<span class='fu'>DEcomparisonPlot</span>(<span class='kw'>de_list</span> <span class='kw'>=</span> <span class='no'>de_list</span>,
+                 <span class='kw'>feature_list</span> <span class='kw'>=</span> <span class='no'>feature_list</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Use of `df$group` is discouraged. Use `group` instead.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Use of `df$group` is discouraged. Use `group` instead.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Use of `df$group` is discouraged. Use `group` instead.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Use of `df$group` is discouraged. Use `group` instead.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Use of `df$group` is discouraged. Use `group` instead.</span></div><div class='img'><img src='DEcomparisonPlot-1.png' alt='' width='700' height='433' /></div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
