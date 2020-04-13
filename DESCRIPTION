@@ -1,0 +1,56 @@
+Package: CiteFuse
+Type: Package
+Title: CiteFuse: multi-modal analysis of CITE-seq data
+Version: 0.99.6
+Authors@R: c(
+    person("Yingxin", "Lin", email = "yingxin.lin@sydney.edu.au", role = c("aut", "cre")
+    ),
+    person("Hani", "Kim", email = "jieun.kim@sydney.edu.au", role = c("aut"))
+    )
+Description: The package for multi-modal analysis of CITE-seq data.
+License: GPL-3
+Encoding: UTF-8
+Depends: R (>= 4.0)
+Imports:
+    SingleCellExperiment (>= 1.8.0),
+    SummarizedExperiment (>= 1.16.0),
+    Matrix,
+    mixtools,
+    cowplot,
+    ggplot2,
+    gridExtra,
+    grid,
+    dbscan,
+    SNFtool,
+    propr,
+    uwot,
+    Rtsne,
+    S4Vectors (>= 0.24.0),
+    igraph,
+    scales,
+    scran (>= 1.14.6),
+    graphics,
+    methods,
+    stats,
+    utils,
+    reshape2,
+    ggridges,
+    randomForest,
+    pheatmap,
+    ggraph,
+    grDevices,
+    rhdf5,
+    rlang
+RoxygenNote: 7.1.0
+Suggests: 
+    knitr,
+    rmarkdown,
+    DT,
+    mclust,
+    scater,
+    ExPosition,
+    BiocStyle
+VignetteBuilder: knitr
+LazyData: false
+biocViews: SingleCell, GeneExpression
+BugReports: https://github.com/SydneyBioX/CiteFuse/issues

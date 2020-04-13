@@ -1,0 +1,16 @@
+template:
+  params:
+    bootswatch: cosmo
+navbar:
+  title: ~
+  left:
+    - text: Getting started
+      menu:
+        - text: Getting started with CiteFuse
+          href: articles/CiteFuse.html
+    - text: Functions
+      href: reference/index.html
+  right:
+    - icon: fa-github fa-lg
+      href: https://github.com/SydneyBioX/CiteFuse
+
