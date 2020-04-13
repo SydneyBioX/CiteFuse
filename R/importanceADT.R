@@ -61,70 +61,72 @@ importanceADT <- function(sce,
                           remove_first_PC = TRUE,
                           ...) {
 
-  if (!altExp_name %in% SingleCellExperiment::altExpNames(sce)) {
-    stop("sce does not contain altExp_name as altExpNames")
-  }
-
-  if (!exprs_value %in% assayNames(altExp(sce, altExp_name))) {
-    stop("sce does not contain exprs_value as assayNames for altExp")
-  }
-
-  method <- match.arg(method, c("randomForest", "PCA"))
-
-  if (method == "randomForest" & is.null(group)) {
-    stop("To run randomForest ADT importance calculation,
-         please provide group infomation.")
-  }
-
-  if (k_pca < 2 | k_pca <= 2 & remove_first_PC) {
-    stop("Please set a larger k_pca")
-  }
-
-
-  exprsMat <- assay(SingleCellExperiment::altExp(sce, altExp_name),
-                    exprs_value)
-
-  if (method == "randomForest") {
-    if (subsample) {
-      num_sub <- round(ncol(exprsMat) * prop)
-      rf <- lapply(seq_len(times), function(x) {
-        idx <- sample(ncol(exprsMat), num_sub)
-        randomForest::randomForest(t(as.matrix(exprsMat[, idx])),
-                                   as.factor(droplevels(group)[idx]), ...)
-      })
-
-      importance <- do.call(cbind, lapply(rf, function(x) x$importance))
-      colnames(importance) <- seq_len(times)
-    } else {
-      rf <- randomForest::randomForest(t(as.matrix(exprsMat)),
-                                       as.factor(droplevels(group)), ...)
-      importance <- rf$importance
+    if (!altExp_name %in% SingleCellExperiment::altExpNames(sce)) {
+        stop("sce does not contain altExp_name as altExpNames")
     }
 
-    S4Vectors::metadata(sce)[["importanceADT_matrix"]] <- as.matrix(importance)
-    S4Vectors::metadata(sce)[["importanceADT"]] <-
-      Matrix::rowMeans(as.matrix(importance))
-  }
-  if (method == "PCA") {
-    adt_pca <- stats::prcomp(t(exprsMat), scale = TRUE, center = TRUE)
-
-    if (remove_first_PC) {
-      use_k <- seq(2, k_pca)
-    } else {
-      use_k <- seq_len(k_pca)
+    if (!exprs_value %in% assayNames(altExp(sce, altExp_name))) {
+        stop("sce does not contain exprs_value as assayNames for altExp")
     }
-    pca_eigenvalue <- adt_pca$sdev[use_k]^2
-    # eigenvalue
-    ev_mat <- matrix(1, ncol = 1, nrow = nrow(adt_pca$rotation)) %*%
-      matrix(pca_eigenvalue, ncol = length(use_k))
 
-    NRS <- Matrix::rowSums(abs(adt_pca$rotation[, use_k]) * ev_mat)
-    S4Vectors::metadata(sce)[["importanceADT_matrix"]] <- as.matrix(NRS)
-    S4Vectors::metadata(sce)[["importanceADT"]] <- rowMeans(as.matrix(NRS))
-  }
+    method <- match.arg(method, c("randomForest", "PCA"))
+
+    if (method == "randomForest" & is.null(group)) {
+        stop("To run randomForest ADT importance calculation,
+               please provide group infomation.")
+    }
+
+    if (k_pca < 2 | k_pca <= 2 & remove_first_PC) {
+        stop("Please set a larger k_pca")
+    }
 
 
-  return(sce)
+    exprsMat <- assay(SingleCellExperiment::altExp(sce, altExp_name),
+                      exprs_value)
+
+    if (method == "randomForest") {
+        if (subsample) {
+            num_sub <- round(ncol(exprsMat) * prop)
+            rf <- lapply(seq_len(times), function(x) {
+                idx <- sample(ncol(exprsMat), num_sub)
+                randomForest::randomForest(t(as.matrix(exprsMat[, idx])),
+                                           as.factor(droplevels(group)[idx]),
+                                           ...)
+            })
+
+            importance <- do.call(cbind, lapply(rf, function(x) x$importance))
+            colnames(importance) <- seq_len(times)
+        } else {
+            rf <- randomForest::randomForest(t(as.matrix(exprsMat)),
+                                             as.factor(droplevels(group)), ...)
+            importance <- rf$importance
+        }
+
+        S4Vectors::metadata(sce)[["importanceADT_matrix"]] <-
+            as.matrix(importance)
+        S4Vectors::metadata(sce)[["importanceADT"]] <-
+            Matrix::rowMeans(as.matrix(importance))
+    }
+    if (method == "PCA") {
+        adt_pca <- stats::prcomp(t(exprsMat), scale = TRUE, center = TRUE)
+
+        if (remove_first_PC) {
+            use_k <- seq(2, k_pca)
+        } else {
+            use_k <- seq_len(k_pca)
+        }
+        pca_eigenvalue <- adt_pca$sdev[use_k]^2
+        # eigenvalue
+        ev_mat <- matrix(1, ncol = 1, nrow = nrow(adt_pca$rotation)) %*%
+            matrix(pca_eigenvalue, ncol = length(use_k))
+
+        NRS <- Matrix::rowSums(abs(adt_pca$rotation[, use_k]) * ev_mat)
+        S4Vectors::metadata(sce)[["importanceADT_matrix"]] <- as.matrix(NRS)
+        S4Vectors::metadata(sce)[["importanceADT"]] <- rowMeans(as.matrix(NRS))
+    }
+
+
+    return(sce)
 }
 
 
@@ -166,67 +168,67 @@ visImportance <- function(sce,
                           exprs_value = "logcounts") {
 
 
-  if (!"importanceADT" %in% names(S4Vectors::metadata(sce))) {
-    stop("Please perform importanceADT() first")
-  }
-
-
-
-  plot <- match.arg(plot, c("boxplot", "heatmap"))
-
-  scores <- metadata(sce)[["importanceADT_matrix"]]
-
-
-  if (plot == "boxplot") {
-    scores <- scores[order(Matrix::rowMeans(as.matrix(scores))), ,
-                     drop = FALSE]
-
-
-
-    df_toPlot <- reshape2::melt(scores)
-    colnames(df_toPlot) <- c("features", "iter", "importance")
-
-    g <- ggplot(df_toPlot, aes(x = df_toPlot$features,
-                               y = df_toPlot$importance,
-                               color = df_toPlot$features)) +
-      geom_boxplot(outlier.size = 1, outlier.stroke = 0.3,
-                   outlier.alpha = 0.8,
-                   width = 0.3) +
-      scale_colour_viridis_d(direction = -1, end = 0.95) +
-      coord_flip() +
-      theme_bw() +
-      ylab("Importance Scores") +
-      xlab("") +
-      labs(col = "Features") +
-      theme(legend.position = "none")
-    print(g)
-
-  }
-
-  if (plot == "heatmap") {
-
-
-    if (!altExp_name %in% SingleCellExperiment::altExpNames(sce)) {
-      stop("sce does not contain altExp_name as altExpNames")
-    }
-
-    if (!exprs_value %in% assayNames(altExp(sce, altExp_name))) {
-      stop("sce does not contain exprs_value as assayNames for altExp")
+    if (!"importanceADT" %in% names(S4Vectors::metadata(sce))) {
+        stop("Please perform importanceADT() first")
     }
 
 
-    corMat_adt <- cor(t(as.matrix(assay(altExp(sce, altExp_name),
-                                        exprs_value))))
-    corMat_adt[is.na(corMat_adt)] <- 0
+
+    plot <- match.arg(plot, c("boxplot", "heatmap"))
+
+    scores <- metadata(sce)[["importanceADT_matrix"]]
 
 
-    anno_col <- data.frame(importance = rowMeans(scores))
-    rownames(anno_col) <- colnames(corMat_adt)
-    pheatmap::pheatmap(corMat_adt,
-                       clustering_method = "ward.D2",
-                       annotation_col = anno_col,
-                       breaks = seq(-0.8, 0.8, 1.6/100))
-  }
+    if (plot == "boxplot") {
+        scores <- scores[order(Matrix::rowMeans(as.matrix(scores))), ,
+                         drop = FALSE]
+
+
+
+        df_toPlot <- reshape2::melt(scores)
+        colnames(df_toPlot) <- c("features", "iter", "importance")
+
+        g <- ggplot(df_toPlot, aes(x = df_toPlot$features,
+                                   y = df_toPlot$importance,
+                                   color = df_toPlot$features)) +
+            geom_boxplot(outlier.size = 1, outlier.stroke = 0.3,
+                         outlier.alpha = 0.8,
+                         width = 0.3) +
+            scale_colour_viridis_d(direction = -1, end = 0.95) +
+            coord_flip() +
+            theme_bw() +
+            ylab("Importance Scores") +
+            xlab("") +
+            labs(col = "Features") +
+            theme(legend.position = "none")
+        print(g)
+
+    }
+
+    if (plot == "heatmap") {
+
+
+        if (!altExp_name %in% SingleCellExperiment::altExpNames(sce)) {
+            stop("sce does not contain altExp_name as altExpNames")
+        }
+
+        if (!exprs_value %in% assayNames(altExp(sce, altExp_name))) {
+            stop("sce does not contain exprs_value as assayNames for altExp")
+        }
+
+
+        corMat_adt <- cor(t(as.matrix(assay(altExp(sce, altExp_name),
+                                            exprs_value))))
+        corMat_adt[is.na(corMat_adt)] <- 0
+
+
+        anno_col <- data.frame(importance = rowMeans(scores))
+        rownames(anno_col) <- colnames(corMat_adt)
+        pheatmap::pheatmap(corMat_adt,
+                           clustering_method = "ward.D2",
+                           annotation_col = anno_col,
+                           breaks = seq(-0.8, 0.8, 1.6/100))
+    }
 
 
 

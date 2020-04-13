@@ -11,7 +11,7 @@ An object of class \code{SingleCellExperiment} with 1450 rows and 173 columns.
 Gene Expression Omnibus with the accession code GSE126310.
 }
 \usage{
-sce_ctcl_subset
+data(sce_ctcl_subset, package = 'CiteFuse')
 }
 \description{
 Data from Mimitou et al. ECCITE-seq PBMC CTCL sample data

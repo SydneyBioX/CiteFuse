@@ -3,6 +3,7 @@
 #' Data from Mimitou et al. ECCITE-seq PBMC control sample data, which is a list
 #' of three matrices of RNA, ADT and HTO
 #'
+#' @usage data(CITEseq_example, package = 'CiteFuse')
 #'
 #' @references Mimitou, E. P., Cheng, A., Montalbano, A., et al. (2019).
 #' Multiplexed detection of proteins, transcriptomes, clonotypes and
@@ -13,7 +14,10 @@
 "CITEseq_example"
 
 
+
 #' A subset of Ligand Receptor Pairs
+#'
+#' @usage data(lr_pair_subset, package = 'CiteFuse')
 "lr_pair_subset"
 
 
@@ -27,6 +31,8 @@
 #' CRISPR perturbations in single cells.
 #' Nature Methods, 16(5), 409–412.
 #'
+#' @usage data(sce_ctcl_subset, package = 'CiteFuse')
+#'
 #' @source Gene Expression Omnibus with the accession code GSE126310.
 "sce_ctcl_subset"
 
@@ -35,6 +41,7 @@
 #'
 #' Data from Mimitou et al. ECCITE-seq PBMC Control sample data
 #'
+#' @usage data(sce_control_subset, package = 'CiteFuse')
 #'
 #' @references Mimitou, E. P., Cheng, A., Montalbano, A., et al. (2019).
 #' Multiplexed detection of proteins, transcriptomes, clonotypes and

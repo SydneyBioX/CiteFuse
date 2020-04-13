@@ -11,7 +11,7 @@ An object of class \code{list} of length 3.
 Gene Expression Omnibus with the accession code GSE126310.
 }
 \usage{
-CITEseq_example
+data(CITEseq_example, package = 'CiteFuse')
 }
 \description{
 Data from Mimitou et al. ECCITE-seq PBMC control sample data, which is a list

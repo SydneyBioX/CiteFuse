@@ -12,8 +12,6 @@ License: GPL-3
 Encoding: UTF-8
 Depends: R (>= 4.0)
 Imports:
-    Rcpp (>= 1.0.2),
-    RcppEigen (>= 0.3.3.5.0),
     SingleCellExperiment (>= 1.8.0),
     SummarizedExperiment (>= 1.16.0),
     Matrix,
@@ -41,8 +39,8 @@ Imports:
     pheatmap,
     ggraph,
     grDevices,
-    rhdf5
-LinkingTo: Rcpp, RcppEigen
+    rhdf5,
+    rlang
 RoxygenNote: 7.1.0
 Suggests: 
     knitr,

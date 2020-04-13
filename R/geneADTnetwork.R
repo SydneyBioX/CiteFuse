@@ -71,111 +71,115 @@ geneADTnetwork <- function(sce,
                            return_igraph = FALSE
 ) {
 
-  cor_method <- match.arg(cor_method, c("pearson", "kendall", "spearman"))
+    cor_method <- match.arg(cor_method, c("pearson", "kendall", "spearman"))
 
-  if (!is.null(cell_subset)) {
-    if (sum(!cell_subset %in% colnames(sce)) != 0) {
-      stop("sce does not contain some or all of cell_subset as cell names")
+    if (!is.null(cell_subset)) {
+        if (sum(!cell_subset %in% colnames(sce)) != 0) {
+            stop("sce does not contain some or
+                 all of cell_subset as cell names")
+        }
+    } else {
+        cell_subset <- colnames(sce)
     }
-  } else {
-    cell_subset <- colnames(sce)
-  }
 
 
 
 
-  # RNA exprssion matrix
+    # RNA exprssion matrix
 
-  if (!RNA_exprs_value %in% assayNames(sce)) {
-    stop("sce does not contain RNA_exprs_value")
-  }
-
-  exprsMat1 <- assay(sce[, cell_subset], RNA_exprs_value)
-
-  if (!altExp_name %in% altExpNames(sce)) {
-    stop("sce does not contain altExp_name as altExpNames")
-  }
-
-  if (!altExp_exprs_value %in% assayNames(altExp(sce, altExp_name))) {
-    stop("sce does not contain altExp_exprs_value as assayNames for altExp")
-  }
-
-  # ADT exprssion matrix
-  exprsMat2 <- assay(altExp(sce[, cell_subset], altExp_name),
-                     altExp_exprs_value)
-
-
-  if (!is.null(RNA_feature_subset)) {
-    if (sum(!RNA_feature_subset %in% rownames(exprsMat1)) != 0) {
-      stop("sce does not contain some or all of RNA_feature_subset as features")
+    if (!RNA_exprs_value %in% assayNames(sce)) {
+        stop("sce does not contain RNA_exprs_value")
     }
-  }
 
-  if (!is.null(ADT_feature_subset)) {
-    if (sum(!ADT_feature_subset %in% rownames(exprsMat2)) != 0) {
-      stop("sce does not contain some or all of ADT_feature_subset as features")
+    exprsMat1 <- assay(sce[, cell_subset], RNA_exprs_value)
+
+    if (!altExp_name %in% altExpNames(sce)) {
+        stop("sce does not contain altExp_name as altExpNames")
     }
-  }
+
+    if (!altExp_exprs_value %in% assayNames(altExp(sce, altExp_name))) {
+        stop("sce does not contain altExp_exprs_value as assayNames for altExp")
+    }
+
+    # ADT exprssion matrix
+    exprsMat2 <- assay(altExp(sce[, cell_subset], altExp_name),
+                       altExp_exprs_value)
+
+
+    if (!is.null(RNA_feature_subset)) {
+        if (sum(!RNA_feature_subset %in% rownames(exprsMat1)) != 0) {
+            stop("sce does not contain some or
+                 all of RNA_feature_subset as features")
+        }
+    }
+
+    if (!is.null(ADT_feature_subset)) {
+        if (sum(!ADT_feature_subset %in% rownames(exprsMat2)) != 0) {
+            stop("sce does not contain some or
+                 all of ADT_feature_subset as features")
+        }
+    }
 
 
 
 
-  exprsMat1 <- as.matrix(exprsMat1[RNA_feature_subset, , drop = FALSE])
-  exprsMat2 <- as.matrix(exprsMat2[ADT_feature_subset, , drop = FALSE])
+    exprsMat1 <- as.matrix(exprsMat1[RNA_feature_subset, , drop = FALSE])
+    exprsMat2 <- as.matrix(exprsMat2[ADT_feature_subset, , drop = FALSE])
 
 
-  # Filter the features that are not expressed at all...
+    # Filter the features that are not expressed at all...
 
-  meanPct1 <- rowMeans(exprsMat1 > RNA_exprs_threshold)
-  meanPct2 <- rowMeans(exprsMat2 > ADT_exprs_threshold)
+    meanPct1 <- rowMeans(exprsMat1 > RNA_exprs_threshold)
+    meanPct2 <- rowMeans(exprsMat2 > ADT_exprs_threshold)
 
-  exprsMat1 <- exprsMat1[meanPct1 > RNA_exprs_pct, , drop = FALSE]
-  exprsMat2 <- exprsMat2[meanPct2 > ADT_exprs_pct, , drop = FALSE]
-
-
-  corMat <- stats::cor(t(exprsMat1), t(exprsMat2), method = cor_method)
-
-  rna_label <- rownames(exprsMat1)
-  rna_id <- paste("RNA", rownames(exprsMat1), sep = "_")
-
-  adt_label <- rownames(exprsMat2)
-  adt_id <- paste("ADT", adt_label, sep = "_")
-
-  colnames(corMat) <- adt_id
-  rownames(corMat) <- rna_id
-
-  df_corMat <- reshape2::melt(corMat)
-
-  df_corMat <- df_corMat[abs(df_corMat$value) > cor_threshold, ]
-
-  g <- igraph::graph_from_data_frame(df_corMat,
-                                     directed = FALSE)
-
-  igraph::V(g)$label <- unlist(lapply(strsplit(names(igraph::V(g)), "_"),
-                                      function(x) paste(x[-1], collapse = "_")))
-  igraph::V(g)$class <- unlist(lapply(strsplit(names(igraph::V(g)), "_"),
-                                      "[[", 1))
-  numeric_class <- as.numeric(as.factor(igraph::V(g)$class))
-  igraph::V(g)$type <- c(TRUE, FALSE)[numeric_class]
-  igraph::V(g)$shape <- c("circle", "square")[numeric_class]
-  igraph::V(g)$color <- c("#A0CBE8", "#FFBE7D")[numeric_class]
-  igraph::V(g)$size <- 10
-  igraph::V(g)$label.cex <- 0.4
-  igraph::V(g)$label.color <- "black"
-
-  igraph::E(g)$color <-  ifelse(df_corMat$value > 0,
-                                "#E15759", "#4E79A7")
-  igraph::E(g)$weights <- abs(df_corMat$value) * 10
+    exprsMat1 <- exprsMat1[meanPct1 > RNA_exprs_pct, , drop = FALSE]
+    exprsMat2 <- exprsMat2[meanPct2 > ADT_exprs_pct, , drop = FALSE]
 
 
-  graphics::plot(g, layout = network_layout)
+    corMat <- stats::cor(t(exprsMat1), t(exprsMat2), method = cor_method)
 
-  graphics::legend('topleft',
-                   legend = c(levels(as.factor(igraph::V(g)$class)),
-                              "positive", "negative"),
-                   col = c("#A0CBE8", "#FFBE7D", "#E15759", "#4E79A7"),
-                   pch = c(16, 15, 95, 95))
+    rna_label <- rownames(exprsMat1)
+    rna_id <- paste("RNA", rownames(exprsMat1), sep = "_")
 
-  return(g)
+    adt_label <- rownames(exprsMat2)
+    adt_id <- paste("ADT", adt_label, sep = "_")
+
+    colnames(corMat) <- adt_id
+    rownames(corMat) <- rna_id
+
+    df_corMat <- reshape2::melt(corMat)
+
+    df_corMat <- df_corMat[abs(df_corMat$value) > cor_threshold, ]
+
+    g <- igraph::graph_from_data_frame(df_corMat,
+                                       directed = FALSE)
+
+    igraph::V(g)$label <- unlist(lapply(strsplit(names(igraph::V(g)), "_"),
+                                        function(x)
+                                            paste(x[-1], collapse = "_")))
+    igraph::V(g)$class <- unlist(lapply(strsplit(names(igraph::V(g)), "_"),
+                                        "[[", 1))
+    numeric_class <- as.numeric(as.factor(igraph::V(g)$class))
+    igraph::V(g)$type <- c(TRUE, FALSE)[numeric_class]
+    igraph::V(g)$shape <- c("circle", "square")[numeric_class]
+    igraph::V(g)$color <- c("#A0CBE8", "#FFBE7D")[numeric_class]
+    igraph::V(g)$size <- 10
+    igraph::V(g)$label.cex <- 0.4
+    igraph::V(g)$label.color <- "black"
+
+    igraph::E(g)$color <-  ifelse(df_corMat$value > 0,
+                                  "#E15759", "#4E79A7")
+    igraph::E(g)$weights <- abs(df_corMat$value) * 10
+
+
+    graphics::plot(g, layout = network_layout)
+
+    graphics::legend('topleft',
+                     legend = c(levels(as.factor(igraph::V(g)$class)),
+                                "positive", "negative"),
+                     col = c("#A0CBE8", "#FFBE7D", "#E15759", "#4E79A7"),
+                     pch = c(16, 15, 95, 95))
+
+    return(g)
 
 }

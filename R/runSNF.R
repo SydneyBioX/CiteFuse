@@ -25,7 +25,7 @@
 #' @importFrom SingleCellExperiment SingleCellExperiment logcounts
 #' @importFrom Matrix rowSums
 #' @importFrom SummarizedExperiment SummarizedExperiment
-#' @importFrom SNFtool affinityMatrix
+#' @importFrom SNFtool affinityMatrix SNF
 #' @importFrom propr propr
 #' @importFrom stats cor
 #'
@@ -43,76 +43,67 @@ CiteFuse <- function(sce,
                      K_knn = 20,
                      t = 20,
                      metadata_names = NULL,
-                     verbose = TRUE
-) {
+                     verbose = TRUE) {
 
 
-
-  if (!"logcounts" %in% SummarizedExperiment::assayNames(sce)) {
-    stop("sce does not contain logcounts...
-         we will perform normalize() to get logcounts")
-  }
-
-
-
-
-  if (is.null(W_list)) {
-    if (gene_select) {
-      hvg <- selectHVG(sce)
-    } else {
-      hvg <- seq_len(nrow(sce))
+    if (!"logcounts" %in% SummarizedExperiment::assayNames(sce)) {
+        stop("sce does not contain logcounts...
+               we will perform normalize() to get logcounts")
     }
 
-
-
-    rna_mat <- as.matrix(SingleCellExperiment::logcounts(sce)[hvg,])
-
-    if (dist_cal_RNA == "correlation") {
-      dist_rna <- as.matrix(1 - stats::cor(rna_mat))
-    }
-
-    adt_mat <- assay(altExp(sce, altExp_name), "counts")
-
-    if (is.null(ADT_subset)) {
-      ADT_subset <- rownames(adt_mat)
-    }
-
-    adt_dist <- suppressMessages(propr::propr(as.matrix(adt_mat[ADT_subset, ])))
+    if (is.null(W_list)) {
+        if (gene_select) {
+            hvg <- selectHVG(sce)
+        } else {
+            hvg <- seq_len(nrow(sce))
+        }
 
 
 
-    if (dist_cal_ADT == "propr") {
-      dist_adt <- 1 - as.matrix(adt_dist@matrix)
+        rna_mat <- as.matrix(SingleCellExperiment::logcounts(sce)[hvg,])
+
+        if (dist_cal_RNA == "correlation") {
+            dist_rna <- as.matrix(1 - stats::cor(rna_mat))
+        }
+
+        adt_mat <- assay(altExp(sce, altExp_name), "counts")
+
+        if (is.null(ADT_subset)) {
+            ADT_subset <- rownames(adt_mat)
+        }
+
+        adt_dist <- suppressMessages(propr(as.matrix(adt_mat[ADT_subset, ])))
+
+
+
+        if (dist_cal_ADT == "propr") {
+            dist_adt <- 1 - as.matrix(adt_dist@matrix)
+        }
+
+        if (verbose) {
+            cat("Calculating affinity matrix \n")
+        }
+
+        W1 <- SNFtool::affinityMatrix(dist_adt, K = K_knn, sigma = 0.5)
+        W2 <- SNFtool::affinityMatrix(dist_rna, K = K_knn, sigma = 0.5)
+        W_list <- list(W1, W2)
     }
 
     if (verbose) {
-      cat("Calculating affinity matrix \n")
+        cat("Performing SNF  \n")
     }
 
-    W1 <- SNFtool::affinityMatrix(dist_adt, K = K_knn, sigma = 0.5)
+    W <- SNFtool::SNF(W_list, K = K_knn, t = 20)
 
-    W2 <- SNFtool::affinityMatrix(dist_rna, K = K_knn, sigma = 0.5)
+    if (is.null(metadata_names)) {
+        metadata_names <- c("SNF_W", "ADT_W", "RNA_W")
+    }
 
+    S4Vectors::metadata(sce)[[metadata_names[1]]] <- W
+    S4Vectors::metadata(sce)[[metadata_names[2]]] <- W1
+    S4Vectors::metadata(sce)[[metadata_names[3]]] <- W2
 
-
-    W_list <- list(W1, W2)
-  }
-
-  if (verbose) {
-    cat("Performing SNF  \n")
-  }
-
-  W <- SNF_fast(W_list, K = K_knn, t = 20)
-
-  if (is.null(metadata_names)) {
-    metadata_names <- c("SNF_W", "ADT_W", "RNA_W")
-  }
-
-  S4Vectors::metadata(sce)[[metadata_names[1]]] <- W
-  S4Vectors::metadata(sce)[[metadata_names[2]]] <- W1
-  S4Vectors::metadata(sce)[[metadata_names[3]]] <- W2
-
-  return(sce)
+    return(sce)
 }
 
 
@@ -122,14 +113,10 @@ CiteFuse <- function(sce,
 selectHVG <- function(sce,
                       FDR = 0.05,
                       bio = 0.1) {
-  # fit <- scran::modelGeneVar(sce,
-  #                        use.spikes = FALSE)
-  #
-  # decomp <- scran::decomposeVar(sce, fit)
 
-  decomp <- scran::modelGeneVar(sce)
-  decomp <- decomp[order(decomp$bio, decreasing = TRUE), ]
-  hvg <- rownames(decomp)[decomp$FDR < FDR & decomp$bio > bio]
+    decomp <- scran::modelGeneVar(sce)
+    decomp <- decomp[order(decomp$bio, decreasing = TRUE), ]
+    hvg <- rownames(decomp)[decomp$FDR < FDR & decomp$bio > bio]
 
-  return(hvg)
+    return(hvg)
 }

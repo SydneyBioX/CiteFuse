@@ -82,6 +82,6 @@ geneADTnetwork(sce_control_subset,
                RNA_feature_subset = RNA_feature_subset,
                ADT_feature_subset = ADT_feature_subset,
                cor_method = "pearson",
-              network_layout = igraph::layout_with_fr)
+               network_layout = igraph::layout_with_fr)
 
 }
