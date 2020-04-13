@@ -5,8 +5,7 @@
 #' @param affinity An affinity matrix
 #' @param K number of clusters
 #' @param type type
-#' @param fast fast
-#' @param maxdim maxdim
+#' @param maxdim Maximum dimension
 #' @param delta delta
 #' @param t t
 #' @param neigen neigen
@@ -27,7 +26,6 @@
 #' @export
 
 spectralClustering <- function(affinity, K = 20, type = 4,
-                               fast = TRUE,
                                maxdim = 50, delta = 1e-5,
                                t = 0, neigen = NULL) {
 
@@ -52,25 +50,23 @@ spectralClustering <- function(affinity, K = 20, type = 4,
         NL <- L/(v %*% t(v))
     }
 
-    if (!fast) {
-        eig <- eigen(NL)
-    }else {
-        f <- function(x, A = NULL){ # matrix multiplication for ARPACK
-            as.matrix(A %*% x)
-        }
 
-        n <- nrow(affinity)
-
-        NL <- ifelse(NL > delta, NL, 0)
-        NL <- methods::as(NL, "dgCMatrix")
-
-
-        eig <- igraph::arpack(f, extra = NL, sym = TRUE,
-                              options = list(which = 'LA', nev = neff,
-                                             n = n,
-                                             ncv = max(min(c(n,4*neff)))))
-
+    f <- function(x, A = NULL){ # matrix multiplication for ARPACK
+        as.matrix(A %*% x)
     }
+
+    n <- nrow(affinity)
+
+    NL <- ifelse(NL > delta, NL, 0)
+    NL <- methods::as(NL, "dgCMatrix")
+
+
+    eig <- igraph::arpack(f, extra = NL, sym = TRUE,
+                          options = list(which = 'LA', nev = neff,
+                                         n = n,
+                                         ncv = max(min(c(n,4*neff)))))
+
+
 
     psi <- eig$vectors / (eig$vectors[,1] %*% matrix(1, 1, neff))#right ev
     eigenvals <- eig$values
@@ -365,7 +361,8 @@ visualiseDim <- function(sce,
 
         } else {
 
-            shape_by <- as.factor(SummarizedExperiment::colData(sce)[, shape_by])
+            shape_by <- as.factor(SummarizedExperiment::colData(sce)[,
+                                                                     shape_by])
 
         }
 

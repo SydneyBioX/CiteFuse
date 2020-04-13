@@ -48,12 +48,18 @@ names(CITEseq_example)
 lapply(CITEseq_example, dim)
 ```
 
+
 Here, we start from a list of three matrices of UMI, ADT and HTO count, which have common cell names. The `preprocessing` function will utilise the three matrices and its common cell names to create a `SingleCellExperiment` object, which stores RNA data in an `assay` and `ADT` and `HTO` data in `altExp` slot.
+
+
 
 ```{r}
 sce_citeseq <- preprocessing(CITEseq_example)
 sce_citeseq
 ```
+
+
+
 
 
 # Detecting both cross- and within-sample doublets using `CiteFuse`
@@ -127,7 +133,7 @@ visualiseDim(sce_citeseq,
 
 Furthermore, `plotHTO` function allows us to plot the pairwise scatter HTO count.
 
-```{r fig.height=12, fig.width=8}
+```{r fig.height=8, fig.width=6}
 plotHTO(sce_citeseq, 1:4)
 ```
 
@@ -314,7 +320,8 @@ visualiseExprs(sce_citeseq, altExp_name = "ADT",
 
 visualiseExprs(sce_citeseq, altExp_name = "ADT", 
                plot = "pairwise", 
-               feature_subset = c("CD45RA", "CD4", "CD8"), threshold = rep(4, 3))
+               feature_subset = c("CD45RA", "CD4", "CD8"), 
+               threshold = rep(4, 3))
 ```
 
 
@@ -543,6 +550,18 @@ de_res <- DEgenesCross(sce_list = list(control = sce_citeseq,
                        group_to_test = c("2", "6"))
 de_res_filter <- selectDEgenes(de_res = de_res)
 de_res_filter
+```
+
+
+# Read data from 10X Genomics
+
+```{r}
+tmpdir <- tempdir()
+download.file("http://cf.10xgenomics.com/samples/cell-exp/3.1.0/connect_5k_pbmc_NGSC3_ch1/connect_5k_pbmc_NGSC3_ch1_filtered_feature_bc_matrix.tar.gz", file.path(tmpdir, "/5k_pbmc_NGSC3_ch1_filtered_feature_bc_matrix.tar.gz"))
+untar(file.path(tmpdir, "5k_pbmc_NGSC3_ch1_filtered_feature_bc_matrix.tar.gz"),
+      exdir = tmpdir)
+sce_citeseq_10X <- readFrom10X(file.path(tmpdir, "filtered_feature_bc_matrix/"))
+sce_citeseq_10X
 ```
 
 

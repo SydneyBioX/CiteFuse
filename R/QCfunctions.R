@@ -166,6 +166,19 @@ preprocessing <- function(exprsMat = NULL,
 #' @importFrom methods as
 #' @importFrom utils read.delim
 #'
+#' @examples
+#'
+#' tmpdir <- tempdir()
+#' tenXdata <- "http://cf.10xgenomics.com/samples/cell-exp/3.1.0/connect_5k_pbmc_NGSC3_ch1/"
+#' file <- "connect_5k_pbmc_NGSC3_ch1_filtered_feature_bc_matrix.tar.gz"
+#' download.file(paste0(tenXdata, file),file.path(tmpdir, file))
+#' untar(file.path(tmpdir,file),
+#'       exdir = tmpdir)
+#' sce_citeseq_10X <- readFrom10X(file.path(tmpdir,
+#' "filtered_feature_bc_matrix/"))
+#' sce_citeseq_10X
+#'
+#'
 #' @export
 #'
 
@@ -187,7 +200,8 @@ readFrom10X <- function(dir,
 
     if (type == "auto") {
 
-        if (sum(grepl(c("barcodes.tsv|features.tsv|matrix.mtx"), all_files)) == 3) {
+        if (sum(grepl(c("barcodes.tsv|features.tsv|matrix.mtx"),
+                      all_files)) == 3) {
             type <- "sparse"
         } else if (any(grepl("\\.h5", all_files))) {
             type <- "HDF5"

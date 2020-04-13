@@ -62,3 +62,14 @@ A SingleCellExeperiment with DE results stored in meta data DE_res
 \description{
 A function to perform DE analysis on a list of CITE seq data
 }
+\examples{
+
+data("sce_control_subset", package = "CiteFuse")
+data("sce_ctcl_subset", package = "CiteFuse")
+
+de_res <- DEgenesCross(sce_list = list(control = sce_control_subset,
+ctcl = sce_ctcl_subset),
+colData_name = c("SNF_W_louvain", "SNF_W_louvain"),
+group_to_test = c("2", "6"))
+
+}

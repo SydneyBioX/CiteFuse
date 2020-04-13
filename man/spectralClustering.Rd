@@ -8,7 +8,6 @@ spectralClustering(
   affinity,
   K = 20,
   type = 4,
-  fast = TRUE,
   maxdim = 50,
   delta = 1e-05,
   t = 0,
@@ -22,9 +21,7 @@ spectralClustering(
 
 \item{type}{type}
 
-\item{fast}{fast}
-
-\item{maxdim}{maxdim}
+\item{maxdim}{Maximum dimension}
 
 \item{delta}{delta}
 

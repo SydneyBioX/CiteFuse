@@ -145,6 +145,16 @@ DEgenes <- function(sce,
 #' @importFrom SummarizedExperiment assayNames assay
 #' @importFrom S4Vectors metadata
 #'
+#' @examples
+#'
+#' data("sce_control_subset", package = "CiteFuse")
+#' data("sce_ctcl_subset", package = "CiteFuse")
+#'
+#' de_res <- DEgenesCross(sce_list = list(control = sce_control_subset,
+#' ctcl = sce_ctcl_subset),
+#' colData_name = c("SNF_W_louvain", "SNF_W_louvain"),
+#' group_to_test = c("2", "6"))
+#'
 #' @export
 #'
 
@@ -579,6 +589,45 @@ DEbubblePlot <- function(de_list) {
 #' the selected subset of features will be visualised
 #'
 #' @return A ggplot2 to visualise the comparison plot of DE.
+#'
+#' @examples
+#'
+#' library(S4Vectors)
+#' data(sce_control_subset)
+#' sce_control_subset <- DEgenes(sce_control_subset,
+#' group = sce_control_subset$SNF_W_louvain,
+#' return_all = TRUE,
+#' exprs_pct = 0.5)
+#'
+#' sce_control_subset <- selectDEgenes(sce_control_subset)
+#'
+#' sce_control_subset <- DEgenes(sce_control_subset,
+#'                        altExp_name = "ADT",
+#'                        group = sce_control_subset$SNF_W_louvain,
+#'                        return_all = TRUE,
+#'                        exprs_pct = 0.5)
+#'
+#'
+#' sce_control_subset <- selectDEgenes(sce_control_subset,
+#'                              altExp_name = "ADT")
+#' rna_list <- c("hg19_CD4",
+#' "hg19_CD8A",
+#' "hg19_HLA-DRB1",
+#' "hg19_ITGAX",
+#' "hg19_NCAM1",
+#' "hg19_CD27",
+#' "hg19_CD19")
+#'
+#' adt_list <- c("CD4", "CD8", "MHCII (HLA-DR)", "CD11c", "CD56", "CD27", "CD19")
+#'
+#' rna_DEgenes_all <- S4Vectors::metadata(sce_control_subset)[["DE_res_RNA"]]
+#' adt_DEgenes_all <- S4Vectors::metadata(sce_control_subset)[["DE_res_ADT"]]
+#'
+#' feature_list <- list(RNA = rna_list, ADT = adt_list)
+#' de_list <- list(RNA = rna_DEgenes_all, ADT = adt_DEgenes_all)
+#'
+#' DEcomparisonPlot(de_list = de_list,
+#'                  feature_list = feature_list)
 #'
 #' @import ggplot2
 #'
