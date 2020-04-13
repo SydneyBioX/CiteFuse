@@ -1,0 +1,9 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+^doc$
+^docs$
+^_pkgdown\.yml$
+^vignettes/webOnly/
+.travis.yml
+^doc/
+^docs/

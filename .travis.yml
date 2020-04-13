@@ -1,0 +1,10 @@
+language: R
+cache: packages
+R: bioc-devel
+dist: trusty
+
+os:
+  - linux
+
+env:
+  - R_BIOC_VERSION: "3.11"
