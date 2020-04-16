@@ -1,13 +1,13 @@
 Package: CiteFuse
 Type: Package
 Title: CiteFuse: multi-modal analysis of CITE-seq data
-Version: 0.99.6
+Version: 0.99.7
 Authors@R: c(
     person("Yingxin", "Lin", email = "yingxin.lin@sydney.edu.au", role = c("aut", "cre")
     ),
     person("Hani", "Kim", email = "jieun.kim@sydney.edu.au", role = c("aut"))
     )
-Description: The package for multi-modal analysis of CITE-seq data.
+Description: CiteFuse pacakage implements a suite of methods and tools for CITE-seq data from pre-processing to integrative analytics, including doublet detection, network-based modality integration, cell type clustering, differential RNA and protein expression analysis, ADT evaluation, ligand-receptor interaction analysis, and interactive web-based visualisation of the analyses.
 License: GPL-3
 Encoding: UTF-8
 Depends: R (>= 4.0)
