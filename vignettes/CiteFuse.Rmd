@@ -162,7 +162,7 @@ sce_citeseq
 
 ## Performing SNF
 
-The first step of analysis is to integrate the RNA and ADT matrix. We use a popular integration algorithm called similarity network fusion (SNF) to integrate the multiomic data. In CiteFuse, we implement a faster version of the original SNF algorithm from Wang et al. (2014) through the `CiteFuse` function, facilitating quicker analysis of CITE-seq data. 
+The first step of analysis is to integrate the RNA and ADT matrix. We use a popular integration algorithm called similarity network fusion (SNF) to integrate the multiomic data. 
 
 ```{r}
 sce_citeseq <- scater::logNormCounts(sce_citeseq)
