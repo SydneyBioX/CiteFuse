@@ -1,5 +1,14 @@
 ---
 title: "CiteFuse: getting started"
+author:
+- name: Yingxin Lin
+  affiliation: School of Mathematics and Statistics, The University of Sydney, Australia
+- name: Hani Jieun Kim
+  affiliation: 
+  - School of Mathematics and Statistics, The University of Sydney, Australia
+  - Charles Perkins Centre, The University of Sydney, Australia
+  - Computational Systems Biology Group, Children’s Medical Research Institute, Faculty of Medicine and Health, The University of Sydney, Australia
+
 date: "`r BiocStyle::doc_date()`"
 output:
   BiocStyle::html_document:
@@ -15,7 +24,11 @@ vignette: >
   
   
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, 
+                       collapse = TRUE, comment = "#>",
+                      fig.height = 5, fig.width = 5,
+                      fig.retina = 1,
+                      dpi = 60)
 ```
 
 
@@ -171,7 +184,7 @@ system.time(sce_citeseq <- CiteFuse(sce_citeseq))
 ```
 
 We now proceed with the fused matrix, which is stored as `SNF_W` in our `sce_citeseq` object. 
- 
+
 ## Performing spectral clustering
 
 CiteFuse implements two different clustering algorithms on the fused matrix, spectral clustering and Louvain clustering. First, we perform spectral clustering with sufficient numbers of `K` and use the eigen values to determine the optimal number of clusters. 
@@ -200,7 +213,7 @@ sce_citeseq$RNA_clust <- as.factor(SNF_W2_clust$labels)
 
 The outcome of the clustering can be easily visualised on a reduced dimensions plot by highlighting the points by cluster label. 
 
-```{r fig.height=12, fig.width=8}
+```{r fig.height=8, fig.width=8}
 
 sce_citeseq <- reducedDimSNF(sce_citeseq,
                              method = "tSNE", 
@@ -283,15 +296,10 @@ visualiseExprs(sce_citeseq,
 ```
 
 
-```{r fig.height = 8, fig.width = 8}
-visualiseExprs(sce_citeseq, 
-               altExp_name = "ADT", 
-               n = 30) +
-  coord_flip()
-```
 
 
-```{r fig.height = 4, fig.width = 8}
+
+```{r fig.height = 4, fig.width = 6}
 visualiseExprs(sce_citeseq, 
                altExp_name = "ADT", 
                group_by = "SNF_W_louvain",
@@ -384,7 +392,7 @@ DEbubblePlot(list(RNA = rna_DEgenes, ADT = adt_DEgenes))
 
 For the `DEcomparisonPlot`, as well as a list containing the DE genes for RNA and ADT, a `feature_list` specifying the genes and proteins of interest is required.
 
-```{r fig.height = 10, fig.width = 10}
+```{r fig.height = 8, fig.width = 8}
 rna_list <- c("hg19_CD4",
               "hg19_CD8A",
               "hg19_HLA-DRB1",
