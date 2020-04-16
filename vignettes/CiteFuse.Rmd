@@ -572,7 +572,7 @@ de_res_filter
 
 Readers unfamiliar with the workflow of converting a count matrix into a `SingleCellExperiment` object may use the `readFrom10X` function to convert count matrix from a 10X experiment into an object that can be used for all functions in CiteFuse. 
 
-```{r}
+```{r eval = FALSE}
 tmpdir <- tempdir()
 download.file("http://cf.10xgenomics.com/samples/cell-exp/3.1.0/connect_5k_pbmc_NGSC3_ch1/connect_5k_pbmc_NGSC3_ch1_filtered_feature_bc_matrix.tar.gz", file.path(tmpdir, "/5k_pbmc_NGSC3_ch1_filtered_feature_bc_matrix.tar.gz"))
 untar(file.path(tmpdir, "5k_pbmc_NGSC3_ch1_filtered_feature_bc_matrix.tar.gz"),

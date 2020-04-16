@@ -343,7 +343,7 @@ doWilcox <- function(exprsMat,
         keep <- meanPct[, 2] > exprs_pct
 
         test_res <- apply(exprsMat[keep,], 1, function(x)
-            stats::wilcox.test(x ~ tmp_celltype))
+            suppressWarnings(stats::wilcox.test(x ~ tmp_celltype)))
 
         test_res <- lapply(test_res, function(x) {
             stats <- x$statistic

@@ -168,6 +168,7 @@ preprocessing <- function(exprsMat = NULL,
 #'
 #' @examples
 #'
+#' \dontrun{
 #' tmpdir <- tempdir()
 #' tenXdata <- "http://cf.10xgenomics.com/samples/cell-exp/3.1.0/connect_5k_pbmc_NGSC3_ch1/"
 #' file <- "connect_5k_pbmc_NGSC3_ch1_filtered_feature_bc_matrix.tar.gz"
@@ -177,7 +178,7 @@ preprocessing <- function(exprsMat = NULL,
 #' sce_citeseq_10X <- readFrom10X(file.path(tmpdir,
 #' "filtered_feature_bc_matrix/"))
 #' sce_citeseq_10X
-#'
+#'}
 #'
 #' @export
 #'
