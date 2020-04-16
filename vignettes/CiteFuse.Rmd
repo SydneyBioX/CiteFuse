@@ -21,7 +21,8 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 
 # Introduction 
 
-`CiteFuse` is a computational framework that implements a suite of methods and tools for CITE-seq data from pre-processing through to integrative analytics. This includes doublet detection, network-based modality integration, cell type clustering, differential RNA and protein expression analysis, ADT evaluation, ligand-receptor interaction analysis, and interactive web-based visualisation of the analyses. This vignette demostrates the usage of `CiteFuse` by using a subset data of CITE-seq data from human PBMCs as an example (Mimitou et al., 2019).
+`CiteFuse` is a computational framework that implements a suite of methods and tools for CITE-seq data from pre-processing through to integrative analytics. This includes doublet detection, network-based modality integration, cell type clustering, differential RNA and protein expression analysis, ADT evaluation, ligand-receptor interaction analysis, and interactive web-based visualisation of the analyses. This vignette demonstrates the usage of `CiteFuse` on a subset data of CITE-seq data from human PBMCs as an example (Mimitou et al., 2019).
+
 
 First, install `CiteFuse` using `BiocManager`.
 
@@ -32,8 +33,6 @@ if (!requireNamespace("BiocManager", quietly = TRUE)) {
 BiocManager::install("CiteFuse")
 ```
 
-
-
 ```{r}
 library(CiteFuse)
 library(scater)
@@ -41,24 +40,18 @@ library(SingleCellExperiment)
 library(DT)
 ```
 
-
 ```{r}
 data("CITEseq_example", package = "CiteFuse")
 names(CITEseq_example)
 lapply(CITEseq_example, dim)
 ```
 
-
-Here, we start from a list of three matrices of UMI, ADT and HTO count, which have common cell names. The `preprocessing` function will utilise the three matrices and its common cell names to create a `SingleCellExperiment` object, which stores RNA data in an `assay` and `ADT` and `HTO` data in `altExp` slot.
-
-
+Here, we start from a list of three matrices of unique molecular identifier (UMI), antibody derived tags (ADT) and hashtag oligonucleotide (HTO) count, which have common cell names. There are 500 cells in our subsetted dataset. And characteristically of CITE-seq data, the matrices are matched, meaning that for any given cell we know the expression level of their RNA transcripts (genome-wide) and its corresponding cell surface protein expression. The `preprocessing` function will utilise the three matrices and its common cell names to create a `SingleCellExperiment` object, which stores RNA data in an `assay` and `ADT` and `HTO` data within in the `altExp` slot.
 
 ```{r}
 sce_citeseq <- preprocessing(CITEseq_example)
 sce_citeseq
 ```
-
-
 
 
 
@@ -71,16 +64,13 @@ sce_citeseq
 
 The function `normaliseExprs` is used to scale the alternative expression. Here, we used it to perform log-transformation of the `HTO` count, by setting `transform = "log"`.
 
-
 ```{r}
 sce_citeseq <- normaliseExprs(sce = sce_citeseq, 
                               altExp_name = "HTO", 
                               transform = "log")
 ```
 
-
-Then we can perform dimension reduction on the `HTO` count by using `runTSNE` or `runUMAP`, then use `visualiseDim` function to visualise the reduced dimension plot.
-
+Then we can perform dimension reduction on the `HTO` count by using `runTSNE` or `runUMAP`, then use `visualiseDim` function to visualise the reduced dimension plot. Our CITE-seq dataset contain data from four samples that were pooled before sequencing. The samples were multiplexed through cell hashing (Stoekius et al., 2018). The four clusters observed on reduced dimension plots equate to the four different samples. 
 
 ```{r fig.height=6, fig.width=6}
 
@@ -104,16 +94,13 @@ visualiseDim(sce_citeseq,
 
 
 
+## Doublet identification step 1: cross-sample doublet detection
 
-## Doublet Identification (cross sample)
-
-We first identify the cross-sample doublets via the `crossSampleDoublets` function.
-
+An important step in single cell data analysis is the removal of doublets. Doublets form as a result of co-encapsulation of cells within a droplet, leading to a hybrid transcriptome from two or more cells. In CiteFuse, we implement a step-wise doublet detection approach to remove doublets. We first identify the cross-sample doublets via the `crossSampleDoublets` function.
 
 ```{r}
 sce_citeseq <- crossSampleDoublets(sce_citeseq)
 ```
-
 
 The results of the cross sample doublets are then saved in `colData` as `doubletClassify_between_label` and `doubletClassify_between_class`.
 
@@ -131,17 +118,16 @@ visualiseDim(sce_citeseq,
 ```
 
 
-Furthermore, `plotHTO` function allows us to plot the pairwise scatter HTO count.
+Furthermore, `plotHTO` function allows us to plot the pairwise scatter HTO count. Any cells that show co-expression of orthologocal HTOs (red) are considered as doublets. 
 
 ```{r fig.height=8, fig.width=6}
 plotHTO(sce_citeseq, 1:4)
 ```
 
 
-## Doublet Identification (within samples)
+## Doublet identification step 1: within-sample doublet detection
 
 We then identify the within-sample doublets via the `withinSampleDoublets` function.
-
 
 ```{r}
 sce_citeseq <- withinSampleDoublets(sce_citeseq,
@@ -150,13 +136,12 @@ sce_citeseq <- withinSampleDoublets(sce_citeseq,
 
 The results of the cross sample doublets are then saved in the `colData` as `doubletClassify_within_label` and `doubletClassify_within_class`.
 
-
 ```{r}
 table(sce_citeseq$doubletClassify_within_label)
 table(sce_citeseq$doubletClassify_within_class)
 ```
 
-
+Again, we can visualise the within-sample doublets in our tSNE plot.
 
 ```{r fig.height=6, fig.width=6}
 visualiseDim(sce_citeseq, 
@@ -165,9 +150,7 @@ visualiseDim(sce_citeseq,
 ```
 
 
-
-Finally, we can filter out the doublets cells (both within and between batches) for the downstream analysis.
-
+Finally, we can filter out the doublet cells (both within and between batches) for the downstream analysis.
 
 ```{r}
 sce_citeseq <- sce_citeseq[, sce_citeseq$doubletClassify_within_class == "Singlet" & sce_citeseq$doubletClassify_between_class == "Singlet"]
@@ -177,9 +160,9 @@ sce_citeseq
 
 # Clustering
 
-
-
 ## Performing SNF
+
+The first step of analysis is to integrate the RNA and ADT matrix. We use a popular integration algorithm called similarity network fusion (SNF) to integrate the multiomic data. In CiteFuse, we implement a faster version of the original SNF algorithm from Wang et al. (2014) through the `CiteFuse` function, facilitating quicker analysis of CITE-seq data. 
 
 ```{r}
 sce_citeseq <- scater::logNormCounts(sce_citeseq)
@@ -187,14 +170,21 @@ sce_citeseq <- normaliseExprs(sce_citeseq, altExp_name = "ADT", transform = "log
 system.time(sce_citeseq <- CiteFuse(sce_citeseq))
 ```
 
-
+We now proceed with the fused matrix, which is stored as `SNF_W` in our `sce_citeseq` object. 
+ 
 ## Performing spectral clustering
+
+CiteFuse implements two different clustering algorithms on the fused matrix, spectral clustering and Louvain clustering. First, we perform spectral clustering with sufficient numbers of `K` and use the eigen values to determine the optimal number of clusters. 
 
 ```{r}
 SNF_W_clust <- spectralClustering(metadata(sce_citeseq)[["SNF_W"]], K = 20)
 plot(SNF_W_clust$eigen_values)
 which.max(abs(diff(SNF_W_clust$eigen_values)))
+```
 
+Using the optimal cluster number defined from the previous step, we can now use the `spectralClutering` function to cluster the single cells by specifying the number of clusters in `K`. The function takes a cell-to-cell similarity matrix as an input. We have already created the fused similarity matrix from `CiteFuse`. Since the `CiteFuse` function creates and stores the similarity matries from ADT and RNA expression, as well the fused matrix, we can use these two to compare the clustering outcomes by data modality. 
+
+```{r}
 SNF_W_clust <- spectralClustering(metadata(sce_citeseq)[["SNF_W"]], K = 5)
 sce_citeseq$SNF_W_clust <- as.factor(SNF_W_clust$labels)
 
@@ -207,6 +197,8 @@ sce_citeseq$RNA_clust <- as.factor(SNF_W2_clust$labels)
 
 
 ## Visualisation
+
+The outcome of the clustering can be easily visualised on a reduced dimensions plot by highlighting the points by cluster label. 
 
 ```{r fig.height=12, fig.width=8}
 
@@ -225,8 +217,9 @@ library(gridExtra)
 grid.arrange(g3, g2, g1, ncol = 2)
 ```
 
-```{r fig.height=8}
+The expression of genes and proteins can be visualised by changing the `colour_by` parameter to assess the clusters. As an example, we highlight the plot by the RNA and ADT expression level of CD8.
 
+```{r fig.height=8}
 g1 <- visualiseDim(sce_citeseq, dimNames = "tSNE_joint", 
                    colour_by = "hg19_CD8A",
                    data_from = "assay",
@@ -243,6 +236,8 @@ grid.arrange(g1, g2, ncol = 2)
 
 
 ## Louvain clustering
+
+As well as spectral clustering, CiteFuse can implement Louvain clustering if users wish to use another clustering method. We use the `igraph` package, and any community detection algorithms available in their package can be selected by changing the `method` parameter. 
 
 ```{r fig.height=8, fig.width=8}
 SNF_W_louvain <- igraphClustering(sce_citeseq, method = "louvain")
@@ -263,6 +258,8 @@ visualiseKNN(sce_citeseq, colour_by = "SNF_W_louvain")
 # Differential Expression Analysis
 
 ## Exploration of feature expression 
+
+CiteFuse has a wide range of visualisation tools to facilitate exploratory analysis of CITE-seq data. The `visualiseExprs` function is an easy-to-use function to generate boxplots, violinplots, jitter plots, density plots, and pairwise scatter/density plots of genes and proteins expressed in the data. The plots can be grouped by using the cluster labels stored in the `sce_citeseq` object. 
 
 ```{r fig.height = 4, fig.width = 8}
 visualiseExprs(sce_citeseq, 
@@ -327,7 +324,12 @@ visualiseExprs(sce_citeseq, altExp_name = "ADT",
 
 ## Perform DE Analysis with Wilcoxon Rank Sum test
 
+CiteFuse also calculates differentially expressed (DE) genes through the `DEgenes` function. The cluster grouping to use must be specified in the `group` parameter. If `altExp_name` is not specified, RNA expression will be used as the default expression matrix. 
+
+Results form the DE analysis is stored in `sce_citeseq` as `DE_res_RNA_filter` and `DE_res_ADT_filter` for RNA and ADT expression, respectively.
+
 ### For RNA expression
+
 ```{r}
 # DE will be performed for RNA if altExp_name = "none" 
 sce_citeseq <- DEgenes(sce_citeseq,
@@ -361,7 +363,11 @@ datatable(format(do.call(rbind, metadata(sce_citeseq)[["DE_res_ADT_filter"]]),
 
 ## Visualising DE Results
 
+The DE genes can be visualised with the `DEbubblePlot` and `DEcomparisonPlot`. In each case, the gene names must first be extracted from the DE result objects. 
+
 ### circlepackPlot
+
+The `circlepackPlot` takes a list of all DE genes from RNA and ADT DE analysis and will plot only the top most significant DE genes to plot. 
 
 ```{r fig.height = 10, fig.width = 10}
 rna_DEgenes <- metadata(sce_citeseq)[["DE_res_RNA_filter"]]
@@ -375,6 +381,8 @@ DEbubblePlot(list(RNA = rna_DEgenes, ADT = adt_DEgenes))
 
 
 ### DEcomparisonPlot
+
+For the `DEcomparisonPlot`, as well as a list containing the DE genes for RNA and ADT, a `feature_list` specifying the genes and proteins of interest is required.
 
 ```{r fig.height = 10, fig.width = 10}
 rna_list <- c("hg19_CD4",
@@ -400,6 +408,8 @@ DEcomparisonPlot(de_list = de_list,
 
 # ADT Importance Evaluation
 
+An important evaluation in CITE-seq data analysis is to assess the quality of each ADT and to evaluate the contribution of ADTs towards clustering outcome. CiteFuse calculates the relative importance of ADT towards clustering outcome by using a random forest model. The higher the score of an ADT, the greater its importance towards the final clustering outcome. 
+
 ```{r fig.height = 8, fig.width = 8}
 set.seed(2020)
 sce_citeseq <- importanceADT(sce_citeseq, 
@@ -412,8 +422,10 @@ visImportance(sce_citeseq, plot = "heatmap")
 sort(metadata(sce_citeseq)[["importanceADT"]], decreasing = TRUE)[1:20]
 ```
 
+The importance scores can be visualised in a boxplot and heatmap. Our evaluation of ADT importance show that unsurprisingly CD4 and CD8 are the top two discriminating proteins in PBMCs. 
 
-Select the ADTs with scores greater than 5 and perform SNF again
+
+Let us try clustering with only ADTs with a score greater than 5.
 
 ```{r}
 subset_adt <- names(which(metadata(sce_citeseq)[["importanceADT"]] > 5))
@@ -433,8 +445,11 @@ library(mclust)
 adjustedRandIndex(sce_citeseq$SNF_W_clust_adtSubset1, sce_citeseq$SNF_W_clust)
 ```
 
+When we compare between the two clustering outcomes, we find that the adjusted rand index is approximately 0.93, where a value of 1 denotes complete concordance. 
 
 # Gene - ADT network
+
+The `geneADTnetwork` function plots an interaction network between genes identified from the DE analysis. The nodes denote proteins and RNA whilst the edges denote positive and negative correlation in expression. 
 
 ```{r fig.height = 8, fig.width = 8}
 RNA_feature_subset <- unique(as.character(unlist(lapply(rna_DEgenes_all, "[[", "name"))))
@@ -450,6 +465,7 @@ geneADTnetwork(sce_citeseq,
 
 # RNA Ligand - ADT Receptor Analysis
 
+With the advent of CITE-seq, we can now predict ligand-receptor interactions by using cell surface protein expression. CiteFuse implements a `ligandReceptorTest` to find ligand receptor interactions between sender and receiver cells. Importantly, the ADT count is used to predict receptor expression within receiver cells. Note that the setting `altExp_name = "RNA"` would enable users to predict ligand-receptor interaction from RNA expression only.  
 
 ```{r}
 data("lr_pair_subset", package = "CiteFuse")
@@ -510,9 +526,9 @@ visLigandReceptor(sce_citeseq,
                   receptor_type = "ADT")
 ```
 
-# Between-sample Analysis 
+# Between-sample analysis 
 
-Here we will jointly analyse the current PBMC CITE-seq data, taken from healthy human donors, and another subset of CITE-seq data from patients with cutaneous T-cell lymphoma (CTCL), again from Mimitou et al. (2019). The data `sce_ctcl_subset` provided in our `CiteFuse` package already contain the clustering information.
+Lastly, we will jointly analyse the current PBMC CITE-seq data, taken from healthy human donors, and another subset of CITE-seq data from patients with cutaneous T-cell lymphoma (CTCL), again from Mimitou et al. (2019). The data `sce_ctcl_subset` provided in our `CiteFuse` package already contains the clustering information.
 
 ```{r}
 data("sce_ctcl_subset", package = "CiteFuse")
@@ -520,7 +536,6 @@ data("sce_ctcl_subset", package = "CiteFuse")
 
 
 To visualise and compare gene or protein expression data, we can use `visualiseExprsList` function.
-
 
 ```{r}
 
@@ -554,6 +569,8 @@ de_res_filter
 
 
 # Read data from 10X Genomics
+
+Readers unfamiliar with the workflow of converting a count matrix into a `SingleCellExperiment` object may use the `readFrom10X` function to convert count matrix from a 10X experiment into an object that can be used for all functions in CiteFuse. 
 
 ```{r}
 tmpdir <- tempdir()

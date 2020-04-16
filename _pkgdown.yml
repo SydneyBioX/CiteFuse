@@ -10,6 +10,8 @@ navbar:
           href: articles/CiteFuse.html
     - text: Functions
       href: reference/index.html
+    - text: News
+      href: news/index.html
   right:
     - icon: fa-github fa-lg
       href: https://github.com/SydneyBioX/CiteFuse
