@@ -7,14 +7,20 @@
 #' @param altExp_name expression name of ADT matrix
 #' @param W_list affinity list, if it is NULL, the function will calculate it.
 #' @param gene_select whether highly variable genes will be selected
-#' for RNA-seq to calcualte simlarity matrix
+#' for RNA-seq to calcualte simlarity matrix using `scran` package
 #' @param dist_cal_RNA similarity metrics used for RNA matrix
 #' @param dist_cal_ADT similarity metrics used for ADT matrix
 #' @param ADT_subset A vector  indicates the subset that will be used.
 #' @param K_knn Number of nearest neighbours
+#' @param K_knn_Aff Number of nearest neighbors for computing affinity matrix
+#' @param sigma Variance for local model for computing affinity matrix
 #' @param t Number of iterations for the diffusion process.
 #' @param metadata_names A vector indicates the names of metadata returned
 #' @param verbose whether print out the process
+#' @param FDR false discovery rate threshold for highly variable gene selection
+#' @param bio biological component of the variance threshold for highly 
+#' variable gene selection 
+#' (see `modelGeneVar` in `scran` package for more details)
 #'
 #' @return A SingleCellExperiment object with fused matrix results stored
 #'
@@ -28,6 +34,13 @@
 #' @importFrom SNFtool affinityMatrix SNF
 #' @importFrom propr propr
 #' @importFrom stats cor
+#' 
+#' @references 
+#' 
+#' B Wang, A Mezlini, F Demir, M Fiume, T Zu, M Brudno, B Haibe-Kains, 
+#' A Goldenberg (2014) Similarity Network Fusion: a fast and effective method 
+#' to aggregate multiple data types on a genome wide scale. 
+#' Nature Methods. Online. Jan 26, 2014
 #'
 #' @export
 
@@ -41,9 +54,13 @@ CiteFuse <- function(sce,
                      dist_cal_ADT = "propr",
                      ADT_subset = NULL,
                      K_knn = 20,
+                     K_knn_Aff = 30,
+                     sigma = 0.45,
                      t = 20,
                      metadata_names = NULL,
-                     verbose = TRUE) {
+                     verbose = TRUE,
+                     FDR = 0.05,
+                     bio = 0.01) {
 
 
     if (!"logcounts" %in% SummarizedExperiment::assayNames(sce)) {
@@ -53,7 +70,9 @@ CiteFuse <- function(sce,
 
     if (is.null(W_list)) {
         if (gene_select) {
-            hvg <- selectHVG(sce)
+            hvg <- selectHVG(sce,
+                             FDR = FDR,
+                             bio = bio)
         } else {
             hvg <- seq_len(nrow(sce))
         }
@@ -84,8 +103,8 @@ CiteFuse <- function(sce,
             cat("Calculating affinity matrix \n")
         }
 
-        W1 <- SNFtool::affinityMatrix(dist_adt, K = K_knn, sigma = 0.5)
-        W2 <- SNFtool::affinityMatrix(dist_rna, K = K_knn, sigma = 0.5)
+        W1 <- SNFtool::affinityMatrix(dist_adt, K = K_knn_Aff, sigma = sigma)
+        W2 <- SNFtool::affinityMatrix(dist_rna, K = K_knn_Aff, sigma = sigma)
         W_list <- list(W1, W2)
     }
 
@@ -93,7 +112,7 @@ CiteFuse <- function(sce,
         cat("Performing SNF  \n")
     }
 
-    W <- SNFtool::SNF(W_list, K = K_knn, t = 20)
+    W <- SNFtool::SNF(W_list, K = K_knn, t = t)
 
     if (is.null(metadata_names)) {
         metadata_names <- c("SNF_W", "ADT_W", "RNA_W")
@@ -112,7 +131,7 @@ CiteFuse <- function(sce,
 
 selectHVG <- function(sce,
                       FDR = 0.05,
-                      bio = 0.1) {
+                      bio = 0.01) {
 
     decomp <- scran::modelGeneVar(sce)
     decomp <- decomp[order(decomp$bio, decreasing = TRUE), ]

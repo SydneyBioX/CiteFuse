@@ -4,30 +4,14 @@
 \alias{spectralClustering}
 \title{spectralClustering}
 \usage{
-spectralClustering(
-  affinity,
-  K = 20,
-  type = 4,
-  maxdim = 50,
-  delta = 1e-05,
-  t = 0,
-  neigen = NULL
-)
+spectralClustering(affinity, K = 20, delta = 1e-05)
 }
 \arguments{
 \item{affinity}{An affinity matrix}
 
 \item{K}{number of clusters}
 
-\item{type}{type}
-
-\item{maxdim}{Maximum dimension}
-
 \item{delta}{delta}
-
-\item{t}{t}
-
-\item{neigen}{neigen}
 }
 \value{
 A list indicates the spectral clustering results

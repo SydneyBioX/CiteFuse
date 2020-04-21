@@ -13,9 +13,13 @@ CiteFuse(
   dist_cal_ADT = "propr",
   ADT_subset = NULL,
   K_knn = 20,
+  K_knn_Aff = 30,
+  sigma = 0.45,
   t = 20,
   metadata_names = NULL,
-  verbose = TRUE
+  verbose = TRUE,
+  FDR = 0.05,
+  bio = 0.01
 )
 }
 \arguments{
@@ -26,7 +30,7 @@ CiteFuse(
 \item{W_list}{affinity list, if it is NULL, the function will calculate it.}
 
 \item{gene_select}{whether highly variable genes will be selected
-for RNA-seq to calcualte simlarity matrix}
+for RNA-seq to calcualte simlarity matrix using `scran` package}
 
 \item{dist_cal_RNA}{similarity metrics used for RNA matrix}
 
@@ -36,11 +40,21 @@ for RNA-seq to calcualte simlarity matrix}
 
 \item{K_knn}{Number of nearest neighbours}
 
+\item{K_knn_Aff}{Number of nearest neighbors for computing affinity matrix}
+
+\item{sigma}{Variance for local model for computing affinity matrix}
+
 \item{t}{Number of iterations for the diffusion process.}
 
 \item{metadata_names}{A vector indicates the names of metadata returned}
 
 \item{verbose}{whether print out the process}
+
+\item{FDR}{false discovery rate threshold for highly variable gene selection}
+
+\item{bio}{biological component of the variance threshold for highly 
+variable gene selection 
+(see `modelGeneVar` in `scran` package for more details)}
 }
 \value{
 A SingleCellExperiment object with fused matrix results stored
@@ -52,4 +66,10 @@ A function to runSNF for CITE seq data
 data("sce_ctcl_subset", package = "CiteFuse")
 sce_ctcl_subset <- CiteFuse(sce_ctcl_subset)
 
+}
+\references{
+B Wang, A Mezlini, F Demir, M Fiume, T Zu, M Brudno, B Haibe-Kains, 
+A Goldenberg (2014) Similarity Network Fusion: a fast and effective method 
+to aggregate multiple data types on a genome wide scale. 
+Nature Methods. Online. Jan 26, 2014
 }
