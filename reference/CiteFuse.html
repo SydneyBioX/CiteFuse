@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">CiteFuse</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.10</span>
       </span>
     </div>
 
@@ -92,9 +92,6 @@
 </li>
 <li>
   <a href="../reference/index.html">Functions</a>
-</li>
-<li>
-  <a href="../news/index.html">News</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -135,9 +132,13 @@
   <span class='kw'>dist_cal_ADT</span> <span class='kw'>=</span> <span class='st'>"propr"</span>,
   <span class='kw'>ADT_subset</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>K_knn</span> <span class='kw'>=</span> <span class='fl'>20</span>,
+  <span class='kw'>K_knn_Aff</span> <span class='kw'>=</span> <span class='fl'>30</span>,
+  <span class='kw'>sigma</span> <span class='kw'>=</span> <span class='fl'>0.45</span>,
   <span class='kw'>t</span> <span class='kw'>=</span> <span class='fl'>20</span>,
   <span class='kw'>metadata_names</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
+  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>FDR</span> <span class='kw'>=</span> <span class='fl'>0.05</span>,
+  <span class='kw'>bio</span> <span class='kw'>=</span> <span class='fl'>0.01</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -158,7 +159,7 @@
     <tr>
       <th>gene_select</th>
       <td><p>whether highly variable genes will be selected
-for RNA-seq to calcualte simlarity matrix</p></td>
+for RNA-seq to calcualte simlarity matrix using `scran` package</p></td>
     </tr>
     <tr>
       <th>dist_cal_RNA</th>
@@ -177,6 +178,14 @@ for RNA-seq to calcualte simlarity matrix</p></td>
       <td><p>Number of nearest neighbours</p></td>
     </tr>
     <tr>
+      <th>K_knn_Aff</th>
+      <td><p>Number of nearest neighbors for computing affinity matrix</p></td>
+    </tr>
+    <tr>
+      <th>sigma</th>
+      <td><p>Variance for local model for computing affinity matrix</p></td>
+    </tr>
+    <tr>
       <th>t</th>
       <td><p>Number of iterations for the diffusion process.</p></td>
     </tr>
@@ -188,11 +197,27 @@ for RNA-seq to calcualte simlarity matrix</p></td>
       <th>verbose</th>
       <td><p>whether print out the process</p></td>
     </tr>
+    <tr>
+      <th>FDR</th>
+      <td><p>false discovery rate threshold for highly variable gene selection</p></td>
+    </tr>
+    <tr>
+      <th>bio</th>
+      <td><p>biological component of the variance threshold for highly 
+variable gene selection 
+(see `modelGeneVar` in `scran` package for more details)</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A SingleCellExperiment object with fused matrix results stored</p>
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <p>B Wang, A Mezlini, F Demir, M Fiume, T Zu, M Brudno, B Haibe-Kains, 
+A Goldenberg (2014) Similarity Network Fusion: a fast and effective method 
+to aggregate multiple data types on a genome wide scale. 
+Nature Methods. Online. Jan 26, 2014</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"sce_ctcl_subset"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"CiteFuse"</span>)

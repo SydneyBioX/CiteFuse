@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">CiteFuse</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.10</span>
       </span>
     </div>
 
@@ -92,9 +92,6 @@
 </li>
 <li>
   <a href="../reference/index.html">Functions</a>
-</li>
-<li>
-  <a href="../news/index.html">News</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -126,15 +123,7 @@
     <p>A function to perform spectral clustering</p>
     </div>
 
-    <pre class="usage"><span class='fu'>spectralClustering</span>(
-  <span class='no'>affinity</span>,
-  <span class='kw'>K</span> <span class='kw'>=</span> <span class='fl'>20</span>,
-  <span class='kw'>type</span> <span class='kw'>=</span> <span class='fl'>4</span>,
-  <span class='kw'>maxdim</span> <span class='kw'>=</span> <span class='fl'>50</span>,
-  <span class='kw'>delta</span> <span class='kw'>=</span> <span class='fl'>1e-05</span>,
-  <span class='kw'>t</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>neigen</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
-)</pre>
+    <pre class="usage"><span class='fu'>spectralClustering</span>(<span class='no'>affinity</span>, <span class='kw'>K</span> <span class='kw'>=</span> <span class='fl'>20</span>, <span class='kw'>delta</span> <span class='kw'>=</span> <span class='fl'>1e-05</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -148,24 +137,8 @@
       <td><p>number of clusters</p></td>
     </tr>
     <tr>
-      <th>type</th>
-      <td><p>type</p></td>
-    </tr>
-    <tr>
-      <th>maxdim</th>
-      <td><p>Maximum dimension</p></td>
-    </tr>
-    <tr>
       <th>delta</th>
       <td><p>delta</p></td>
-    </tr>
-    <tr>
-      <th>t</th>
-      <td><p>t</p></td>
-    </tr>
-    <tr>
-      <th>neigen</th>
-      <td><p>neigen</p></td>
     </tr>
     </table>
 
@@ -176,11 +149,9 @@
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
 <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>sce_control_subset</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"CiteFuse"</span>)
-<span class='no'>sce_control_subset</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='CiteFuse.html'>CiteFuse</a></span>(<span class='no'>sce_control_subset</span>)</div><div class='output co'>#&gt; Calculating affinity matrix 
+<span class='no'>sce_control_subset</span> <span class='kw'>&lt;-</span> <span class='fu'>CiteFuse</span>(<span class='no'>sce_control_subset</span>)</div><div class='output co'>#&gt; Calculating affinity matrix 
 #&gt; Performing SNF  </div><div class='input'><span class='no'>SNF_W</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>S4Vectors</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/S4Vectors/man/Annotated-class.html'>metadata</a></span>(<span class='no'>sce_control_subset</span>)<span class='kw'>[[</span><span class='st'>"SNF_W"</span>]]
-<span class='no'>SNF_W_clust</span> <span class='kw'>&lt;-</span> <span class='fu'>spectralClustering</span>(<span class='no'>SNF_W</span>, <span class='kw'>K</span> <span class='kw'>=</span> <span class='fl'>5</span>)</div><div class='output co'>#&gt; Computing Spectral Clustering 
-#&gt; Computing Diffusion Coordinates
-#&gt; Used default value: 5 dimensions</div><div class='input'>
+<span class='no'>SNF_W_clust</span> <span class='kw'>&lt;-</span> <span class='fu'>spectralClustering</span>(<span class='no'>SNF_W</span>, <span class='kw'>K</span> <span class='kw'>=</span> <span class='fl'>5</span>)</div><div class='output co'>#&gt; Computing Spectral Clustering </div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

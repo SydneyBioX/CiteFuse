@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">CiteFuse</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.10</span>
       </span>
     </div>
 
@@ -92,9 +92,6 @@
 </li>
 <li>
   <a href="../reference/index.html">Functions</a>
-</li>
-<li>
-  <a href="../news/index.html">News</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -164,7 +161,7 @@ the ADT importance results</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"sce_control_subset"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"CiteFuse"</span>)
-<span class='no'>sce_control_subset</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='importanceADT.html'>importanceADT</a></span>(<span class='no'>sce_control_subset</span>,
+<span class='no'>sce_control_subset</span> <span class='kw'>&lt;-</span> <span class='fu'>importanceADT</span>(<span class='no'>sce_control_subset</span>,
 <span class='kw'>group</span> <span class='kw'>=</span> <span class='no'>sce_control_subset</span>$<span class='no'>SNF_W_louvain</span>,
 <span class='kw'>subsample</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 <span class='fu'>visImportance</span>(<span class='no'>sce_control_subset</span>, <span class='kw'>plot</span> <span class='kw'>=</span> <span class='st'>"boxplot"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Use of `df_toPlot$features` is discouraged. Use `features` instead.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Use of `df_toPlot$importance` is discouraged. Use `importance` instead.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Use of `df_toPlot$features` is discouraged. Use `features` instead.</span></div><div class='img'><img src='visImportance-1.png' alt='' width='700' height='433' /></div><div class='input'>

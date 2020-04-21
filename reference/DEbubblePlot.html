@@ -73,7 +73,7 @@ the marker for each cluster" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">CiteFuse</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.10</span>
       </span>
     </div>
 
@@ -93,9 +93,6 @@ the marker for each cluster" />
 </li>
 <li>
   <a href="../reference/index.html">Functions</a>
-</li>
-<li>
-  <a href="../news/index.html">News</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -162,24 +159,24 @@ the marker for each cluster</p>
 #&gt; <span class='message'>Attaching package: ‘S4Vectors’</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:base’:</span>
 #&gt; <span class='message'></span>
 #&gt; <span class='message'>    expand.grid</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>sce_control_subset</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"CiteFuse"</span>)
-<span class='no'>sce_control_subset</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='DEgenes.html'>DEgenes</a></span>(<span class='no'>sce_control_subset</span>,
+<span class='no'>sce_control_subset</span> <span class='kw'>&lt;-</span> <span class='fu'>DEgenes</span>(<span class='no'>sce_control_subset</span>,
 <span class='kw'>altExp_name</span> <span class='kw'>=</span> <span class='st'>"none"</span>,
 <span class='kw'>group</span> <span class='kw'>=</span> <span class='no'>sce_control_subset</span>$<span class='no'>SNF_W_louvain</span>,
 <span class='kw'>return_all</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
 <span class='kw'>exprs_pct</span> <span class='kw'>=</span> <span class='fl'>0.5</span>)
 
 
-<span class='no'>sce_control_subset</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='selectDEgenes.html'>selectDEgenes</a></span>(<span class='no'>sce_control_subset</span>,
+<span class='no'>sce_control_subset</span> <span class='kw'>&lt;-</span> <span class='fu'>selectDEgenes</span>(<span class='no'>sce_control_subset</span>,
                             <span class='kw'>altExp_name</span> <span class='kw'>=</span> <span class='st'>"none"</span>)
 
-<span class='no'>sce_control_subset</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='DEgenes.html'>DEgenes</a></span>(<span class='no'>sce_control_subset</span>,
+<span class='no'>sce_control_subset</span> <span class='kw'>&lt;-</span> <span class='fu'>DEgenes</span>(<span class='no'>sce_control_subset</span>,
 <span class='kw'>altExp_name</span> <span class='kw'>=</span> <span class='st'>"ADT"</span>,
 <span class='kw'>group</span> <span class='kw'>=</span> <span class='no'>sce_control_subset</span>$<span class='no'>SNF_W_louvain</span>,
 <span class='kw'>return_all</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
 <span class='kw'>exprs_pct</span> <span class='kw'>=</span> <span class='fl'>0.5</span>)
 
 
-<span class='no'>sce_control_subset</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='selectDEgenes.html'>selectDEgenes</a></span>(<span class='no'>sce_control_subset</span>,
+<span class='no'>sce_control_subset</span> <span class='kw'>&lt;-</span> <span class='fu'>selectDEgenes</span>(<span class='no'>sce_control_subset</span>,
                              <span class='kw'>altExp_name</span> <span class='kw'>=</span> <span class='st'>"ADT"</span>)
 
 <span class='no'>rna_DEgenes</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/S4Vectors/man/Annotated-class.html'>metadata</a></span>(<span class='no'>sce_control_subset</span>)<span class='kw'>[[</span><span class='st'>"DE_res_RNA_filter"</span>]]

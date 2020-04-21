@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">CiteFuse</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.10</span>
       </span>
     </div>
 
@@ -51,9 +51,6 @@
 </li>
 <li>
   <a href="../reference/index.html">Functions</a>
-</li>
-<li>
-  <a href="../news/index.html">News</a>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
@@ -81,13 +78,18 @@
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>CiteFuse: getting started</h1>
-            
-            <h4 class="date">16 April 2020</h4>
+                        <h4 class="author">Yingxin Lin</h4>
+            <address class="author_afil">
+      School of Mathematics and Statistics, The University of Sydney, Australia<br><h4 class="author">Hani Jieun Kim</h4>
+            <address class="author_afil">
+      School of Mathematics and Statistics, The University of Sydney, Australia<br><h4 class="date">21 April 2020</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/SydneyBioX/CiteFuse/blob/master/vignettes/CiteFuse.Rmd"><code>vignettes/CiteFuse.Rmd</code></a></small>
       <div class="hidden name"><code>CiteFuse.Rmd</code></div>
 
-    </div>
+    </address>
+</address>
+</div>
 
     
     
@@ -105,32 +107,32 @@
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">SingleCellExperiment</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">DT</span>)</pre></body></html></div>
 <div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="st">"CITEseq_example"</span>, <span class="kw">package</span> <span class="kw">=</span> <span class="st">"CiteFuse"</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span>(<span class="no">CITEseq_example</span>)</pre></body></html></div>
-<pre><code>## [1] "RNA" "ADT" "HTO"</code></pre>
-<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="no">CITEseq_example</span>, <span class="no">dim</span>)</pre></body></html></div>
-<pre><code>## $RNA
-## [1] 19521   500
-## 
-## $ADT
-## [1]  49 500
-## 
-## $HTO
-## [1]   4 500</code></pre>
+<span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span>(<span class="no">CITEseq_example</span>)
+<span class="co">#&gt; [1] "RNA" "ADT" "HTO"</span>
+<span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="no">CITEseq_example</span>, <span class="no">dim</span>)
+<span class="co">#&gt; $RNA</span>
+<span class="co">#&gt; [1] 19521   500</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $ADT</span>
+<span class="co">#&gt; [1]  49 500</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $HTO</span>
+<span class="co">#&gt; [1]   4 500</span></pre></body></html></div>
 <p>Here, we start from a list of three matrices of unique molecular identifier (UMI), antibody derived tags (ADT) and hashtag oligonucleotide (HTO) count, which have common cell names. There are 500 cells in our subsetted dataset. And characteristically of CITE-seq data, the matrices are matched, meaning that for any given cell we know the expression level of their RNA transcripts (genome-wide) and its corresponding cell surface protein expression. The <code>preprocessing</code> function will utilise the three matrices and its common cell names to create a <code>SingleCellExperiment</code> object, which stores RNA data in an <code>assay</code> and <code>ADT</code> and <code>HTO</code> data within in the <code>altExp</code> slot.</p>
-<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="no">sce_citeseq</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/preprocessing.html">preprocessing</a></span>(<span class="no">CITEseq_example</span>)
-<span class="no">sce_citeseq</span></pre></body></html></div>
-<pre><code>## class: SingleCellExperiment 
-## dim: 19521 500 
-## metadata(0):
-## assays(1): counts
-## rownames(19521): hg19_AL627309.1 hg19_AL669831.5 ... hg19_MT-ND6
-##   hg19_MT-CYB
-## rowData names(0):
-## colnames(500): AAGCCGCGTTGTCTTT GATCGCGGTTATCGGT ... TTGGCAACACTAGTAC
-##   GCTGCGAGTTGTGGCC
-## colData names(0):
-## reducedDimNames(0):
-## altExpNames(2): ADT HTO</code></pre>
+<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">sce_citeseq</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/CiteFuse/man/preprocessing.html">preprocessing</a></span>(<span class="no">CITEseq_example</span>)
+<span class="no">sce_citeseq</span>
+<span class="co">#&gt; class: SingleCellExperiment </span>
+<span class="co">#&gt; dim: 19521 500 </span>
+<span class="co">#&gt; metadata(0):</span>
+<span class="co">#&gt; assays(1): counts</span>
+<span class="co">#&gt; rownames(19521): hg19_AL627309.1 hg19_AL669831.5 ... hg19_MT-ND6</span>
+<span class="co">#&gt;   hg19_MT-CYB</span>
+<span class="co">#&gt; rowData names(0):</span>
+<span class="co">#&gt; colnames(500): AAGCCGCGTTGTCTTT GATCGCGGTTATCGGT ... TTGGCAACACTAGTAC</span>
+<span class="co">#&gt;   GCTGCGAGTTGTGGCC</span>
+<span class="co">#&gt; colData names(0):</span>
+<span class="co">#&gt; reducedDimNames(0):</span>
+<span class="co">#&gt; altExpNames(2): ADT HTO</span></pre></body></html></div>
 </div>
 <div id="detecting-both-cross--and-within-sample-doublets-using-citefuse" class="section level1">
 <h1 class="hasAnchor">
@@ -140,97 +142,99 @@
 <h2 class="hasAnchor">
 <a href="#hto-normalisation-and-visualisation" class="anchor"></a>HTO Normalisation and Visualisation</h2>
 <p>The function <code>normaliseExprs</code> is used to scale the alternative expression. Here, we used it to perform log-transformation of the <code>HTO</code> count, by setting <code>transform = "log"</code>.</p>
-<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="no">sce_citeseq</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/normaliseExprs.html">normaliseExprs</a></span>(<span class="kw">sce</span> <span class="kw">=</span> <span class="no">sce_citeseq</span>,
+<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="no">sce_citeseq</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/CiteFuse/man/normaliseExprs.html">normaliseExprs</a></span>(<span class="kw">sce</span> <span class="kw">=</span> <span class="no">sce_citeseq</span>,
                               <span class="kw">altExp_name</span> <span class="kw">=</span> <span class="st">"HTO"</span>,
                               <span class="kw">transform</span> <span class="kw">=</span> <span class="st">"log"</span>)</pre></body></html></div>
 <p>Then we can perform dimension reduction on the <code>HTO</code> count by using <code>runTSNE</code> or <code>runUMAP</code>, then use <code>visualiseDim</code> function to visualise the reduced dimension plot. Our CITE-seq dataset contain data from four samples that were pooled before sequencing. The samples were multiplexed through cell hashing (Stoekius et al., 2018). The four clusters observed on reduced dimension plots equate to the four different samples.</p>
-<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="no">sce_citeseq</span> <span class="kw">&lt;-</span> <span class="kw pkg">scater</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/scater/man/runTSNE.html">runTSNE</a></span>(<span class="no">sce_citeseq</span>,
+<div class="sourceCode" id="cb6"><html><body><pre class="r">
+<span class="no">sce_citeseq</span> <span class="kw">&lt;-</span> <span class="kw pkg">scater</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/scater/man/runTSNE.html">runTSNE</a></span>(<span class="no">sce_citeseq</span>,
                                <span class="kw">altexp</span> <span class="kw">=</span> <span class="st">"HTO"</span>,
                                <span class="kw">name</span> <span class="kw">=</span> <span class="st">"TSNE_HTO"</span>,
                                <span class="kw">pca</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
 
 
-<span class="fu"><a href="../reference/visualiseDim.html">visualiseDim</a></span>(<span class="no">sce_citeseq</span>,
+<span class="fu"><a href="https://rdrr.io/pkg/CiteFuse/man/visualiseDim.html">visualiseDim</a></span>(<span class="no">sce_citeseq</span>,
              <span class="kw">dimNames</span> <span class="kw">=</span> <span class="st">"TSNE_HTO"</span>) + <span class="fu">labs</span>(<span class="kw">title</span> <span class="kw">=</span> <span class="st">"tSNE (HTO)"</span>)</pre></body></html></div>
-<p><img src="CiteFuse_files/figure-html/unnamed-chunk-6-1.png" width="576"></p>
-<div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="no">sce_citeseq</span> <span class="kw">&lt;-</span> <span class="kw pkg">scater</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/scater/man/runUMAP.html">runUMAP</a></span>(<span class="no">sce_citeseq</span>,
+<p><img src="CiteFuse_files/figure-html/unnamed-chunk-6-1.png"><!-- --></p>
+<div class="sourceCode" id="cb7"><html><body><pre class="r">
+<span class="no">sce_citeseq</span> <span class="kw">&lt;-</span> <span class="kw pkg">scater</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/scater/man/runUMAP.html">runUMAP</a></span>(<span class="no">sce_citeseq</span>,
                                <span class="kw">altexp</span> <span class="kw">=</span> <span class="st">"HTO"</span>,
                                <span class="kw">name</span> <span class="kw">=</span> <span class="st">"UMAP_HTO"</span>)
 
 
-<span class="fu"><a href="../reference/visualiseDim.html">visualiseDim</a></span>(<span class="no">sce_citeseq</span>,
+<span class="fu"><a href="https://rdrr.io/pkg/CiteFuse/man/visualiseDim.html">visualiseDim</a></span>(<span class="no">sce_citeseq</span>,
              <span class="kw">dimNames</span> <span class="kw">=</span> <span class="st">"UMAP_HTO"</span>) + <span class="fu">labs</span>(<span class="kw">title</span> <span class="kw">=</span> <span class="st">"UMAP (HTO)"</span>)</pre></body></html></div>
-<p><img src="CiteFuse_files/figure-html/unnamed-chunk-6-2.png" width="576"></p>
+<p><img src="CiteFuse_files/figure-html/unnamed-chunk-6-2.png"><!-- --></p>
 </div>
 <div id="doublet-identification-step-1-cross-sample-doublet-detection" class="section level2">
 <h2 class="hasAnchor">
 <a href="#doublet-identification-step-1-cross-sample-doublet-detection" class="anchor"></a>Doublet identification step 1: cross-sample doublet detection</h2>
 <p>An important step in single cell data analysis is the removal of doublets. Doublets form as a result of co-encapsulation of cells within a droplet, leading to a hybrid transcriptome from two or more cells. In CiteFuse, we implement a step-wise doublet detection approach to remove doublets. We first identify the cross-sample doublets via the <code>crossSampleDoublets</code> function.</p>
-<div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="no">sce_citeseq</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/crossSampleDoublets.html">crossSampleDoublets</a></span>(<span class="no">sce_citeseq</span>)</pre></body></html></div>
-<pre><code>## number of iterations= 20 
-## number of iterations= 24 
-## number of iterations= 46 
-## number of iterations= 50</code></pre>
+<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="no">sce_citeseq</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/CiteFuse/man/crossSampleDoublets.html">crossSampleDoublets</a></span>(<span class="no">sce_citeseq</span>)
+<span class="co">#&gt; number of iterations= 20 </span>
+<span class="co">#&gt; number of iterations= 24 </span>
+<span class="co">#&gt; number of iterations= 46 </span>
+<span class="co">#&gt; number of iterations= 50</span></pre></body></html></div>
 <p>The results of the cross sample doublets are then saved in <code>colData</code> as <code>doubletClassify_between_label</code> and <code>doubletClassify_between_class</code>.</p>
-<div class="sourceCode" id="cb14"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span>(<span class="no">sce_citeseq</span>$<span class="no">doubletClassify_between_label</span>)</pre></body></html></div>
-<pre><code>## 
-##                 1                 2                 3                 4 
-##               115               121                92               129 
-## doublet/multiplet 
-##                43</code></pre>
-<div class="sourceCode" id="cb16"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span>(<span class="no">sce_citeseq</span>$<span class="no">doubletClassify_between_class</span>)</pre></body></html></div>
-<pre><code>## 
-## doublet/multiplet           Singlet 
-##                43               457</code></pre>
+<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span>(<span class="no">sce_citeseq</span>$<span class="no">doubletClassify_between_label</span>)
+<span class="co">#&gt; </span>
+<span class="co">#&gt;                 1                 2                 3                 4 </span>
+<span class="co">#&gt;               115               121                92               129 </span>
+<span class="co">#&gt; doublet/multiplet </span>
+<span class="co">#&gt;                43</span>
+<span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span>(<span class="no">sce_citeseq</span>$<span class="no">doubletClassify_between_class</span>)
+<span class="co">#&gt; </span>
+<span class="co">#&gt; doublet/multiplet           Singlet </span>
+<span class="co">#&gt;                43               457</span></pre></body></html></div>
 <p>We can then highlight the cross-sample doublets in our tSNE plot of HTO count.</p>
-<div class="sourceCode" id="cb18"><html><body><pre class="r"><span class="fu"><a href="../reference/visualiseDim.html">visualiseDim</a></span>(<span class="no">sce_citeseq</span>,
+<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/pkg/CiteFuse/man/visualiseDim.html">visualiseDim</a></span>(<span class="no">sce_citeseq</span>,
              <span class="kw">dimNames</span> <span class="kw">=</span> <span class="st">"TSNE_HTO"</span>,
              <span class="kw">colour_by</span> <span class="kw">=</span> <span class="st">"doubletClassify_between_label"</span>)</pre></body></html></div>
-<p><img src="CiteFuse_files/figure-html/unnamed-chunk-9-1.png" width="576"></p>
+<p><img src="CiteFuse_files/figure-html/unnamed-chunk-9-1.png"><!-- --></p>
 <p>Furthermore, <code>plotHTO</code> function allows us to plot the pairwise scatter HTO count. Any cells that show co-expression of orthologocal HTOs (red) are considered as doublets.</p>
-<div class="sourceCode" id="cb19"><html><body><pre class="r"><span class="fu"><a href="../reference/plotHTO.html">plotHTO</a></span>(<span class="no">sce_citeseq</span>, <span class="fl">1</span>:<span class="fl">4</span>)</pre></body></html></div>
-<p><img src="CiteFuse_files/figure-html/unnamed-chunk-10-1.png" width="576"></p>
+<div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/pkg/CiteFuse/man/plotHTO.html">plotHTO</a></span>(<span class="no">sce_citeseq</span>, <span class="fl">1</span>:<span class="fl">4</span>)</pre></body></html></div>
+<p><img src="CiteFuse_files/figure-html/unnamed-chunk-10-1.png"><!-- --></p>
 </div>
 <div id="doublet-identification-step-1-within-sample-doublet-detection" class="section level2">
 <h2 class="hasAnchor">
 <a href="#doublet-identification-step-1-within-sample-doublet-detection" class="anchor"></a>Doublet identification step 1: within-sample doublet detection</h2>
 <p>We then identify the within-sample doublets via the <code>withinSampleDoublets</code> function.</p>
-<div class="sourceCode" id="cb20"><html><body><pre class="r"><span class="no">sce_citeseq</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/withinSampleDoublets.html">withinSampleDoublets</a></span>(<span class="no">sce_citeseq</span>,
+<div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="no">sce_citeseq</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/CiteFuse/man/withinSampleDoublets.html">withinSampleDoublets</a></span>(<span class="no">sce_citeseq</span>,
                                     <span class="kw">minPts</span> <span class="kw">=</span> <span class="fl">10</span>)</pre></body></html></div>
 <p>The results of the cross sample doublets are then saved in the <code>colData</code> as <code>doubletClassify_within_label</code> and <code>doubletClassify_within_class</code>.</p>
-<div class="sourceCode" id="cb21"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span>(<span class="no">sce_citeseq</span>$<span class="no">doubletClassify_within_label</span>)</pre></body></html></div>
-<pre><code>## 
-##  Doublets(Within)_1  Doublets(Within)_2  Doublets(Within)_3  Doublets(Within)_4 
-##                   3                   7                   4                   6 
-## NotDoublets(Within) 
-##                 480</code></pre>
-<div class="sourceCode" id="cb23"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span>(<span class="no">sce_citeseq</span>$<span class="no">doubletClassify_within_class</span>)</pre></body></html></div>
-<pre><code>## 
-## Doublet Singlet 
-##      20     480</code></pre>
+<div class="sourceCode" id="cb13"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span>(<span class="no">sce_citeseq</span>$<span class="no">doubletClassify_within_label</span>)
+<span class="co">#&gt; </span>
+<span class="co">#&gt;  Doublets(Within)_1  Doublets(Within)_2  Doublets(Within)_3  Doublets(Within)_4 </span>
+<span class="co">#&gt;                   3                   7                   4                   6 </span>
+<span class="co">#&gt; NotDoublets(Within) </span>
+<span class="co">#&gt;                 480</span>
+<span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span>(<span class="no">sce_citeseq</span>$<span class="no">doubletClassify_within_class</span>)
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Doublet Singlet </span>
+<span class="co">#&gt;      20     480</span></pre></body></html></div>
 <p>Again, we can visualise the within-sample doublets in our tSNE plot.</p>
-<div class="sourceCode" id="cb25"><html><body><pre class="r"><span class="fu"><a href="../reference/visualiseDim.html">visualiseDim</a></span>(<span class="no">sce_citeseq</span>,
+<div class="sourceCode" id="cb14"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/pkg/CiteFuse/man/visualiseDim.html">visualiseDim</a></span>(<span class="no">sce_citeseq</span>,
              <span class="kw">dimNames</span> <span class="kw">=</span> <span class="st">"TSNE_HTO"</span>,
              <span class="kw">colour_by</span> <span class="kw">=</span> <span class="st">"doubletClassify_within_label"</span>)</pre></body></html></div>
-<p><img src="CiteFuse_files/figure-html/unnamed-chunk-13-1.png" width="576"></p>
+<p><img src="CiteFuse_files/figure-html/unnamed-chunk-13-1.png"><!-- --></p>
 <p>Finally, we can filter out the doublet cells (both within and between batches) for the downstream analysis.</p>
-<div class="sourceCode" id="cb26"><html><body><pre class="r"><span class="no">sce_citeseq</span> <span class="kw">&lt;-</span> <span class="no">sce_citeseq</span>[, <span class="no">sce_citeseq</span>$<span class="no">doubletClassify_within_class</span> <span class="kw">==</span> <span class="st">"Singlet"</span> <span class="kw">&amp;</span> <span class="no">sce_citeseq</span>$<span class="no">doubletClassify_between_class</span> <span class="kw">==</span> <span class="st">"Singlet"</span>]
-<span class="no">sce_citeseq</span></pre></body></html></div>
-<pre><code>## class: SingleCellExperiment 
-## dim: 19521 437 
-## metadata(3): doubletClassify_between_threshold
-##   doubletClassify_between_resultsMat doubletClassify_within_resultsMat
-## assays(1): counts
-## rownames(19521): hg19_AL627309.1 hg19_AL669831.5 ... hg19_MT-ND6
-##   hg19_MT-CYB
-## rowData names(0):
-## colnames(437): GATCGCGGTTATCGGT GGCTGGTAGAGGTTAT ... TTGGCAACACTAGTAC
-##   GCTGCGAGTTGTGGCC
-## colData names(5): doubletClassify_between_label
-##   doubletClassify_between_class nUMI doubletClassify_within_label
-##   doubletClassify_within_class
-## reducedDimNames(2): TSNE_HTO UMAP_HTO
-## altExpNames(2): ADT HTO</code></pre>
+<div class="sourceCode" id="cb15"><html><body><pre class="r"><span class="no">sce_citeseq</span> <span class="kw">&lt;-</span> <span class="no">sce_citeseq</span>[, <span class="no">sce_citeseq</span>$<span class="no">doubletClassify_within_class</span> <span class="kw">==</span> <span class="st">"Singlet"</span> <span class="kw">&amp;</span> <span class="no">sce_citeseq</span>$<span class="no">doubletClassify_between_class</span> <span class="kw">==</span> <span class="st">"Singlet"</span>]
+<span class="no">sce_citeseq</span>
+<span class="co">#&gt; class: SingleCellExperiment </span>
+<span class="co">#&gt; dim: 19521 437 </span>
+<span class="co">#&gt; metadata(3): doubletClassify_between_threshold</span>
+<span class="co">#&gt;   doubletClassify_between_resultsMat doubletClassify_within_resultsMat</span>
+<span class="co">#&gt; assays(1): counts</span>
+<span class="co">#&gt; rownames(19521): hg19_AL627309.1 hg19_AL669831.5 ... hg19_MT-ND6</span>
+<span class="co">#&gt;   hg19_MT-CYB</span>
+<span class="co">#&gt; rowData names(0):</span>
+<span class="co">#&gt; colnames(437): GATCGCGGTTATCGGT GGCTGGTAGAGGTTAT ... TTGGCAACACTAGTAC</span>
+<span class="co">#&gt;   GCTGCGAGTTGTGGCC</span>
+<span class="co">#&gt; colData names(5): doubletClassify_between_label</span>
+<span class="co">#&gt;   doubletClassify_between_class nUMI doubletClassify_within_label</span>
+<span class="co">#&gt;   doubletClassify_within_class</span>
+<span class="co">#&gt; reducedDimNames(2): TSNE_HTO UMAP_HTO</span>
+<span class="co">#&gt; altExpNames(2): ADT HTO</span></pre></body></html></div>
 </div>
 </div>
 <div id="clustering" class="section level1">
@@ -240,95 +244,89 @@
 <h2 class="hasAnchor">
 <a href="#performing-snf" class="anchor"></a>Performing SNF</h2>
 <p>The first step of analysis is to integrate the RNA and ADT matrix. We use a popular integration algorithm called similarity network fusion (SNF) to integrate the multiomic data.</p>
-<div class="sourceCode" id="cb28"><html><body><pre class="r"><span class="no">sce_citeseq</span> <span class="kw">&lt;-</span> <span class="kw pkg">scater</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/scater/man/logNormCounts.html">logNormCounts</a></span>(<span class="no">sce_citeseq</span>)
-<span class="no">sce_citeseq</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/normaliseExprs.html">normaliseExprs</a></span>(<span class="no">sce_citeseq</span>, <span class="kw">altExp_name</span> <span class="kw">=</span> <span class="st">"ADT"</span>, <span class="kw">transform</span> <span class="kw">=</span> <span class="st">"log"</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span>(<span class="no">sce_citeseq</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/CiteFuse.html">CiteFuse</a></span>(<span class="no">sce_citeseq</span>))</pre></body></html></div>
-<pre><code>## Calculating affinity matrix 
-## Performing SNF</code></pre>
-<pre><code>##    user  system elapsed 
-##   4.747   0.118   4.866</code></pre>
+<div class="sourceCode" id="cb16"><html><body><pre class="r"><span class="no">sce_citeseq</span> <span class="kw">&lt;-</span> <span class="kw pkg">scater</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/scater/man/logNormCounts.html">logNormCounts</a></span>(<span class="no">sce_citeseq</span>)
+<span class="no">sce_citeseq</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/CiteFuse/man/normaliseExprs.html">normaliseExprs</a></span>(<span class="no">sce_citeseq</span>, <span class="kw">altExp_name</span> <span class="kw">=</span> <span class="st">"ADT"</span>, <span class="kw">transform</span> <span class="kw">=</span> <span class="st">"log"</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span>(<span class="no">sce_citeseq</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/CiteFuse/man/CiteFuse.html">CiteFuse</a></span>(<span class="no">sce_citeseq</span>))
+<span class="co">#&gt; Calculating affinity matrix </span>
+<span class="co">#&gt; Performing SNF</span>
+<span class="co">#&gt;    user  system elapsed </span>
+<span class="co">#&gt;   5.880   0.088   5.970</span></pre></body></html></div>
 <p>We now proceed with the fused matrix, which is stored as <code>SNF_W</code> in our <code>sce_citeseq</code> object.</p>
 </div>
 <div id="performing-spectral-clustering" class="section level2">
 <h2 class="hasAnchor">
 <a href="#performing-spectral-clustering" class="anchor"></a>Performing spectral clustering</h2>
 <p>CiteFuse implements two different clustering algorithms on the fused matrix, spectral clustering and Louvain clustering. First, we perform spectral clustering with sufficient numbers of <code>K</code> and use the eigen values to determine the optimal number of clusters.</p>
-<div class="sourceCode" id="cb31"><html><body><pre class="r"><span class="no">SNF_W_clust</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/spectralClustering.html">spectralClustering</a></span>(<span class="fu">metadata</span>(<span class="no">sce_citeseq</span>)<span class="kw">[[</span><span class="st">"SNF_W"</span>]], <span class="kw">K</span> <span class="kw">=</span> <span class="fl">20</span>)</pre></body></html></div>
-<pre><code>## Computing Spectral Clustering 
-## Computing Diffusion Coordinates
-## Used default value: 20 dimensions</code></pre>
-<div class="sourceCode" id="cb33"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">SNF_W_clust</span>$<span class="no">eigen_values</span>)</pre></body></html></div>
-<p><img src="CiteFuse_files/figure-html/unnamed-chunk-16-1.png" width="700"></p>
-<div class="sourceCode" id="cb34"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/which.min.html">which.max</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">abs</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/diff.html">diff</a></span>(<span class="no">SNF_W_clust</span>$<span class="no">eigen_values</span>)))</pre></body></html></div>
-<pre><code>## [1] 5</code></pre>
+<div class="sourceCode" id="cb17"><html><body><pre class="r"><span class="no">SNF_W_clust</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/CiteFuse/man/spectralClustering.html">spectralClustering</a></span>(<span class="fu">metadata</span>(<span class="no">sce_citeseq</span>)<span class="kw">[[</span><span class="st">"SNF_W"</span>]], <span class="kw">K</span> <span class="kw">=</span> <span class="fl">20</span>)
+<span class="co">#&gt; Computing Spectral Clustering</span>
+<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">SNF_W_clust</span>$<span class="no">eigen_values</span>)</pre></body></html></div>
+<p><img src="CiteFuse_files/figure-html/unnamed-chunk-16-1.png"><!-- --></p>
+<div class="sourceCode" id="cb18"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/which.min.html">which.max</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">abs</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/diff.html">diff</a></span>(<span class="no">SNF_W_clust</span>$<span class="no">eigen_values</span>)))
+<span class="co">#&gt; [1] 5</span></pre></body></html></div>
 <p>Using the optimal cluster number defined from the previous step, we can now use the <code>spectralClutering</code> function to cluster the single cells by specifying the number of clusters in <code>K</code>. The function takes a cell-to-cell similarity matrix as an input. We have already created the fused similarity matrix from <code>CiteFuse</code>. Since the <code>CiteFuse</code> function creates and stores the similarity matries from ADT and RNA expression, as well the fused matrix, we can use these two to compare the clustering outcomes by data modality.</p>
-<div class="sourceCode" id="cb36"><html><body><pre class="r"><span class="no">SNF_W_clust</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/spectralClustering.html">spectralClustering</a></span>(<span class="fu">metadata</span>(<span class="no">sce_citeseq</span>)<span class="kw">[[</span><span class="st">"SNF_W"</span>]], <span class="kw">K</span> <span class="kw">=</span> <span class="fl">5</span>)</pre></body></html></div>
-<pre><code>## Computing Spectral Clustering 
-## Computing Diffusion Coordinates
-## Used default value: 5 dimensions</code></pre>
-<div class="sourceCode" id="cb38"><html><body><pre class="r"><span class="no">sce_citeseq</span>$<span class="no">SNF_W_clust</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span>(<span class="no">SNF_W_clust</span>$<span class="no">labels</span>)
+<div class="sourceCode" id="cb19"><html><body><pre class="r"><span class="no">SNF_W_clust</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/CiteFuse/man/spectralClustering.html">spectralClustering</a></span>(<span class="fu">metadata</span>(<span class="no">sce_citeseq</span>)<span class="kw">[[</span><span class="st">"SNF_W"</span>]], <span class="kw">K</span> <span class="kw">=</span> <span class="fl">5</span>)
+<span class="co">#&gt; Computing Spectral Clustering</span>
+<span class="no">sce_citeseq</span>$<span class="no">SNF_W_clust</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span>(<span class="no">SNF_W_clust</span>$<span class="no">labels</span>)
 
-<span class="no">SNF_W1_clust</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/spectralClustering.html">spectralClustering</a></span>(<span class="fu">metadata</span>(<span class="no">sce_citeseq</span>)<span class="kw">[[</span><span class="st">"ADT_W"</span>]], <span class="kw">K</span> <span class="kw">=</span> <span class="fl">5</span>)</pre></body></html></div>
-<pre><code>## Computing Spectral Clustering 
-## Computing Diffusion Coordinates
-## Used default value: 5 dimensions</code></pre>
-<div class="sourceCode" id="cb40"><html><body><pre class="r"><span class="no">sce_citeseq</span>$<span class="no">ADT_clust</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span>(<span class="no">SNF_W1_clust</span>$<span class="no">labels</span>)
+<span class="no">SNF_W1_clust</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/CiteFuse/man/spectralClustering.html">spectralClustering</a></span>(<span class="fu">metadata</span>(<span class="no">sce_citeseq</span>)<span class="kw">[[</span><span class="st">"ADT_W"</span>]], <span class="kw">K</span> <span class="kw">=</span> <span class="fl">5</span>)
+<span class="co">#&gt; Computing Spectral Clustering</span>
+<span class="no">sce_citeseq</span>$<span class="no">ADT_clust</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span>(<span class="no">SNF_W1_clust</span>$<span class="no">labels</span>)
 
-<span class="no">SNF_W2_clust</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/spectralClustering.html">spectralClustering</a></span>(<span class="fu">metadata</span>(<span class="no">sce_citeseq</span>)<span class="kw">[[</span><span class="st">"RNA_W"</span>]], <span class="kw">K</span> <span class="kw">=</span> <span class="fl">5</span>)</pre></body></html></div>
-<pre><code>## Computing Spectral Clustering 
-## Computing Diffusion Coordinates
-## Used default value: 5 dimensions</code></pre>
-<div class="sourceCode" id="cb42"><html><body><pre class="r"><span class="no">sce_citeseq</span>$<span class="no">RNA_clust</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span>(<span class="no">SNF_W2_clust</span>$<span class="no">labels</span>)</pre></body></html></div>
+<span class="no">SNF_W2_clust</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/CiteFuse/man/spectralClustering.html">spectralClustering</a></span>(<span class="fu">metadata</span>(<span class="no">sce_citeseq</span>)<span class="kw">[[</span><span class="st">"RNA_W"</span>]], <span class="kw">K</span> <span class="kw">=</span> <span class="fl">5</span>)
+<span class="co">#&gt; Computing Spectral Clustering</span>
+<span class="no">sce_citeseq</span>$<span class="no">RNA_clust</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span>(<span class="no">SNF_W2_clust</span>$<span class="no">labels</span>)</pre></body></html></div>
 </div>
 <div id="visualisation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#visualisation" class="anchor"></a>Visualisation</h2>
 <p>The outcome of the clustering can be easily visualised on a reduced dimensions plot by highlighting the points by cluster label.</p>
-<div class="sourceCode" id="cb43"><html><body><pre class="r"><span class="no">sce_citeseq</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/reducedDimSNF.html">reducedDimSNF</a></span>(<span class="no">sce_citeseq</span>,
+<div class="sourceCode" id="cb20"><html><body><pre class="r">
+<span class="no">sce_citeseq</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/CiteFuse/man/reducedDimSNF.html">reducedDimSNF</a></span>(<span class="no">sce_citeseq</span>,
                              <span class="kw">method</span> <span class="kw">=</span> <span class="st">"tSNE"</span>,
                              <span class="kw">dimNames</span> <span class="kw">=</span> <span class="st">"tSNE_joint"</span>)
 
-<span class="no">g1</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/visualiseDim.html">visualiseDim</a></span>(<span class="no">sce_citeseq</span>, <span class="kw">dimNames</span> <span class="kw">=</span> <span class="st">"tSNE_joint"</span>, <span class="kw">colour_by</span> <span class="kw">=</span> <span class="st">"SNF_W_clust"</span>) +
+<span class="no">g1</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/CiteFuse/man/visualiseDim.html">visualiseDim</a></span>(<span class="no">sce_citeseq</span>, <span class="kw">dimNames</span> <span class="kw">=</span> <span class="st">"tSNE_joint"</span>, <span class="kw">colour_by</span> <span class="kw">=</span> <span class="st">"SNF_W_clust"</span>) +
   <span class="fu">labs</span>(<span class="kw">title</span> <span class="kw">=</span> <span class="st">"tSNE (SNF clustering)"</span>)
-<span class="no">g2</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/visualiseDim.html">visualiseDim</a></span>(<span class="no">sce_citeseq</span>, <span class="kw">dimNames</span> <span class="kw">=</span> <span class="st">"tSNE_joint"</span>,  <span class="kw">colour_by</span> <span class="kw">=</span> <span class="st">"ADT_clust"</span>) +
+<span class="no">g2</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/CiteFuse/man/visualiseDim.html">visualiseDim</a></span>(<span class="no">sce_citeseq</span>, <span class="kw">dimNames</span> <span class="kw">=</span> <span class="st">"tSNE_joint"</span>,  <span class="kw">colour_by</span> <span class="kw">=</span> <span class="st">"ADT_clust"</span>) +
   <span class="fu">labs</span>(<span class="kw">title</span> <span class="kw">=</span> <span class="st">"tSNE (ADT clustering)"</span>)
-<span class="no">g3</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/visualiseDim.html">visualiseDim</a></span>(<span class="no">sce_citeseq</span>, <span class="kw">dimNames</span> <span class="kw">=</span> <span class="st">"tSNE_joint"</span>,  <span class="kw">colour_by</span> <span class="kw">=</span> <span class="st">"RNA_clust"</span>) +
+<span class="no">g3</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/CiteFuse/man/visualiseDim.html">visualiseDim</a></span>(<span class="no">sce_citeseq</span>, <span class="kw">dimNames</span> <span class="kw">=</span> <span class="st">"tSNE_joint"</span>,  <span class="kw">colour_by</span> <span class="kw">=</span> <span class="st">"RNA_clust"</span>) +
   <span class="fu">labs</span>(<span class="kw">title</span> <span class="kw">=</span> <span class="st">"tSNE (RNA clustering)"</span>)
 
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">gridExtra</span>)
 <span class="fu"><a href="https://rdrr.io/pkg/gridExtra/man/arrangeGrob.html">grid.arrange</a></span>(<span class="no">g3</span>, <span class="no">g2</span>, <span class="no">g1</span>, <span class="kw">ncol</span> <span class="kw">=</span> <span class="fl">2</span>)</pre></body></html></div>
-<p><img src="CiteFuse_files/figure-html/unnamed-chunk-18-1.png" width="768"></p>
+<p><img src="CiteFuse_files/figure-html/unnamed-chunk-18-1.png"><!-- --></p>
 <p>The expression of genes and proteins can be visualised by changing the <code>colour_by</code> parameter to assess the clusters. As an example, we highlight the plot by the RNA and ADT expression level of CD8.</p>
-<div class="sourceCode" id="cb44"><html><body><pre class="r"><span class="no">g1</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/visualiseDim.html">visualiseDim</a></span>(<span class="no">sce_citeseq</span>, <span class="kw">dimNames</span> <span class="kw">=</span> <span class="st">"tSNE_joint"</span>,
+<div class="sourceCode" id="cb21"><html><body><pre class="r"><span class="no">g1</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/CiteFuse/man/visualiseDim.html">visualiseDim</a></span>(<span class="no">sce_citeseq</span>, <span class="kw">dimNames</span> <span class="kw">=</span> <span class="st">"tSNE_joint"</span>,
                    <span class="kw">colour_by</span> <span class="kw">=</span> <span class="st">"hg19_CD8A"</span>,
                    <span class="kw">data_from</span> <span class="kw">=</span> <span class="st">"assay"</span>,
                    <span class="kw">assay_name</span> <span class="kw">=</span> <span class="st">"logcounts"</span>) +
   <span class="fu">labs</span>(<span class="kw">title</span> <span class="kw">=</span> <span class="st">"tSNE: hg19_CD8A (RNA expression)"</span>)
-<span class="no">g2</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/visualiseDim.html">visualiseDim</a></span>(<span class="no">sce_citeseq</span>,<span class="kw">dimNames</span> <span class="kw">=</span> <span class="st">"tSNE_joint"</span>,
+<span class="no">g2</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/CiteFuse/man/visualiseDim.html">visualiseDim</a></span>(<span class="no">sce_citeseq</span>,<span class="kw">dimNames</span> <span class="kw">=</span> <span class="st">"tSNE_joint"</span>,
                    <span class="kw">colour_by</span> <span class="kw">=</span> <span class="st">"CD8"</span>,
                    <span class="kw">data_from</span> <span class="kw">=</span> <span class="st">"altExp"</span>,
                    <span class="kw">altExp_assay_name</span> <span class="kw">=</span> <span class="st">"logcounts"</span>) +
   <span class="fu">labs</span>(<span class="kw">title</span> <span class="kw">=</span> <span class="st">"tSNE: CD8 (ADT expression)"</span>)
 
 <span class="fu"><a href="https://rdrr.io/pkg/gridExtra/man/arrangeGrob.html">grid.arrange</a></span>(<span class="no">g1</span>, <span class="no">g2</span>, <span class="kw">ncol</span> <span class="kw">=</span> <span class="fl">2</span>)</pre></body></html></div>
-<p><img src="CiteFuse_files/figure-html/unnamed-chunk-19-1.png" width="700"></p>
+<p><img src="CiteFuse_files/figure-html/unnamed-chunk-19-1.png"><!-- --></p>
 </div>
 <div id="louvain-clustering" class="section level2">
 <h2 class="hasAnchor">
 <a href="#louvain-clustering" class="anchor"></a>Louvain clustering</h2>
 <p>As well as spectral clustering, CiteFuse can implement Louvain clustering if users wish to use another clustering method. We use the <code>igraph</code> package, and any community detection algorithms available in their package can be selected by changing the <code>method</code> parameter.</p>
-<div class="sourceCode" id="cb45"><html><body><pre class="r"><span class="no">SNF_W_louvain</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/igraphClustering.html">igraphClustering</a></span>(<span class="no">sce_citeseq</span>, <span class="kw">method</span> <span class="kw">=</span> <span class="st">"louvain"</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span>(<span class="no">SNF_W_louvain</span>)</pre></body></html></div>
-<pre><code>## SNF_W_louvain
-##  1  2  3  4  5  6  7  8  9 
-## 30 38 80 29 90 37 52 29 52</code></pre>
-<div class="sourceCode" id="cb47"><html><body><pre class="r"><span class="no">sce_citeseq</span>$<span class="no">SNF_W_louvain</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span>(<span class="no">SNF_W_louvain</span>)
+<div class="sourceCode" id="cb22"><html><body><pre class="r"><span class="no">SNF_W_louvain</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/CiteFuse/man/igraphClustering.html">igraphClustering</a></span>(<span class="no">sce_citeseq</span>, <span class="kw">method</span> <span class="kw">=</span> <span class="st">"louvain"</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span>(<span class="no">SNF_W_louvain</span>)
+<span class="co">#&gt; SNF_W_louvain</span>
+<span class="co">#&gt;  1  2  3  4  5  6  7  8  9 </span>
+<span class="co">#&gt; 30 52 42 31 72 56 37 88 29</span>
 
-<span class="fu"><a href="../reference/visualiseDim.html">visualiseDim</a></span>(<span class="no">sce_citeseq</span>, <span class="kw">dimNames</span> <span class="kw">=</span> <span class="st">"tSNE_joint"</span>, <span class="kw">colour_by</span> <span class="kw">=</span> <span class="st">"SNF_W_louvain"</span>) +
+<span class="no">sce_citeseq</span>$<span class="no">SNF_W_louvain</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span>(<span class="no">SNF_W_louvain</span>)
+
+<span class="fu"><a href="https://rdrr.io/pkg/CiteFuse/man/visualiseDim.html">visualiseDim</a></span>(<span class="no">sce_citeseq</span>, <span class="kw">dimNames</span> <span class="kw">=</span> <span class="st">"tSNE_joint"</span>, <span class="kw">colour_by</span> <span class="kw">=</span> <span class="st">"SNF_W_louvain"</span>) +
   <span class="fu">labs</span>(<span class="kw">title</span> <span class="kw">=</span> <span class="st">"tSNE (SNF louvain clustering)"</span>)</pre></body></html></div>
-<p><img src="CiteFuse_files/figure-html/unnamed-chunk-20-1.png" width="768"></p>
-<div class="sourceCode" id="cb48"><html><body><pre class="r"><span class="fu"><a href="../reference/visualiseKNN.html">visualiseKNN</a></span>(<span class="no">sce_citeseq</span>, <span class="kw">colour_by</span> <span class="kw">=</span> <span class="st">"SNF_W_louvain"</span>)</pre></body></html></div>
-<p><img src="CiteFuse_files/figure-html/unnamed-chunk-21-1.png" width="576"></p>
+<p><img src="CiteFuse_files/figure-html/unnamed-chunk-20-1.png"><!-- --></p>
+<div class="sourceCode" id="cb23"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/pkg/CiteFuse/man/visualiseKNN.html">visualiseKNN</a></span>(<span class="no">sce_citeseq</span>, <span class="kw">colour_by</span> <span class="kw">=</span> <span class="st">"SNF_W_louvain"</span>)</pre></body></html></div>
+<p><img src="CiteFuse_files/figure-html/unnamed-chunk-21-1.png"><!-- --></p>
 </div>
 </div>
 <div id="differential-expression-analysis" class="section level1">
@@ -338,57 +336,53 @@
 <h2 class="hasAnchor">
 <a href="#exploration-of-feature-expression" class="anchor"></a>Exploration of feature expression</h2>
 <p>CiteFuse has a wide range of visualisation tools to facilitate exploratory analysis of CITE-seq data. The <code>visualiseExprs</code> function is an easy-to-use function to generate boxplots, violinplots, jitter plots, density plots, and pairwise scatter/density plots of genes and proteins expressed in the data. The plots can be grouped by using the cluster labels stored in the <code>sce_citeseq</code> object.</p>
-<div class="sourceCode" id="cb49"><html><body><pre class="r"><span class="fu"><a href="../reference/visualiseExprs.html">visualiseExprs</a></span>(<span class="no">sce_citeseq</span>,
+<div class="sourceCode" id="cb24"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/pkg/CiteFuse/man/visualiseExprs.html">visualiseExprs</a></span>(<span class="no">sce_citeseq</span>,
                <span class="kw">plot</span> <span class="kw">=</span> <span class="st">"boxplot"</span>,
                <span class="kw">group_by</span> <span class="kw">=</span> <span class="st">"SNF_W_louvain"</span>,
                <span class="kw">feature_subset</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"hg19_CD2"</span>, <span class="st">"hg19_CD4"</span>, <span class="st">"hg19_CD8A"</span>, <span class="st">"hg19_CD19"</span>))</pre></body></html></div>
-<p><img src="CiteFuse_files/figure-html/unnamed-chunk-22-1.png" width="768"></p>
-<div class="sourceCode" id="cb50"><html><body><pre class="r"><span class="fu"><a href="../reference/visualiseExprs.html">visualiseExprs</a></span>(<span class="no">sce_citeseq</span>,
+<p><img src="CiteFuse_files/figure-html/unnamed-chunk-22-1.png"><!-- --></p>
+<div class="sourceCode" id="cb25"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/pkg/CiteFuse/man/visualiseExprs.html">visualiseExprs</a></span>(<span class="no">sce_citeseq</span>,
                <span class="kw">plot</span> <span class="kw">=</span> <span class="st">"violin"</span>,
                <span class="kw">group_by</span> <span class="kw">=</span> <span class="st">"SNF_W_louvain"</span>,
                <span class="kw">feature_subset</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"hg19_CD2"</span>, <span class="st">"hg19_CD4"</span>, <span class="st">"hg19_CD8A"</span>, <span class="st">"hg19_CD19"</span>))</pre></body></html></div>
-<p><img src="CiteFuse_files/figure-html/unnamed-chunk-22-2.png" width="768"></p>
-<div class="sourceCode" id="cb51"><html><body><pre class="r"><span class="fu"><a href="../reference/visualiseExprs.html">visualiseExprs</a></span>(<span class="no">sce_citeseq</span>,
+<p><img src="CiteFuse_files/figure-html/unnamed-chunk-22-2.png"><!-- --></p>
+<div class="sourceCode" id="cb26"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/pkg/CiteFuse/man/visualiseExprs.html">visualiseExprs</a></span>(<span class="no">sce_citeseq</span>,
                <span class="kw">plot</span> <span class="kw">=</span> <span class="st">"jitter"</span>,
                <span class="kw">group_by</span> <span class="kw">=</span> <span class="st">"SNF_W_louvain"</span>,
                <span class="kw">feature_subset</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"hg19_CD2"</span>, <span class="st">"hg19_CD4"</span>, <span class="st">"hg19_CD8A"</span>, <span class="st">"hg19_CD19"</span>))</pre></body></html></div>
-<p><img src="CiteFuse_files/figure-html/unnamed-chunk-22-3.png" width="768"></p>
-<div class="sourceCode" id="cb52"><html><body><pre class="r"><span class="fu"><a href="../reference/visualiseExprs.html">visualiseExprs</a></span>(<span class="no">sce_citeseq</span>,
+<p><img src="CiteFuse_files/figure-html/unnamed-chunk-22-3.png"><!-- --></p>
+<div class="sourceCode" id="cb27"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/pkg/CiteFuse/man/visualiseExprs.html">visualiseExprs</a></span>(<span class="no">sce_citeseq</span>,
                <span class="kw">plot</span> <span class="kw">=</span> <span class="st">"density"</span>,
                <span class="kw">group_by</span> <span class="kw">=</span> <span class="st">"SNF_W_louvain"</span>,
                <span class="kw">feature_subset</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"hg19_CD2"</span>, <span class="st">"hg19_CD4"</span>, <span class="st">"hg19_CD8A"</span>, <span class="st">"hg19_CD19"</span>))</pre></body></html></div>
-<p><img src="CiteFuse_files/figure-html/unnamed-chunk-22-4.png" width="768"></p>
-<div class="sourceCode" id="cb53"><html><body><pre class="r"><span class="fu"><a href="../reference/visualiseExprs.html">visualiseExprs</a></span>(<span class="no">sce_citeseq</span>,
-               <span class="kw">altExp_name</span> <span class="kw">=</span> <span class="st">"ADT"</span>,
-               <span class="kw">n</span> <span class="kw">=</span> <span class="fl">30</span>) +
-  <span class="fu">coord_flip</span>()</pre></body></html></div>
-<p><img src="CiteFuse_files/figure-html/unnamed-chunk-23-1.png" width="768"></p>
-<div class="sourceCode" id="cb54"><html><body><pre class="r"><span class="fu"><a href="../reference/visualiseExprs.html">visualiseExprs</a></span>(<span class="no">sce_citeseq</span>,
+<p><img src="CiteFuse_files/figure-html/unnamed-chunk-22-4.png"><!-- --></p>
+<div class="sourceCode" id="cb28"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/pkg/CiteFuse/man/visualiseExprs.html">visualiseExprs</a></span>(<span class="no">sce_citeseq</span>,
                <span class="kw">altExp_name</span> <span class="kw">=</span> <span class="st">"ADT"</span>,
                <span class="kw">group_by</span> <span class="kw">=</span> <span class="st">"SNF_W_louvain"</span>,
                <span class="kw">plot</span> <span class="kw">=</span> <span class="st">"violin"</span>, <span class="kw">n</span> <span class="kw">=</span> <span class="fl">5</span>)</pre></body></html></div>
-<p><img src="CiteFuse_files/figure-html/unnamed-chunk-24-1.png" width="768"></p>
-<div class="sourceCode" id="cb55"><html><body><pre class="r"><span class="fu"><a href="../reference/visualiseExprs.html">visualiseExprs</a></span>(<span class="no">sce_citeseq</span>, <span class="kw">altExp_name</span> <span class="kw">=</span> <span class="st">"ADT"</span>,
+<p><img src="CiteFuse_files/figure-html/unnamed-chunk-23-1.png"><!-- --></p>
+<div class="sourceCode" id="cb29"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/pkg/CiteFuse/man/visualiseExprs.html">visualiseExprs</a></span>(<span class="no">sce_citeseq</span>, <span class="kw">altExp_name</span> <span class="kw">=</span> <span class="st">"ADT"</span>,
                <span class="kw">plot</span> <span class="kw">=</span> <span class="st">"jitter"</span>,
                <span class="kw">group_by</span> <span class="kw">=</span> <span class="st">"SNF_W_louvain"</span>,
                <span class="kw">feature_subset</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"CD2"</span>, <span class="st">"CD8"</span>, <span class="st">"CD4"</span>, <span class="st">"CD19"</span>))</pre></body></html></div>
-<p><img src="CiteFuse_files/figure-html/unnamed-chunk-24-2.png" width="768"></p>
-<div class="sourceCode" id="cb56"><html><body><pre class="r"><span class="fu"><a href="../reference/visualiseExprs.html">visualiseExprs</a></span>(<span class="no">sce_citeseq</span>, <span class="kw">altExp_name</span> <span class="kw">=</span> <span class="st">"ADT"</span>,
+<p><img src="CiteFuse_files/figure-html/unnamed-chunk-23-2.png"><!-- --></p>
+<div class="sourceCode" id="cb30"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/pkg/CiteFuse/man/visualiseExprs.html">visualiseExprs</a></span>(<span class="no">sce_citeseq</span>, <span class="kw">altExp_name</span> <span class="kw">=</span> <span class="st">"ADT"</span>,
                <span class="kw">plot</span> <span class="kw">=</span> <span class="st">"density"</span>,
                <span class="kw">group_by</span> <span class="kw">=</span> <span class="st">"SNF_W_louvain"</span>,
                <span class="kw">feature_subset</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"CD2"</span>, <span class="st">"CD8"</span>, <span class="st">"CD4"</span>, <span class="st">"CD19"</span>))</pre></body></html></div>
-<p><img src="CiteFuse_files/figure-html/unnamed-chunk-24-3.png" width="768"></p>
-<div class="sourceCode" id="cb57"><html><body><pre class="r"><span class="fu"><a href="../reference/visualiseExprs.html">visualiseExprs</a></span>(<span class="no">sce_citeseq</span>, <span class="kw">altExp_name</span> <span class="kw">=</span> <span class="st">"ADT"</span>,
+<p><img src="CiteFuse_files/figure-html/unnamed-chunk-23-3.png"><!-- --></p>
+<div class="sourceCode" id="cb31"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/pkg/CiteFuse/man/visualiseExprs.html">visualiseExprs</a></span>(<span class="no">sce_citeseq</span>, <span class="kw">altExp_name</span> <span class="kw">=</span> <span class="st">"ADT"</span>,
                <span class="kw">plot</span> <span class="kw">=</span> <span class="st">"pairwise"</span>,
-               <span class="kw">feature_subset</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"CD4"</span>, <span class="st">"CD8"</span>))</pre></body></html></div>
-<pre><code>## number of iterations= 12 
-## number of iterations= 16</code></pre>
-<p><img src="CiteFuse_files/figure-html/unnamed-chunk-25-1.png" width="768"></p>
-<div class="sourceCode" id="cb59"><html><body><pre class="r"><span class="fu"><a href="../reference/visualiseExprs.html">visualiseExprs</a></span>(<span class="no">sce_citeseq</span>, <span class="kw">altExp_name</span> <span class="kw">=</span> <span class="st">"ADT"</span>,
+               <span class="kw">feature_subset</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"CD4"</span>, <span class="st">"CD8"</span>))
+<span class="co">#&gt; number of iterations= 26 </span>
+<span class="co">#&gt; number of iterations= 25</span></pre></body></html></div>
+<p><img src="CiteFuse_files/figure-html/unnamed-chunk-24-1.png"><!-- --></p>
+<div class="sourceCode" id="cb32"><html><body><pre class="r">
+<span class="fu"><a href="https://rdrr.io/pkg/CiteFuse/man/visualiseExprs.html">visualiseExprs</a></span>(<span class="no">sce_citeseq</span>, <span class="kw">altExp_name</span> <span class="kw">=</span> <span class="st">"ADT"</span>,
                <span class="kw">plot</span> <span class="kw">=</span> <span class="st">"pairwise"</span>,
                <span class="kw">feature_subset</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"CD45RA"</span>, <span class="st">"CD4"</span>, <span class="st">"CD8"</span>),
                <span class="kw">threshold</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="fl">4</span>, <span class="fl">3</span>))</pre></body></html></div>
-<p><img src="CiteFuse_files/figure-html/unnamed-chunk-25-2.png" width="768"></p>
+<p><img src="CiteFuse_files/figure-html/unnamed-chunk-24-2.png"><!-- --></p>
 </div>
 <div id="perform-de-analysis-with-wilcoxon-rank-sum-test" class="section level2">
 <h2 class="hasAnchor">
@@ -398,37 +392,37 @@
 <div id="for-rna-expression" class="section level3">
 <h3 class="hasAnchor">
 <a href="#for-rna-expression" class="anchor"></a>For RNA expression</h3>
-<div class="sourceCode" id="cb60"><html><body><pre class="r"><span class="co"># DE will be performed for RNA if altExp_name = "none" </span>
-<span class="no">sce_citeseq</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/DEgenes.html">DEgenes</a></span>(<span class="no">sce_citeseq</span>,
+<div class="sourceCode" id="cb33"><html><body><pre class="r"><span class="co"># DE will be performed for RNA if altExp_name = "none" </span>
+<span class="no">sce_citeseq</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/CiteFuse/man/DEgenes.html">DEgenes</a></span>(<span class="no">sce_citeseq</span>,
                        <span class="kw">altExp_name</span> <span class="kw">=</span> <span class="st">"none"</span>,
                        <span class="kw">group</span> <span class="kw">=</span> <span class="no">sce_citeseq</span>$<span class="no">SNF_W_louvain</span>,
                        <span class="kw">return_all</span> <span class="kw">=</span> <span class="fl">TRUE</span>,
                        <span class="kw">exprs_pct</span> <span class="kw">=</span> <span class="fl">0.5</span>)
 
 
-<span class="no">sce_citeseq</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/selectDEgenes.html">selectDEgenes</a></span>(<span class="no">sce_citeseq</span>,
+<span class="no">sce_citeseq</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/CiteFuse/man/selectDEgenes.html">selectDEgenes</a></span>(<span class="no">sce_citeseq</span>,
                              <span class="kw">altExp_name</span> <span class="kw">=</span> <span class="st">"none"</span>)
 <span class="fu"><a href="https://rdrr.io/pkg/DT/man/datatable.html">datatable</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/format.html">format</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/do.call.html">do.call</a></span>(<span class="no">rbind</span>, <span class="fu">metadata</span>(<span class="no">sce_citeseq</span>)<span class="kw">[[</span><span class="st">"DE_res_RNA_filter"</span>]]),
                  <span class="kw">digits</span> <span class="kw">=</span> <span class="fl">2</span>))</pre></body></html></div>
-<div id="htmlwidget-5102f899da9f31af25f9" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-5102f899da9f31af25f9">{"x":{"filter":"none","data":[["1.hg19_GZMK","1.hg19_KLRB1","1.hg19_DUSP2","1.hg19_IL7R","1.hg19_NCR3","1.hg19_CEBPD","1.hg19_KLRG1","1.hg19_CD69","1.hg19_LINC01871","1.hg19_IL32","2.hg19_CD8B","2.hg19_CMC1","2.hg19_CCL5","2.hg19_CD8A","2.hg19_GZMM","2.hg19_DUSP2","2.hg19_NDUFA6","2.hg19_HCST","2.hg19_RNF166","2.hg19_FYN","3.hg19_ZNF683","3.hg19_TRBV20-1","3.hg19_CD8A","3.hg19_FGFBP2","3.hg19_GZMH","3.hg19_CD8B","3.hg19_CCL5","3.hg19_CST7","3.hg19_KLRD1","3.hg19_CYTOR","4.hg19_CCR7","4.hg19_ACTN1","4.hg19_NELL2","4.hg19_PASK","4.hg19_MAL","4.hg19_CD8B","4.hg19_LEF1","4.hg19_PIK3IP1","4.hg19_LDLRAP1","4.hg19_PCED1B","5.hg19_LTB","5.hg19_TCF7","5.hg19_IL7R","5.hg19_LDHB","5.hg19_INPP4B","5.hg19_CD27","5.hg19_LEF1","5.hg19_NOSIP","5.hg19_SELL","5.hg19_CAMK4","6.hg19_FCN1","6.hg19_LYZ","6.hg19_SPI1","6.hg19_CYBB","6.hg19_HLA-DRA","6.hg19_S100A9","6.hg19_CD68","6.hg19_S100A8","6.hg19_CSTA","6.hg19_VCAN","7.hg19_GNLY","7.hg19_CCL5","7.hg19_GZMB","7.hg19_CTSW","7.hg19_NKG7","7.hg19_GZMH","7.hg19_IFITM2","7.hg19_KLRD1","7.hg19_CD8A","7.hg19_TYROBP","8.hg19_IL7R","8.hg19_S100A4","8.hg19_S100A10","8.hg19_IL32","8.hg19_EML4","8.hg19_FAM107B","8.hg19_RORA","8.hg19_CD2","8.hg19_TNFAIP3","8.hg19_GUK1","9.hg19_SH2D1B","9.hg19_KLRF1","9.hg19_CLIC3","9.hg19_FCER1G","9.hg19_MYOM2","9.hg19_TRDC","9.hg19_SPON2","9.hg19_TYROBP","9.hg19_IL2RB","9.hg19_KLRB1"],["2668"," 850","2126","2159","3396","3393","2878","3109","3983","3478","3257","3984","3217","4004","4452","5063","5205","4890","5330","5168","4890","6321","4268","5222","5277","7670","6396","6720","7320","8196","2449","2815","2907","3163","3115","2175","2384","2787","3260","3524","3917","5592","5443","5736","9061","9080","8530","7904","8680","9426","2400","2406","2409","2600"," 661","2808","3200","2825","3400","3400","2545","3656","4591","5072","4800","5220","4839","5452","5463","6141","2602","3100","3253","3434","3973","4176","4256","4141","4160","4118","3603","2742","3449","3498","2047","4272","2804","2748","3121","3143"],["7.8e-24","2.5e-23","1.1e-11","1.2e-10","1.6e-10","3.2e-10","9.2e-09","2.5e-07","7.5e-06","7.6e-05","8.8e-14","9.8e-10","2.0e-09","1.6e-07","4.5e-06","1.1e-04","1.7e-04","2.7e-04","2.9e-04","3.3e-04","9.3e-43","8.1e-37","1.2e-26","9.8e-23","8.4e-22","9.8e-17","2.9e-15","2.9e-14","7.9e-14","1.5e-13","3.0e-21","3.7e-19","8.1e-19","1.6e-18","1.4e-13","2.8e-13","5.0e-13","5.0e-11","1.5e-10","2.7e-10","3.7e-34","2.4e-31","3.1e-25","7.1e-22","2.0e-19","3.8e-19","4.7e-19","2.3e-16","2.9e-15","1.0e-14","4.5e-64","1.1e-61","1.3e-61","1.9e-61","9.1e-60","2.2e-56","1.3e-53","4.7e-52","4.8e-51","4.8e-51","3.1e-19","2.9e-14","7.3e-12","1.9e-10","4.8e-10","1.1e-09","1.4e-09","5.1e-09","6.9e-09","7.8e-09","3.9e-08","1.8e-05","4.5e-05","1.5e-04","4.2e-04","2.8e-03","3.2e-03","3.9e-03","4.1e-03","4.6e-03","7.0e-52","3.7e-37","4.7e-34","1.4e-33","1.6e-33","6.8e-31","1.4e-27","2.3e-27","8.4e-26","3.1e-24"],["7.8e-24","2.5e-23","1.1e-11","1.2e-10","1.6e-10","3.2e-10","9.2e-09","2.5e-07","7.5e-06","7.6e-05","8.8e-14","9.8e-10","2.0e-09","1.6e-07","4.5e-06","1.1e-04","1.7e-04","2.7e-04","2.9e-04","3.3e-04","9.3e-43","8.1e-37","1.2e-26","9.8e-23","8.4e-22","9.8e-17","2.9e-15","2.9e-14","7.9e-14","1.5e-13","3.0e-21","3.7e-19","8.1e-19","1.6e-18","1.4e-13","2.8e-13","5.0e-13","5.0e-11","1.5e-10","2.7e-10","3.7e-34","2.4e-31","3.1e-25","7.1e-22","2.0e-19","3.8e-19","4.7e-19","2.3e-16","2.9e-15","1.0e-14","4.5e-64","1.1e-61","1.3e-61","1.9e-61","9.1e-60","2.2e-56","1.3e-53","4.7e-52","4.8e-51","4.8e-51","3.1e-19","2.9e-14","7.3e-12","1.9e-10","4.8e-10","1.1e-09","1.4e-09","5.1e-09","6.9e-09","7.8e-09","3.9e-08","1.8e-05","4.5e-05","1.5e-04","4.2e-04","2.8e-03","3.2e-03","3.9e-03","4.1e-03","4.6e-03","7.0e-52","3.7e-37","4.7e-34","1.4e-33","1.6e-33","6.8e-31","1.4e-27","2.3e-27","8.4e-26","3.1e-24"],["0.1088","0.4686","0.5104","0.9285","0.1657","0.2075","0.4686","0.4013","0.2302","1.7839","0.3541","0.4049","2.0103","0.8258","0.5960","0.5444","0.3662","1.3533","0.3648","0.5329","0.0920","0.1043","0.6408","0.6099","0.7164","0.3141","1.8257","1.3502","0.6572","0.2635","0.0890","0.0690","0.0740","0.0513","0.1080","0.3614","0.2537","0.2096","0.1353","0.0991","0.5608","0.2284","0.7299","0.7113","0.1061","0.1245","0.1797","0.3680","0.3325","0.1754","0.0000","0.0016","0.0027","0.0000","0.0529","0.0020","0.0000","0.0079","0.0000","0.0000","2.3480","1.9339","0.9406","0.6517","2.1203","0.8427","1.6395","0.7225","0.7999","0.5668","0.9520","2.3277","1.2842","1.7878","0.3654","0.4598","0.4339","0.6678","0.6590","0.7686","0.0184","0.1293","0.0921","0.1812","0.2495","0.0941","0.2766","0.4647","0.2215","0.4411"],["0.92","2.80","1.69","2.53","0.81","0.94","1.28","1.07","0.69","2.67","1.36","1.44","3.78","1.75","1.23","1.09","0.77","1.96","0.77","0.99","1.15","1.49","2.09","1.93","2.07","1.01","3.67","2.64","1.56","0.92","0.82","0.65","0.56","0.51","0.60","1.57","1.09","0.86","0.66","0.46","2.36","1.19","2.23","1.79","0.63","0.60","0.81","1.06","1.03","0.64","1.83","2.74","1.14","0.81","2.84","2.53","0.74","2.81","1.04","1.50","5.13","3.87","2.19","1.52","3.88","1.87","2.54","1.56","1.69","1.36","2.26","3.32","2.00","2.65","0.85","0.80","0.82","1.07","1.17","1.14","0.91","1.22","1.42","1.71","1.81","0.96","1.78","2.11","1.34","2.02"],["0.0565","0.2285","0.3489","0.4251","0.1278","0.1351","0.2998","0.3464","0.1843","0.7617","0.2206","0.2431","0.6140","0.4185","0.4286","0.3609","0.3283","0.7569","0.3058","0.4110","0.0616","0.0448","0.3529","0.3305","0.3585","0.1793","0.5686","0.5490","0.3641","0.2297","0.0784","0.0686","0.0637","0.0515","0.0931","0.2304","0.1985","0.1838","0.1275","0.0980","0.2911","0.1671","0.3314","0.5072","0.1037","0.1037","0.1441","0.3055","0.2248","0.1585","0.0000","0.0025","0.0025","0.0000","0.0450","0.0025","0.0000","0.0075","0.0000","0.0000","0.5792","0.6000","0.4156","0.3844","0.6052","0.4078","0.8312","0.3974","0.4078","0.2208","0.4265","0.8946","0.7451","0.7672","0.3137","0.3824","0.3382","0.4853","0.4755","0.5784","0.0130","0.0935","0.0831","0.0779","0.1766","0.0597","0.1896","0.1818","0.1844","0.2000"],["0.63","0.97","0.90","0.93","0.57","0.57","0.83","0.77","0.53","1.00","0.76","0.66","1.00","0.89","0.76","0.66","0.55","0.92","0.55","0.66","0.71","0.60","0.94","0.89","0.93","0.66","1.00","0.99","0.82","0.59","0.66","0.59","0.59","0.52","0.59","0.79","0.76","0.72","0.55","0.52","0.93","0.79","0.96","0.87","0.51","0.52","0.59","0.72","0.66","0.56","0.68","0.68","0.68","0.65","0.92","0.62","0.57","0.62","0.54","0.54","1.00","1.00","0.92","0.83","1.00","0.87","0.98","0.83","0.85","0.65","0.93","1.00","0.97","0.93","0.59","0.62","0.59","0.72","0.69","0.79","0.65","0.81","0.69","0.73","0.88","0.63","0.81","0.94","0.79","0.87"],["0.58","0.74","0.55","0.51","0.44","0.43","0.53","0.42","0.35","0.24","0.54","0.41","0.39","0.48","0.33","0.30","0.22","0.16","0.25","0.25","0.65","0.56","0.58","0.56","0.57","0.48","0.43","0.44","0.46","0.36","0.58","0.52","0.52","0.47","0.49","0.56","0.56","0.54","0.42","0.42","0.64","0.62","0.62","0.36","0.41","0.42","0.44","0.42","0.43","0.40","0.68","0.67","0.67","0.65","0.87","0.62","0.57","0.61","0.54","0.54","0.42","0.40","0.51","0.44","0.39","0.46","0.15","0.43","0.44","0.43","0.50","0.11","0.22","0.16","0.27","0.24","0.25","0.24","0.21","0.21","0.64","0.71","0.61","0.65","0.71","0.57","0.62","0.76","0.60","0.67"],["0.58","0.74","0.55","0.51","0.44","0.43","0.53","0.42","0.35","0.24","0.54","0.41","0.39","0.48","0.33","0.30","0.22","0.16","0.25","0.25","0.65","0.56","0.58","0.56","0.57","0.48","0.43","0.44","0.46","0.36","0.58","0.52","0.52","0.47","0.49","0.56","0.56","0.54","0.42","0.42","0.64","0.62","0.62","0.36","0.41","0.42","0.44","0.42","0.43","0.40","0.68","0.67","0.67","0.65","0.87","0.62","0.57","0.61","0.54","0.54","0.42","0.40","0.51","0.44","0.39","0.46","0.15","0.43","0.44","0.43","0.50","0.11","0.22","0.16","0.27","0.24","0.25","0.24","0.21","0.21","0.64","0.71","0.61","0.65","0.71","0.57","0.62","0.76","0.60","0.67"],["hg19_GZMK","hg19_KLRB1","hg19_DUSP2","hg19_IL7R","hg19_NCR3","hg19_CEBPD","hg19_KLRG1","hg19_CD69","hg19_LINC01871","hg19_IL32","hg19_CD8B","hg19_CMC1","hg19_CCL5","hg19_CD8A","hg19_GZMM","hg19_DUSP2","hg19_NDUFA6","hg19_HCST","hg19_RNF166","hg19_FYN","hg19_ZNF683","hg19_TRBV20-1","hg19_CD8A","hg19_FGFBP2","hg19_GZMH","hg19_CD8B","hg19_CCL5","hg19_CST7","hg19_KLRD1","hg19_CYTOR","hg19_CCR7","hg19_ACTN1","hg19_NELL2","hg19_PASK","hg19_MAL","hg19_CD8B","hg19_LEF1","hg19_PIK3IP1","hg19_LDLRAP1","hg19_PCED1B","hg19_LTB","hg19_TCF7","hg19_IL7R","hg19_LDHB","hg19_INPP4B","hg19_CD27","hg19_LEF1","hg19_NOSIP","hg19_SELL","hg19_CAMK4","hg19_FCN1","hg19_LYZ","hg19_SPI1","hg19_CYBB","hg19_HLA-DRA","hg19_S100A9","hg19_CD68","hg19_S100A8","hg19_CSTA","hg19_VCAN","hg19_GNLY","hg19_CCL5","hg19_GZMB","hg19_CTSW","hg19_NKG7","hg19_GZMH","hg19_IFITM2","hg19_KLRD1","hg19_CD8A","hg19_TYROBP","hg19_IL7R","hg19_S100A4","hg19_S100A10","hg19_IL32","hg19_EML4","hg19_FAM107B","hg19_RORA","hg19_CD2","hg19_TNFAIP3","hg19_GUK1","hg19_SH2D1B","hg19_KLRF1","hg19_CLIC3","hg19_FCER1G","hg19_MYOM2","hg19_TRDC","hg19_SPON2","hg19_TYROBP","hg19_IL2RB","hg19_KLRB1"],["1","1","1","1","1","1","1","1","1","1","2","2","2","2","2","2","2","2","2","2","3","3","3","3","3","3","3","3","3","3","4","4","4","4","4","4","4","4","4","4","5","5","5","5","5","5","5","5","5","5","6","6","6","6","6","6","6","6","6","6","7","7","7","7","7","7","7","7","7","7","8","8","8","8","8","8","8","8","8","8","9","9","9","9","9","9","9","9","9","9"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>stats.W<\/th>\n      <th>pval<\/th>\n      <th>p.adjust<\/th>\n      <th>meanExprs.1<\/th>\n      <th>meanExprs.2<\/th>\n      <th>meanPct.1<\/th>\n      <th>meanPct.2<\/th>\n      <th>meanDiff<\/th>\n      <th>pctDiff<\/th>\n      <th>name<\/th>\n      <th>group<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"order":[],"autoWidth":false,"orderClasses":false,"columnDefs":[{"orderable":false,"targets":0}]}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-085215389b1764af181e" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-085215389b1764af181e">{"x":{"filter":"none","data":[["1.hg19_GZMK","1.hg19_KLRB1","1.hg19_DUSP2","1.hg19_IL7R","1.hg19_NCR3","1.hg19_CEBPD","1.hg19_KLRG1","1.hg19_CD69","1.hg19_LINC01871","1.hg19_IL32","2.hg19_SH2D1B","2.hg19_KLRF1","2.hg19_CLIC3","2.hg19_FCER1G","2.hg19_MYOM2","2.hg19_TRDC","2.hg19_SPON2","2.hg19_TYROBP","2.hg19_IL2RB","2.hg19_KLRB1","3.hg19_CD8B","3.hg19_CCL5","3.hg19_CD8A","3.hg19_CMC1","3.hg19_KLRG1","3.hg19_DUSP2","3.hg19_FYN","3.hg19_GZMM","3.hg19_SRP14","3.hg19_HCST","4.hg19_IL7R","4.hg19_S100A4","4.hg19_S100A10","4.hg19_IL32","4.hg19_FAM107B","4.hg19_EML4","4.hg19_CD6","4.hg19_CD2","4.hg19_RORA","4.hg19_ITGB1","5.hg19_TRBV20-1","5.hg19_ZNF683","5.hg19_FGFBP2","5.hg19_CD8A","5.hg19_GZMH","5.hg19_CD8B","5.hg19_CYTOR","5.hg19_CST7","5.hg19_KLRD1","5.hg19_CCL5","6.hg19_GNLY","6.hg19_CCL5","6.hg19_CTSW","6.hg19_GZMB","6.hg19_GZMH","6.hg19_IFITM2","6.hg19_NKG7","6.hg19_PRSS23","6.hg19_CD8A","6.hg19_HOPX","7.hg19_FCN1","7.hg19_LYZ","7.hg19_SPI1","7.hg19_CYBB","7.hg19_HLA-DRA","7.hg19_S100A9","7.hg19_CD68","7.hg19_S100A8","7.hg19_CSTA","7.hg19_VCAN","8.hg19_LTB","8.hg19_TCF7","8.hg19_IL7R","8.hg19_LDHB","8.hg19_CD27","8.hg19_LEF1","8.hg19_NOSIP","8.hg19_SELL","8.hg19_NPM1","8.hg19_CAMK4","9.hg19_CCR7","9.hg19_ACTN1","9.hg19_NELL2","9.hg19_PASK","9.hg19_MAL","9.hg19_CD8B","9.hg19_LEF1","9.hg19_PIK3IP1","9.hg19_LDLRAP1","9.hg19_PCED1B"],["2668"," 850","2126","2159","3396","3393","2878","3109","3983","3478","3603","2742","3449","3498","2047","4272","2804","2748","3121","3143","3340","3350","4081","4764","5470","5452","5686","5693","5469","5538","2588","3314","3461","3771","4262","4495","4462","4328","4506","4372","4925","4728","4462","4388","5128","7448","7474","6322","6835","6392","2260","3760","4760","4706","4978","4723","4865","6370","5498","6103","2400","2406","2409","2600"," 661","2808","3200","2825","3400","3400","3843","5576","5575","5776","8738","8339","7978","8482","7152","9506","2449","2815","2907","3163","3115","2175","2384","2787","3260","3524"],["7.8e-24","2.5e-23","1.1e-11","1.2e-10","1.6e-10","3.2e-10","9.2e-09","2.5e-07","7.5e-06","7.6e-05","7.0e-52","3.7e-37","4.7e-34","1.4e-33","1.6e-33","6.8e-31","1.4e-27","2.3e-27","8.4e-26","3.1e-24","3.1e-16","8.1e-11","3.7e-09","9.7e-09","1.6e-05","3.1e-05","2.1e-04","2.7e-04","2.7e-04","3.7e-04","2.6e-09","1.1e-05","2.6e-05","1.8e-04","7.1e-04","1.5e-03","1.6e-03","2.0e-03","2.1e-03","2.2e-03","2.3e-42","1.6e-37","1.1e-22","2.1e-22","5.5e-19","8.9e-14","7.2e-13","9.0e-13","1.7e-12","1.9e-12","1.4e-22","1.2e-15","1.5e-13","2.9e-13","2.3e-12","1.5e-11","1.8e-11","5.1e-11","1.7e-10","1.5e-09","4.5e-64","1.1e-61","1.3e-61","1.9e-61","9.1e-60","2.2e-56","1.3e-53","4.7e-52","4.8e-51","4.8e-51","1.1e-33","2.2e-30","8.0e-24","5.5e-21","6.7e-20","5.2e-19","2.4e-15","2.9e-15","6.4e-15","1.7e-13","3.0e-21","3.7e-19","8.1e-19","1.6e-18","1.4e-13","2.8e-13","5.0e-13","5.0e-11","1.5e-10","2.7e-10"],["7.8e-24","2.5e-23","1.1e-11","1.2e-10","1.6e-10","3.2e-10","9.2e-09","2.5e-07","7.5e-06","7.6e-05","7.0e-52","3.7e-37","4.7e-34","1.4e-33","1.6e-33","6.8e-31","1.4e-27","2.3e-27","8.4e-26","3.1e-24","3.1e-16","8.1e-11","3.7e-09","9.7e-09","1.6e-05","3.1e-05","2.1e-04","2.7e-04","2.7e-04","3.7e-04","2.6e-09","1.1e-05","2.6e-05","1.8e-04","7.1e-04","1.5e-03","1.6e-03","2.0e-03","2.1e-03","2.2e-03","2.3e-42","1.6e-37","1.1e-22","2.1e-22","5.5e-19","8.9e-14","7.2e-13","9.0e-13","1.7e-12","1.9e-12","1.4e-22","1.2e-15","1.5e-13","2.9e-13","2.3e-12","1.5e-11","1.8e-11","5.1e-11","1.7e-10","1.5e-09","4.5e-64","1.1e-61","1.3e-61","1.9e-61","9.1e-60","2.2e-56","1.3e-53","4.7e-52","4.8e-51","4.8e-51","1.1e-33","2.2e-30","8.0e-24","5.5e-21","6.7e-20","5.2e-19","2.4e-15","2.9e-15","6.4e-15","1.7e-13","3.0e-21","3.7e-19","8.1e-19","1.6e-18","1.4e-13","2.8e-13","5.0e-13","5.0e-11","1.5e-10","2.7e-10"],["0.1088","0.4686","0.5104","0.9285","0.1657","0.2075","0.4686","0.4013","0.2302","1.7839","0.0184","0.1293","0.0921","0.1812","0.2495","0.0941","0.2766","0.4647","0.2215","0.4411","0.3411","1.9895","0.8091","0.4066","0.4660","0.5375","0.5282","0.6042","1.1880","1.3497","0.9398","2.3237","1.2814","1.7858","0.4562","0.3672","0.4132","0.6647","0.4315","0.6902","0.1020","0.1152","0.6229","0.6790","0.7474","0.3320","0.2744","1.3792","0.6761","1.8741","2.3051","1.9122","0.6290","0.9245","0.8180","1.6226","2.0948","0.2391","0.7842","0.4878","0.0000","0.0016","0.0027","0.0000","0.0529","0.0020","0.0000","0.0079","0.0000","0.0000","0.5670","0.2327","0.7453","0.7186","0.1238","0.1807","0.3746","0.3341","1.2434","0.1818","0.0890","0.0690","0.0740","0.0513","0.1080","0.3614","0.2537","0.2096","0.1353","0.0991"],["0.92","2.80","1.69","2.53","0.81","0.94","1.28","1.07","0.69","2.67","0.91","1.22","1.42","1.71","1.81","0.96","1.78","2.11","1.34","2.02","1.39","3.81","1.82","1.33","1.07","1.10","0.99","1.09","1.63","1.94","2.33","3.31","1.99","2.62","0.83","0.79","0.76","1.09","0.82","1.18","1.66","1.15","2.01","2.06","2.07","1.00","0.94","2.64","1.56","3.64","5.22","3.88","1.61","2.21","1.96","2.59","3.93","0.78","1.74","1.13","1.83","2.74","1.14","0.81","2.84","2.53","0.74","2.81","1.04","1.50","2.38","1.20","2.20","1.79","0.61","0.82","1.04","1.04","2.07","0.62","0.82","0.65","0.56","0.51","0.60","1.57","1.09","0.86","0.66","0.46"],["0.0565","0.2285","0.3489","0.4251","0.1278","0.1351","0.2998","0.3464","0.1843","0.7617","0.0130","0.0935","0.0831","0.0779","0.1766","0.0597","0.1896","0.1818","0.1844","0.2000","0.2127","0.6101","0.4127","0.2430","0.3089","0.3570","0.4101","0.4329","0.8076","0.7544","0.4236","0.8941","0.7438","0.7660","0.3793","0.3153","0.3350","0.4828","0.3374","0.4581","0.0438","0.0767","0.3397","0.3699","0.3726","0.1945","0.2356","0.5589","0.3753","0.5781","0.5748","0.5958","0.3753","0.4094","0.3990","0.8294","0.6010","0.1811","0.3990","0.2992","0.0000","0.0025","0.0025","0.0000","0.0450","0.0025","0.0000","0.0075","0.0000","0.0000","0.2951","0.1719","0.3352","0.5100","0.1032","0.1461","0.3095","0.2264","0.7221","0.1633","0.0784","0.0686","0.0637","0.0515","0.0931","0.2304","0.1985","0.1838","0.1275","0.0980"],["0.63","0.97","0.90","0.93","0.57","0.57","0.83","0.77","0.53","1.00","0.65","0.81","0.69","0.73","0.88","0.63","0.81","0.94","0.79","0.87","0.79","1.00","0.90","0.62","0.60","0.67","0.64","0.69","0.93","0.93","0.94","1.00","0.97","0.94","0.65","0.55","0.61","0.74","0.58","0.68","0.67","0.71","0.90","0.92","0.92","0.64","0.60","0.99","0.82","1.00","1.00","1.00","0.86","0.93","0.89","0.98","1.00","0.59","0.88","0.73","0.68","0.68","0.68","0.65","0.92","0.62","0.57","0.62","0.54","0.54","0.93","0.78","0.95","0.86","0.53","0.59","0.72","0.66","0.95","0.55","0.66","0.59","0.59","0.52","0.59","0.79","0.76","0.72","0.55","0.52"],["0.58","0.74","0.55","0.51","0.44","0.43","0.53","0.42","0.35","0.24","0.64","0.71","0.61","0.65","0.71","0.57","0.62","0.76","0.60","0.67","0.57","0.39","0.49","0.38","0.29","0.31","0.23","0.26","0.12","0.17","0.51","0.11","0.22","0.17","0.27","0.23","0.28","0.26","0.24","0.22","0.62","0.63","0.56","0.55","0.54","0.44","0.36","0.43","0.44","0.42","0.43","0.40","0.48","0.52","0.49","0.15","0.40","0.41","0.48","0.43","0.68","0.67","0.67","0.65","0.87","0.62","0.57","0.61","0.54","0.54","0.64","0.61","0.62","0.35","0.43","0.44","0.41","0.43","0.23","0.38","0.58","0.52","0.52","0.47","0.49","0.56","0.56","0.54","0.42","0.42"],["0.58","0.74","0.55","0.51","0.44","0.43","0.53","0.42","0.35","0.24","0.64","0.71","0.61","0.65","0.71","0.57","0.62","0.76","0.60","0.67","0.57","0.39","0.49","0.38","0.29","0.31","0.23","0.26","0.12","0.17","0.51","0.11","0.22","0.17","0.27","0.23","0.28","0.26","0.24","0.22","0.62","0.63","0.56","0.55","0.54","0.44","0.36","0.43","0.44","0.42","0.43","0.40","0.48","0.52","0.49","0.15","0.40","0.41","0.48","0.43","0.68","0.67","0.67","0.65","0.87","0.62","0.57","0.61","0.54","0.54","0.64","0.61","0.62","0.35","0.43","0.44","0.41","0.43","0.23","0.38","0.58","0.52","0.52","0.47","0.49","0.56","0.56","0.54","0.42","0.42"],["hg19_GZMK","hg19_KLRB1","hg19_DUSP2","hg19_IL7R","hg19_NCR3","hg19_CEBPD","hg19_KLRG1","hg19_CD69","hg19_LINC01871","hg19_IL32","hg19_SH2D1B","hg19_KLRF1","hg19_CLIC3","hg19_FCER1G","hg19_MYOM2","hg19_TRDC","hg19_SPON2","hg19_TYROBP","hg19_IL2RB","hg19_KLRB1","hg19_CD8B","hg19_CCL5","hg19_CD8A","hg19_CMC1","hg19_KLRG1","hg19_DUSP2","hg19_FYN","hg19_GZMM","hg19_SRP14","hg19_HCST","hg19_IL7R","hg19_S100A4","hg19_S100A10","hg19_IL32","hg19_FAM107B","hg19_EML4","hg19_CD6","hg19_CD2","hg19_RORA","hg19_ITGB1","hg19_TRBV20-1","hg19_ZNF683","hg19_FGFBP2","hg19_CD8A","hg19_GZMH","hg19_CD8B","hg19_CYTOR","hg19_CST7","hg19_KLRD1","hg19_CCL5","hg19_GNLY","hg19_CCL5","hg19_CTSW","hg19_GZMB","hg19_GZMH","hg19_IFITM2","hg19_NKG7","hg19_PRSS23","hg19_CD8A","hg19_HOPX","hg19_FCN1","hg19_LYZ","hg19_SPI1","hg19_CYBB","hg19_HLA-DRA","hg19_S100A9","hg19_CD68","hg19_S100A8","hg19_CSTA","hg19_VCAN","hg19_LTB","hg19_TCF7","hg19_IL7R","hg19_LDHB","hg19_CD27","hg19_LEF1","hg19_NOSIP","hg19_SELL","hg19_NPM1","hg19_CAMK4","hg19_CCR7","hg19_ACTN1","hg19_NELL2","hg19_PASK","hg19_MAL","hg19_CD8B","hg19_LEF1","hg19_PIK3IP1","hg19_LDLRAP1","hg19_PCED1B"],["1","1","1","1","1","1","1","1","1","1","2","2","2","2","2","2","2","2","2","2","3","3","3","3","3","3","3","3","3","3","4","4","4","4","4","4","4","4","4","4","5","5","5","5","5","5","5","5","5","5","6","6","6","6","6","6","6","6","6","6","7","7","7","7","7","7","7","7","7","7","8","8","8","8","8","8","8","8","8","8","9","9","9","9","9","9","9","9","9","9"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>stats.W<\/th>\n      <th>pval<\/th>\n      <th>p.adjust<\/th>\n      <th>meanExprs.1<\/th>\n      <th>meanExprs.2<\/th>\n      <th>meanPct.1<\/th>\n      <th>meanPct.2<\/th>\n      <th>meanDiff<\/th>\n      <th>pctDiff<\/th>\n      <th>name<\/th>\n      <th>group<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"order":[],"autoWidth":false,"orderClasses":false,"columnDefs":[{"orderable":false,"targets":0}]}},"evals":[],"jsHooks":[]}</script>
 </div>
 <div id="for-adt-count" class="section level3">
 <h3 class="hasAnchor">
 <a href="#for-adt-count" class="anchor"></a>For ADT count</h3>
-<div class="sourceCode" id="cb61"><html><body><pre class="r"><span class="no">sce_citeseq</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/DEgenes.html">DEgenes</a></span>(<span class="no">sce_citeseq</span>,
+<div class="sourceCode" id="cb34"><html><body><pre class="r"><span class="no">sce_citeseq</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/CiteFuse/man/DEgenes.html">DEgenes</a></span>(<span class="no">sce_citeseq</span>,
                        <span class="kw">altExp_name</span> <span class="kw">=</span> <span class="st">"ADT"</span>,
                        <span class="kw">group</span> <span class="kw">=</span> <span class="no">sce_citeseq</span>$<span class="no">SNF_W_louvain</span>,
                        <span class="kw">return_all</span> <span class="kw">=</span> <span class="fl">TRUE</span>,
                        <span class="kw">exprs_pct</span> <span class="kw">=</span> <span class="fl">0.5</span>)
 
 
-<span class="no">sce_citeseq</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/selectDEgenes.html">selectDEgenes</a></span>(<span class="no">sce_citeseq</span>,
+<span class="no">sce_citeseq</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/CiteFuse/man/selectDEgenes.html">selectDEgenes</a></span>(<span class="no">sce_citeseq</span>,
                              <span class="kw">altExp_name</span> <span class="kw">=</span> <span class="st">"ADT"</span>)
 <span class="fu"><a href="https://rdrr.io/pkg/DT/man/datatable.html">datatable</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/format.html">format</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/do.call.html">do.call</a></span>(<span class="no">rbind</span>, <span class="fu">metadata</span>(<span class="no">sce_citeseq</span>)<span class="kw">[[</span><span class="st">"DE_res_ADT_filter"</span>]]),
                  <span class="kw">digits</span> <span class="kw">=</span> <span class="fl">2</span>))</pre></body></html></div>
-<div id="htmlwidget-6cc20a7e01a5bb42e554" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-6cc20a7e01a5bb42e554">{"x":{"filter":"none","data":[["1.CD26 (Adenosine)","1.CD28","4","5.CD28","5.CD26 (Adenosine)","5.CD3","6.LAMP1","6.CD45RO","6.CD45","6.B220 (CD45R)","6.CD14","6.B7-H1 (PD-L1)","6.Siglec-8","6.PD-L1 (CD274)","6.TCRg","6.EpCAM (CD326)","9"],[" 2830"," 3124"," 4549"," 4114","10836","10830"," 1652"," 1660"," 2274"," 2366"," 3156"," 2859"," 2594"," 2604"," 2774"," 2860"," 3146"],["5.0e-08","7.3e-06","3.7e-02","2.6e-27","6.5e-07","6.8e-06","2.0e-15","3.0e-15","2.9e-13","2.0e-12","1.2e-11","1.7e-11","2.0e-11","4.1e-11","4.2e-11","8.1e-11","4.9e-17"],["5.0e-08","7.3e-06","3.7e-02","2.6e-27","6.5e-07","6.8e-06","2.0e-15","3.0e-15","2.9e-13","2.0e-12","1.2e-11","1.7e-11","2.0e-11","4.1e-11","4.2e-11","8.1e-11","4.9e-17"],["0.46","1.48","1.51","1.28","0.45","1.43","0.92","1.13","0.57","0.79","0.27","0.41","0.78","1.13","0.56","0.54","0.65"],["1.59","2.28","1.87","2.54","0.86","1.83","2.55","2.59","1.46","1.71","1.59","1.32","1.80","2.16","1.44","1.51","1.74"],["0.41","0.85","0.85","0.83","0.38","0.85","0.77","0.85","0.58","0.75","0.33","0.46","0.72","0.87","0.57","0.56","0.54"],["0.73","0.97","1.00","0.99","0.63","0.97","1.00","1.00","0.95","0.97","0.70","0.84","0.95","0.97","0.86","0.89","0.94"],["0.32","0.11","0.15","0.16","0.25","0.12","0.23","0.15","0.37","0.22","0.38","0.38","0.22","0.10","0.30","0.33","0.40"],["0.32","0.11","0.15","0.16","0.25","0.12","0.23","0.15","0.37","0.22","0.38","0.38","0.22","0.10","0.30","0.33","0.40"],["CD26 (Adenosine)","CD28","CD28","CD28","CD26 (Adenosine)","CD3","LAMP1","CD45RO","CD45","B220 (CD45R)","CD14","B7-H1 (PD-L1)","Siglec-8","PD-L1 (CD274)","TCRg","EpCAM (CD326)","CD366 (tim3)"],["1","1","4","5","5","5","6","6","6","6","6","6","6","6","6","6","9"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>stats.W<\/th>\n      <th>pval<\/th>\n      <th>p.adjust<\/th>\n      <th>meanExprs.1<\/th>\n      <th>meanExprs.2<\/th>\n      <th>meanPct.1<\/th>\n      <th>meanPct.2<\/th>\n      <th>meanDiff<\/th>\n      <th>pctDiff<\/th>\n      <th>name<\/th>\n      <th>group<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"order":[],"autoWidth":false,"orderClasses":false,"columnDefs":[{"orderable":false,"targets":0}]}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-f79f7e19c194e1958559" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-f79f7e19c194e1958559">{"x":{"filter":"none","data":[["1.CD26 (Adenosine)","1.CD28","2","7.LAMP1","7.CD45RO","7.CD45","7.B220 (CD45R)","7.CD14","7.B7-H1 (PD-L1)","7.Siglec-8","7.PD-L1 (CD274)","7.TCRg","7.EpCAM (CD326)","8.CD28","8.CD26 (Adenosine)","8.CD3","9"],[" 2830"," 3124"," 3146"," 1652"," 1660"," 2274"," 2366"," 3156"," 2859"," 2594"," 2604"," 2774"," 2860"," 4106","10616","10628"," 4549"],["5.0e-08","7.3e-06","4.9e-17","2.0e-15","3.0e-15","2.9e-13","2.0e-12","1.2e-11","1.7e-11","2.0e-11","4.1e-11","4.2e-11","8.1e-11","1.3e-26","6.5e-07","7.4e-06","3.7e-02"],["5.0e-08","7.3e-06","4.9e-17","2.0e-15","3.0e-15","2.9e-13","2.0e-12","1.2e-11","1.7e-11","2.0e-11","4.1e-11","4.2e-11","8.1e-11","1.3e-26","6.5e-07","7.4e-06","3.7e-02"],["0.46","1.48","0.65","0.92","1.13","0.57","0.79","0.27","0.41","0.78","1.13","0.56","0.54","1.29","0.45","1.43","1.51"],["1.59","2.28","1.74","2.55","2.59","1.46","1.71","1.59","1.32","1.80","2.16","1.44","1.51","2.54","0.87","1.83","1.87"],["0.41","0.85","0.54","0.77","0.85","0.58","0.75","0.33","0.46","0.72","0.87","0.57","0.56","0.83","0.38","0.85","0.85"],["0.73","0.97","0.94","1.00","1.00","0.95","0.97","0.70","0.84","0.95","0.97","0.86","0.89","0.99","0.64","0.97","1.00"],["0.32","0.11","0.40","0.23","0.15","0.37","0.22","0.38","0.38","0.22","0.10","0.30","0.33","0.16","0.26","0.11","0.15"],["0.32","0.11","0.40","0.23","0.15","0.37","0.22","0.38","0.38","0.22","0.10","0.30","0.33","0.16","0.26","0.11","0.15"],["CD26 (Adenosine)","CD28","CD366 (tim3)","LAMP1","CD45RO","CD45","B220 (CD45R)","CD14","B7-H1 (PD-L1)","Siglec-8","PD-L1 (CD274)","TCRg","EpCAM (CD326)","CD28","CD26 (Adenosine)","CD3","CD28"],["1","1","2","7","7","7","7","7","7","7","7","7","7","8","8","8","9"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>stats.W<\/th>\n      <th>pval<\/th>\n      <th>p.adjust<\/th>\n      <th>meanExprs.1<\/th>\n      <th>meanExprs.2<\/th>\n      <th>meanPct.1<\/th>\n      <th>meanPct.2<\/th>\n      <th>meanDiff<\/th>\n      <th>pctDiff<\/th>\n      <th>name<\/th>\n      <th>group<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"order":[],"autoWidth":false,"orderClasses":false,"columnDefs":[{"orderable":false,"targets":0}]}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 <div id="visualising-de-results" class="section level2">
@@ -439,20 +433,20 @@
 <h3 class="hasAnchor">
 <a href="#circlepackplot" class="anchor"></a>circlepackPlot</h3>
 <p>The <code>circlepackPlot</code> takes a list of all DE genes from RNA and ADT DE analysis and will plot only the top most significant DE genes to plot.</p>
-<div class="sourceCode" id="cb62"><html><body><pre class="r"><span class="no">rna_DEgenes</span> <span class="kw">&lt;-</span> <span class="fu">metadata</span>(<span class="no">sce_citeseq</span>)<span class="kw">[[</span><span class="st">"DE_res_RNA_filter"</span>]]
+<div class="sourceCode" id="cb35"><html><body><pre class="r"><span class="no">rna_DEgenes</span> <span class="kw">&lt;-</span> <span class="fu">metadata</span>(<span class="no">sce_citeseq</span>)<span class="kw">[[</span><span class="st">"DE_res_RNA_filter"</span>]]
 <span class="no">adt_DEgenes</span> <span class="kw">&lt;-</span> <span class="fu">metadata</span>(<span class="no">sce_citeseq</span>)<span class="kw">[[</span><span class="st">"DE_res_ADT_filter"</span>]]
 
 <span class="no">rna_DEgenes</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="no">rna_DEgenes</span>, <span class="kw">function</span>(<span class="no">x</span>){
   <span class="no">x</span>$<span class="no">name</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html">gsub</a></span>(<span class="st">"hg19_"</span>, <span class="st">""</span>, <span class="no">x</span>$<span class="no">name</span>)
   <span class="no">x</span>})
-<span class="fu"><a href="../reference/DEbubblePlot.html">DEbubblePlot</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">RNA</span> <span class="kw">=</span> <span class="no">rna_DEgenes</span>, <span class="kw">ADT</span> <span class="kw">=</span> <span class="no">adt_DEgenes</span>))</pre></body></html></div>
-<p><img src="CiteFuse_files/figure-html/unnamed-chunk-28-1.png" width="960"></p>
+<span class="fu"><a href="https://rdrr.io/pkg/CiteFuse/man/DEbubblePlot.html">DEbubblePlot</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">RNA</span> <span class="kw">=</span> <span class="no">rna_DEgenes</span>, <span class="kw">ADT</span> <span class="kw">=</span> <span class="no">adt_DEgenes</span>))</pre></body></html></div>
+<p><img src="CiteFuse_files/figure-html/unnamed-chunk-27-1.png"><!-- --></p>
 </div>
 <div id="decomparisonplot" class="section level3">
 <h3 class="hasAnchor">
 <a href="#decomparisonplot" class="anchor"></a>DEcomparisonPlot</h3>
 <p>For the <code>DEcomparisonPlot</code>, as well as a list containing the DE genes for RNA and ADT, a <code>feature_list</code> specifying the genes and proteins of interest is required.</p>
-<div class="sourceCode" id="cb63"><html><body><pre class="r"><span class="no">rna_list</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"hg19_CD4"</span>,
+<div class="sourceCode" id="cb36"><html><body><pre class="r"><span class="no">rna_list</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"hg19_CD4"</span>,
               <span class="st">"hg19_CD8A"</span>,
               <span class="st">"hg19_HLA-DRB1"</span>,
               <span class="st">"hg19_ITGAX"</span>,
@@ -468,9 +462,9 @@
 <span class="no">feature_list</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">RNA</span> <span class="kw">=</span> <span class="no">rna_list</span>, <span class="kw">ADT</span> <span class="kw">=</span> <span class="no">adt_list</span>)
 <span class="no">de_list</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">RNA</span> <span class="kw">=</span> <span class="no">rna_DEgenes_all</span>, <span class="kw">ADT</span> <span class="kw">=</span> <span class="no">adt_DEgenes_all</span>)
 
-<span class="fu"><a href="../reference/DEcomparisonPlot.html">DEcomparisonPlot</a></span>(<span class="kw">de_list</span> <span class="kw">=</span> <span class="no">de_list</span>,
+<span class="fu"><a href="https://rdrr.io/pkg/CiteFuse/man/DEcomparisonPlot.html">DEcomparisonPlot</a></span>(<span class="kw">de_list</span> <span class="kw">=</span> <span class="no">de_list</span>,
                  <span class="kw">feature_list</span> <span class="kw">=</span> <span class="no">feature_list</span>)</pre></body></html></div>
-<p><img src="CiteFuse_files/figure-html/unnamed-chunk-29-1.png" width="960"></p>
+<p><img src="CiteFuse_files/figure-html/unnamed-chunk-28-1.png"><!-- --></p>
 </div>
 </div>
 </div>
@@ -478,289 +472,298 @@
 <h1 class="hasAnchor">
 <a href="#adt-importance-evaluation" class="anchor"></a>ADT Importance Evaluation</h1>
 <p>An important evaluation in CITE-seq data analysis is to assess the quality of each ADT and to evaluate the contribution of ADTs towards clustering outcome. CiteFuse calculates the relative importance of ADT towards clustering outcome by using a random forest model. The higher the score of an ADT, the greater its importance towards the final clustering outcome.</p>
-<div class="sourceCode" id="cb64"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="fl">2020</span>)
-<span class="no">sce_citeseq</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/importanceADT.html">importanceADT</a></span>(<span class="no">sce_citeseq</span>,
+<div class="sourceCode" id="cb37"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="fl">2020</span>)
+<span class="no">sce_citeseq</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/CiteFuse/man/importanceADT.html">importanceADT</a></span>(<span class="no">sce_citeseq</span>,
                              <span class="kw">group</span> <span class="kw">=</span> <span class="no">sce_citeseq</span>$<span class="no">SNF_W_louvain</span>,
                              <span class="kw">subsample</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
 
-<span class="fu"><a href="../reference/visImportance.html">visImportance</a></span>(<span class="no">sce_citeseq</span>, <span class="kw">plot</span> <span class="kw">=</span> <span class="st">"boxplot"</span>)</pre></body></html></div>
-<p><img src="CiteFuse_files/figure-html/unnamed-chunk-30-1.png" width="768"></p>
-<div class="sourceCode" id="cb65"><html><body><pre class="r"><span class="fu"><a href="../reference/visImportance.html">visImportance</a></span>(<span class="no">sce_citeseq</span>, <span class="kw">plot</span> <span class="kw">=</span> <span class="st">"heatmap"</span>)</pre></body></html></div>
-<p><img src="CiteFuse_files/figure-html/unnamed-chunk-30-2.png" width="768"></p>
-<div class="sourceCode" id="cb66"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/sort.html">sort</a></span>(<span class="fu">metadata</span>(<span class="no">sce_citeseq</span>)<span class="kw">[[</span><span class="st">"importanceADT"</span>]], <span class="kw">decreasing</span> <span class="kw">=</span> <span class="fl">TRUE</span>)[<span class="fl">1</span>:<span class="fl">20</span>]</pre></body></html></div>
-<pre><code>##               CD4               CD8              CD27               CD5 
-##         30.558333         29.224077         27.691326         22.097058 
-##               CD7      PECAM (CD31)             CD11b               CD2 
-##         16.041289         13.495346         12.716874         12.241439 
-##    MHCII (HLA-DR)              CD28              CD44 IL7Ralpha (CD127) 
-##         10.332952         10.189411          9.006814          8.808518 
-##         HLA-A,B,C             CD62L             CD11c            CD45RA 
-##          6.961884          5.921209          5.678501          5.612525 
-##      CD366 (tim3)               CD3              CD56      PD-1 (CD279) 
-##          5.294986          5.263878          4.732472          4.427862</code></pre>
+<span class="fu"><a href="https://rdrr.io/pkg/CiteFuse/man/visImportance.html">visImportance</a></span>(<span class="no">sce_citeseq</span>, <span class="kw">plot</span> <span class="kw">=</span> <span class="st">"boxplot"</span>)</pre></body></html></div>
+<p><img src="CiteFuse_files/figure-html/unnamed-chunk-29-1.png"><!-- --></p>
+<div class="sourceCode" id="cb38"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/pkg/CiteFuse/man/visImportance.html">visImportance</a></span>(<span class="no">sce_citeseq</span>, <span class="kw">plot</span> <span class="kw">=</span> <span class="st">"heatmap"</span>)</pre></body></html></div>
+<p><img src="CiteFuse_files/figure-html/unnamed-chunk-29-2.png"><!-- --></p>
+<div class="sourceCode" id="cb39"><html><body><pre class="r">
+<span class="fu"><a href="https://rdrr.io/r/base/sort.html">sort</a></span>(<span class="fu">metadata</span>(<span class="no">sce_citeseq</span>)<span class="kw">[[</span><span class="st">"importanceADT"</span>]], <span class="kw">decreasing</span> <span class="kw">=</span> <span class="fl">TRUE</span>)[<span class="fl">1</span>:<span class="fl">20</span>]
+<span class="co">#&gt;               CD4              CD27               CD8               CD5 </span>
+<span class="co">#&gt;         30.036201         29.449213         28.557098         25.486926 </span>
+<span class="co">#&gt;               CD7      PECAM (CD31)             CD11b               CD2 </span>
+<span class="co">#&gt;         16.493928         12.961868         11.988086         11.766563 </span>
+<span class="co">#&gt;              CD28              CD44    MHCII (HLA-DR) IL7Ralpha (CD127) </span>
+<span class="co">#&gt;          9.947612          9.788229          9.651328          8.516038 </span>
+<span class="co">#&gt;         HLA-A,B,C             CD62L      CD366 (tim3)            CD45RA </span>
+<span class="co">#&gt;          7.126189          5.710455          5.670500          5.659654 </span>
+<span class="co">#&gt;               CD3             CD11c              CD56      PD-1 (CD279) </span>
+<span class="co">#&gt;          5.481791          5.202686          5.024104          4.637673</span></pre></body></html></div>
 <p>The importance scores can be visualised in a boxplot and heatmap. Our evaluation of ADT importance show that unsurprisingly CD4 and CD8 are the top two discriminating proteins in PBMCs.</p>
 <p>Let us try clustering with only ADTs with a score greater than 5.</p>
-<div class="sourceCode" id="cb68"><html><body><pre class="r"><span class="no">subset_adt</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/which.html">which</a></span>(<span class="fu">metadata</span>(<span class="no">sce_citeseq</span>)<span class="kw">[[</span><span class="st">"importanceADT"</span>]] <span class="kw">&gt;</span> <span class="fl">5</span>))
-<span class="no">subset_adt</span></pre></body></html></div>
-<pre><code>##  [1] "CD11b"             "CD11c"             "CD2"              
-##  [4] "CD27"              "CD28"              "CD3"              
-##  [7] "CD366 (tim3)"      "CD4"               "CD44"             
-## [10] "CD45RA"            "CD5"               "CD62L"            
-## [13] "CD7"               "CD8"               "HLA-A,B,C"        
-## [16] "IL7Ralpha (CD127)" "MHCII (HLA-DR)"    "PECAM (CD31)"</code></pre>
-<div class="sourceCode" id="cb70"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span>(<span class="no">sce_citeseq</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/CiteFuse.html">CiteFuse</a></span>(<span class="no">sce_citeseq</span>,
+<div class="sourceCode" id="cb40"><html><body><pre class="r"><span class="no">subset_adt</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/which.html">which</a></span>(<span class="fu">metadata</span>(<span class="no">sce_citeseq</span>)<span class="kw">[[</span><span class="st">"importanceADT"</span>]] <span class="kw">&gt;</span> <span class="fl">5</span>))
+<span class="no">subset_adt</span>
+<span class="co">#&gt;  [1] "CD11b"             "CD11c"             "CD2"              </span>
+<span class="co">#&gt;  [4] "CD27"              "CD28"              "CD3"              </span>
+<span class="co">#&gt;  [7] "CD366 (tim3)"      "CD4"               "CD44"             </span>
+<span class="co">#&gt; [10] "CD45RA"            "CD5"               "CD56"             </span>
+<span class="co">#&gt; [13] "CD62L"             "CD7"               "CD8"              </span>
+<span class="co">#&gt; [16] "HLA-A,B,C"         "IL7Ralpha (CD127)" "MHCII (HLA-DR)"   </span>
+<span class="co">#&gt; [19] "PECAM (CD31)"</span>
+
+<span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span>(<span class="no">sce_citeseq</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/CiteFuse/man/CiteFuse.html">CiteFuse</a></span>(<span class="no">sce_citeseq</span>,
                                     <span class="kw">ADT_subset</span> <span class="kw">=</span> <span class="no">subset_adt</span>,
                                     <span class="kw">metadata_names</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"W_SNF_adtSubset1"</span>,
                                                        <span class="st">"W_ADT_adtSubset1"</span>,
-                                                       <span class="st">"W_RNA"</span>)))</pre></body></html></div>
-<pre><code>## Calculating affinity matrix 
-## Performing SNF</code></pre>
-<pre><code>##    user  system elapsed 
-##   4.625   0.047   4.679</code></pre>
-<div class="sourceCode" id="cb73"><html><body><pre class="r"><span class="no">SNF_W_clust_adtSubset1</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/spectralClustering.html">spectralClustering</a></span>(<span class="fu">metadata</span>(<span class="no">sce_citeseq</span>)<span class="kw">[[</span><span class="st">"W_SNF_adtSubset1"</span>]], <span class="kw">K</span> <span class="kw">=</span> <span class="fl">5</span>)</pre></body></html></div>
-<pre><code>## Computing Spectral Clustering 
-## Computing Diffusion Coordinates
-## Used default value: 5 dimensions</code></pre>
-<div class="sourceCode" id="cb75"><html><body><pre class="r"><span class="no">sce_citeseq</span>$<span class="no">SNF_W_clust_adtSubset1</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span>(<span class="no">SNF_W_clust_adtSubset1</span>$<span class="no">labels</span>)
+                                                       <span class="st">"W_RNA"</span>)))
+<span class="co">#&gt; Calculating affinity matrix </span>
+<span class="co">#&gt; Performing SNF</span>
+<span class="co">#&gt;    user  system elapsed </span>
+<span class="co">#&gt;   5.084   0.020   5.105</span>
+
+<span class="no">SNF_W_clust_adtSubset1</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/CiteFuse/man/spectralClustering.html">spectralClustering</a></span>(<span class="fu">metadata</span>(<span class="no">sce_citeseq</span>)<span class="kw">[[</span><span class="st">"W_SNF_adtSubset1"</span>]], <span class="kw">K</span> <span class="kw">=</span> <span class="fl">5</span>)
+<span class="co">#&gt; Computing Spectral Clustering</span>
+<span class="no">sce_citeseq</span>$<span class="no">SNF_W_clust_adtSubset1</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span>(<span class="no">SNF_W_clust_adtSubset1</span>$<span class="no">labels</span>)
 
 
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">mclust</span>)
-<span class="fu"><a href="https://mclust-org.github.io/mclust/reference/adjustedRandIndex.html">adjustedRandIndex</a></span>(<span class="no">sce_citeseq</span>$<span class="no">SNF_W_clust_adtSubset1</span>, <span class="no">sce_citeseq</span>$<span class="no">SNF_W_clust</span>)</pre></body></html></div>
-<pre><code>## [1] 0.9305236</code></pre>
+<span class="fu"><a href="https://mclust-org.github.io/mclust/reference/adjustedRandIndex.html">adjustedRandIndex</a></span>(<span class="no">sce_citeseq</span>$<span class="no">SNF_W_clust_adtSubset1</span>, <span class="no">sce_citeseq</span>$<span class="no">SNF_W_clust</span>)
+<span class="co">#&gt; [1] 0.9332215</span></pre></body></html></div>
 <p>When we compare between the two clustering outcomes, we find that the adjusted rand index is approximately 0.93, where a value of 1 denotes complete concordance.</p>
 </div>
 <div id="gene---adt-network" class="section level1">
 <h1 class="hasAnchor">
 <a href="#gene---adt-network" class="anchor"></a>Gene - ADT network</h1>
 <p>The <code>geneADTnetwork</code> function plots an interaction network between genes identified from the DE analysis. The nodes denote proteins and RNA whilst the edges denote positive and negative correlation in expression.</p>
-<div class="sourceCode" id="cb77"><html><body><pre class="r"><span class="no">RNA_feature_subset</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="no">rna_DEgenes_all</span>, <span class="st">"[["</span>, <span class="st">"name"</span>))))
+<div class="sourceCode" id="cb41"><html><body><pre class="r"><span class="no">RNA_feature_subset</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="no">rna_DEgenes_all</span>, <span class="st">"[["</span>, <span class="st">"name"</span>))))
 <span class="no">ADT_feature_subset</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="no">adt_DEgenes_all</span>, <span class="st">"[["</span>, <span class="st">"name"</span>))))
 
-<span class="fu"><a href="../reference/geneADTnetwork.html">geneADTnetwork</a></span>(<span class="no">sce_citeseq</span>,
+<span class="fu"><a href="https://rdrr.io/pkg/CiteFuse/man/geneADTnetwork.html">geneADTnetwork</a></span>(<span class="no">sce_citeseq</span>,
                <span class="kw">RNA_feature_subset</span> <span class="kw">=</span> <span class="no">RNA_feature_subset</span>,
                <span class="kw">ADT_feature_subset</span> <span class="kw">=</span> <span class="no">ADT_feature_subset</span>,
                <span class="kw">cor_method</span> <span class="kw">=</span> <span class="st">"pearson"</span>,
                <span class="kw">network_layout</span> <span class="kw">=</span> <span class="kw pkg">igraph</span><span class="kw ns">::</span><span class="no"><a href="https://rdrr.io/pkg/igraph/man/layout_with_fr.html">layout_with_fr</a></span>)</pre></body></html></div>
-<p><img src="CiteFuse_files/figure-html/unnamed-chunk-32-1.png" width="768"></p>
-<pre><code>## IGRAPH d666d40 UN-B 72 134 -- 
-## + attr: name (v/c), label (v/c), class (v/c), type (v/l), shape (v/c),
-## | color (v/c), size (v/n), label.cex (v/n), label.color (v/c), value
-## | (e/n), color (e/c), weights (e/n)
-## + edges from d666d40 (vertex names):
-##  [1] RNA_hg19_IL7R  --ADT_CD28             
-##  [2] RNA_hg19_LTB   --ADT_CD28             
-##  [3] RNA_hg19_NKG7  --ADT_CD28             
-##  [4] RNA_hg19_CST7  --ADT_CD28             
-##  [5] RNA_hg19_GNLY  --ADT_CD28             
-##  [6] RNA_hg19_CCL5  --ADT_CD28             
-## + ... omitted several edges</code></pre>
+<p><img src="CiteFuse_files/figure-html/unnamed-chunk-31-1.png"><!-- --></p>
+<pre><code>#&gt; IGRAPH 790d715 UN-B 72 134 -- 
+#&gt; + attr: name (v/c), label (v/c), class (v/c), type (v/l), shape (v/c),
+#&gt; | color (v/c), size (v/n), label.cex (v/n), label.color (v/c), value
+#&gt; | (e/n), color (e/c), weights (e/n)
+#&gt; + edges from 790d715 (vertex names):
+#&gt;  [1] RNA_hg19_IL7R  --ADT_CD28             
+#&gt;  [2] RNA_hg19_LTB   --ADT_CD28             
+#&gt;  [3] RNA_hg19_NKG7  --ADT_CD28             
+#&gt;  [4] RNA_hg19_CST7  --ADT_CD28             
+#&gt;  [5] RNA_hg19_GNLY  --ADT_CD28             
+#&gt;  [6] RNA_hg19_CCL5  --ADT_CD28             
+#&gt; + ... omitted several edges</code></pre>
 </div>
 <div id="rna-ligand---adt-receptor-analysis" class="section level1">
 <h1 class="hasAnchor">
 <a href="#rna-ligand---adt-receptor-analysis" class="anchor"></a>RNA Ligand - ADT Receptor Analysis</h1>
 <p>With the advent of CITE-seq, we can now predict ligand-receptor interactions by using cell surface protein expression. CiteFuse implements a <code>ligandReceptorTest</code> to find ligand receptor interactions between sender and receiver cells. Importantly, the ADT count is used to predict receptor expression within receiver cells. Note that the setting <code>altExp_name = "RNA"</code> would enable users to predict ligand-receptor interaction from RNA expression only.</p>
-<div class="sourceCode" id="cb79"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="st">"lr_pair_subset"</span>, <span class="kw">package</span> <span class="kw">=</span> <span class="st">"CiteFuse"</span>)
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">lr_pair_subset</span>)</pre></body></html></div>
-<pre><code>##      [,1]          [,2]   
-## [1,] "hg19_IL17RA" "CD45" 
-## [2,] "hg19_FAS"    "CD11b"
-## [3,] "hg19_GZMK"   "CD62L"
-## [4,] "hg19_CD40LG" "CD11b"
-## [5,] "hg19_FLT3LG" "CD62L"
-## [6,] "hg19_GZMA"   "CD19"</code></pre>
-<div class="sourceCode" id="cb81"><html><body><pre class="r"><span class="no">sce_citeseq</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/normaliseExprs.html">normaliseExprs</a></span>(<span class="kw">sce</span> <span class="kw">=</span> <span class="no">sce_citeseq</span>,
+<div class="sourceCode" id="cb43"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="st">"lr_pair_subset"</span>, <span class="kw">package</span> <span class="kw">=</span> <span class="st">"CiteFuse"</span>)
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">lr_pair_subset</span>)
+<span class="co">#&gt;      [,1]          [,2]   </span>
+<span class="co">#&gt; [1,] "hg19_IL17RA" "CD45" </span>
+<span class="co">#&gt; [2,] "hg19_FAS"    "CD11b"</span>
+<span class="co">#&gt; [3,] "hg19_GZMK"   "CD62L"</span>
+<span class="co">#&gt; [4,] "hg19_CD40LG" "CD11b"</span>
+<span class="co">#&gt; [5,] "hg19_FLT3LG" "CD62L"</span>
+<span class="co">#&gt; [6,] "hg19_GZMA"   "CD19"</span>
+
+<span class="no">sce_citeseq</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/CiteFuse/man/normaliseExprs.html">normaliseExprs</a></span>(<span class="kw">sce</span> <span class="kw">=</span> <span class="no">sce_citeseq</span>,
                               <span class="kw">altExp_name</span> <span class="kw">=</span> <span class="st">"ADT"</span>,
                               <span class="kw">transform</span> <span class="kw">=</span> <span class="st">"zi_minMax"</span>)
 
-<span class="no">sce_citeseq</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/normaliseExprs.html">normaliseExprs</a></span>(<span class="kw">sce</span> <span class="kw">=</span> <span class="no">sce_citeseq</span>,
+<span class="no">sce_citeseq</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/CiteFuse/man/normaliseExprs.html">normaliseExprs</a></span>(<span class="kw">sce</span> <span class="kw">=</span> <span class="no">sce_citeseq</span>,
                               <span class="kw">altExp_name</span> <span class="kw">=</span> <span class="st">"none"</span>,
                               <span class="kw">exprs_value</span> <span class="kw">=</span> <span class="st">"logcounts"</span>,
                               <span class="kw">transform</span> <span class="kw">=</span> <span class="st">"minMax"</span>)
 
-<span class="no">sce_citeseq</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/ligandReceptorTest.html">ligandReceptorTest</a></span>(<span class="kw">sce</span> <span class="kw">=</span> <span class="no">sce_citeseq</span>,
+<span class="no">sce_citeseq</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/CiteFuse/man/ligandReceptorTest.html">ligandReceptorTest</a></span>(<span class="kw">sce</span> <span class="kw">=</span> <span class="no">sce_citeseq</span>,
                                   <span class="kw">ligandReceptor_list</span> <span class="kw">=</span> <span class="no">lr_pair_subset</span>,
                                   <span class="kw">cluster</span> <span class="kw">=</span> <span class="no">sce_citeseq</span>$<span class="no">SNF_W_louvain</span>,
                                   <span class="kw">RNA_exprs_value</span> <span class="kw">=</span> <span class="st">"minMax"</span>,
                                   <span class="kw">use_alt_exp</span> <span class="kw">=</span> <span class="fl">TRUE</span>,
                                   <span class="kw">altExp_name</span> <span class="kw">=</span> <span class="st">"ADT"</span>,
                                   <span class="kw">altExp_exprs_value</span> <span class="kw">=</span> <span class="st">"zi_minMax"</span>,
-                                  <span class="kw">num_permute</span> <span class="kw">=</span> <span class="fl">1000</span>)</pre></body></html></div>
-<pre><code>## 100 ......200 ......300 ......400 ......500 ......600 ......700 ......800 ......900 ......1000 ......</code></pre>
-<div class="sourceCode" id="cb83"><html><body><pre class="r"><span class="fu"><a href="../reference/visLigandReceptor.html">visLigandReceptor</a></span>(<span class="no">sce_citeseq</span>,
+                                  <span class="kw">num_permute</span> <span class="kw">=</span> <span class="fl">1000</span>)
+<span class="co">#&gt; 100 ......200 ......300 ......400 ......500 ......600 ......700 ......800 ......900 ......1000 ......</span></pre></body></html></div>
+<div class="sourceCode" id="cb44"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/pkg/CiteFuse/man/visLigandReceptor.html">visLigandReceptor</a></span>(<span class="no">sce_citeseq</span>,
                   <span class="kw">type</span> <span class="kw">=</span> <span class="st">"pval_heatmap"</span>,
                   <span class="kw">receptor_type</span> <span class="kw">=</span> <span class="st">"ADT"</span>)</pre></body></html></div>
-<p><img src="CiteFuse_files/figure-html/unnamed-chunk-34-1.png" width="768"></p>
-<div class="sourceCode" id="cb84"><html><body><pre class="r"><span class="fu"><a href="../reference/visLigandReceptor.html">visLigandReceptor</a></span>(<span class="no">sce_citeseq</span>,
+<p><img src="CiteFuse_files/figure-html/unnamed-chunk-33-1.png"><!-- --></p>
+<div class="sourceCode" id="cb45"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/pkg/CiteFuse/man/visLigandReceptor.html">visLigandReceptor</a></span>(<span class="no">sce_citeseq</span>,
                   <span class="kw">type</span> <span class="kw">=</span> <span class="st">"pval_dotplot"</span>,
                   <span class="kw">receptor_type</span> <span class="kw">=</span> <span class="st">"ADT"</span>)</pre></body></html></div>
-<p><img src="CiteFuse_files/figure-html/unnamed-chunk-35-1.png" width="576"></p>
-<div class="sourceCode" id="cb85"><html><body><pre class="r"><span class="fu"><a href="../reference/visLigandReceptor.html">visLigandReceptor</a></span>(<span class="no">sce_citeseq</span>,
+<p><img src="CiteFuse_files/figure-html/unnamed-chunk-34-1.png"><!-- --></p>
+<div class="sourceCode" id="cb46"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/pkg/CiteFuse/man/visLigandReceptor.html">visLigandReceptor</a></span>(<span class="no">sce_citeseq</span>,
                   <span class="kw">type</span> <span class="kw">=</span> <span class="st">"group_network"</span>,
                   <span class="kw">receptor_type</span> <span class="kw">=</span> <span class="st">"ADT"</span>)</pre></body></html></div>
-<p><img src="CiteFuse_files/figure-html/unnamed-chunk-36-1.png" width="768"></p>
-<div class="sourceCode" id="cb86"><html><body><pre class="r"><span class="fu"><a href="../reference/visLigandReceptor.html">visLigandReceptor</a></span>(<span class="no">sce_citeseq</span>,
+<p><img src="CiteFuse_files/figure-html/unnamed-chunk-35-1.png"><!-- --></p>
+<div class="sourceCode" id="cb47"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/pkg/CiteFuse/man/visLigandReceptor.html">visLigandReceptor</a></span>(<span class="no">sce_citeseq</span>,
                   <span class="kw">type</span> <span class="kw">=</span> <span class="st">"group_heatmap"</span>,
                   <span class="kw">receptor_type</span> <span class="kw">=</span> <span class="st">"ADT"</span>)</pre></body></html></div>
-<p><img src="CiteFuse_files/figure-html/unnamed-chunk-37-1.png" width="768"></p>
-<div class="sourceCode" id="cb87"><html><body><pre class="r"><span class="fu"><a href="../reference/visLigandReceptor.html">visLigandReceptor</a></span>(<span class="no">sce_citeseq</span>,
+<p><img src="CiteFuse_files/figure-html/unnamed-chunk-36-1.png"><!-- --></p>
+<div class="sourceCode" id="cb48"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/pkg/CiteFuse/man/visLigandReceptor.html">visLigandReceptor</a></span>(<span class="no">sce_citeseq</span>,
                   <span class="kw">type</span> <span class="kw">=</span> <span class="st">"lr_network"</span>,
                   <span class="kw">receptor_type</span> <span class="kw">=</span> <span class="st">"ADT"</span>)</pre></body></html></div>
-<p><img src="CiteFuse_files/figure-html/unnamed-chunk-38-1.png" width="768"></p>
+<p><img src="CiteFuse_files/figure-html/unnamed-chunk-37-1.png"><!-- --></p>
 </div>
 <div id="between-sample-analysis" class="section level1">
 <h1 class="hasAnchor">
 <a href="#between-sample-analysis" class="anchor"></a>Between-sample analysis</h1>
 <p>Lastly, we will jointly analyse the current PBMC CITE-seq data, taken from healthy human donors, and another subset of CITE-seq data from patients with cutaneous T-cell lymphoma (CTCL), again from Mimitou et al. (2019). The data <code>sce_ctcl_subset</code> provided in our <code>CiteFuse</code> package already contains the clustering information.</p>
-<div class="sourceCode" id="cb88"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="st">"sce_ctcl_subset"</span>, <span class="kw">package</span> <span class="kw">=</span> <span class="st">"CiteFuse"</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb49"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="st">"sce_ctcl_subset"</span>, <span class="kw">package</span> <span class="kw">=</span> <span class="st">"CiteFuse"</span>)</pre></body></html></div>
 <p>To visualise and compare gene or protein expression data, we can use <code>visualiseExprsList</code> function.</p>
-<div class="sourceCode" id="cb89"><html><body><pre class="r"><span class="fu"><a href="../reference/visualiseExprsList.html">visualiseExprsList</a></span>(<span class="kw">sce_list</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">control</span> <span class="kw">=</span> <span class="no">sce_citeseq</span>,
+<div class="sourceCode" id="cb50"><html><body><pre class="r">
+<span class="fu"><a href="https://rdrr.io/pkg/CiteFuse/man/visualiseExprsList.html">visualiseExprsList</a></span>(<span class="kw">sce_list</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">control</span> <span class="kw">=</span> <span class="no">sce_citeseq</span>,
                                    <span class="kw">ctcl</span> <span class="kw">=</span> <span class="no">sce_ctcl_subset</span>),
                    <span class="kw">plot</span> <span class="kw">=</span> <span class="st">"boxplot"</span>,
                    <span class="kw">altExp_name</span> <span class="kw">=</span> <span class="st">"none"</span>,
                    <span class="kw">exprs_value</span> <span class="kw">=</span> <span class="st">"logcounts"</span>,
                    <span class="kw">feature_subset</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"hg19_S100A10"</span>, <span class="st">"hg19_CD8A"</span>),
                    <span class="kw">group_by</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"SNF_W_louvain"</span>, <span class="st">"SNF_W_louvain"</span>))</pre></body></html></div>
-<p><img src="CiteFuse_files/figure-html/unnamed-chunk-40-1.png" width="700"></p>
-<div class="sourceCode" id="cb90"><html><body><pre class="r"><span class="fu"><a href="../reference/visualiseExprsList.html">visualiseExprsList</a></span>(<span class="kw">sce_list</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">control</span> <span class="kw">=</span> <span class="no">sce_citeseq</span>,
+<p><img src="CiteFuse_files/figure-html/unnamed-chunk-39-1.png"><!-- --></p>
+<div class="sourceCode" id="cb51"><html><body><pre class="r">
+<span class="fu"><a href="https://rdrr.io/pkg/CiteFuse/man/visualiseExprsList.html">visualiseExprsList</a></span>(<span class="kw">sce_list</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">control</span> <span class="kw">=</span> <span class="no">sce_citeseq</span>,
                                    <span class="kw">ctcl</span> <span class="kw">=</span> <span class="no">sce_ctcl_subset</span>),
                    <span class="kw">plot</span> <span class="kw">=</span> <span class="st">"boxplot"</span>,
                    <span class="kw">altExp_name</span> <span class="kw">=</span> <span class="st">"ADT"</span>,
                    <span class="kw">feature_subset</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"CD19"</span>, <span class="st">"CD8"</span>),
                    <span class="kw">group_by</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"SNF_W_louvain"</span>, <span class="st">"SNF_W_louvain"</span>))</pre></body></html></div>
-<p><img src="CiteFuse_files/figure-html/unnamed-chunk-40-2.png" width="700"></p>
+<p><img src="CiteFuse_files/figure-html/unnamed-chunk-39-2.png"><!-- --></p>
 <p>We can then perform differential expression analysis of the RNA expression level across the two clusters that have high CD19 expression in ADT.</p>
-<div class="sourceCode" id="cb91"><html><body><pre class="r"><span class="no">de_res</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/DEgenesCross.html">DEgenesCross</a></span>(<span class="kw">sce_list</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">control</span> <span class="kw">=</span> <span class="no">sce_citeseq</span>,
+<div class="sourceCode" id="cb52"><html><body><pre class="r"><span class="no">de_res</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/CiteFuse/man/DEgenesCross.html">DEgenesCross</a></span>(<span class="kw">sce_list</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">control</span> <span class="kw">=</span> <span class="no">sce_citeseq</span>,
                                        <span class="kw">ctcl</span> <span class="kw">=</span> <span class="no">sce_ctcl_subset</span>),
                        <span class="kw">colData_name</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"SNF_W_louvain"</span>, <span class="st">"SNF_W_louvain"</span>),
                        <span class="kw">group_to_test</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"2"</span>, <span class="st">"6"</span>))
-<span class="no">de_res_filter</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/selectDEgenes.html">selectDEgenes</a></span>(<span class="kw">de_res</span> <span class="kw">=</span> <span class="no">de_res</span>)
-<span class="no">de_res_filter</span></pre></body></html></div>
-<pre><code>## $control
-##            stats.W         pval     p.adjust meanExprs.1 meanExprs.2  meanPct.1
-## hg19_NKG7     82.0 9.717299e-13 9.717299e-13  0.51066894   3.2333024 0.30232558
-## hg19_CST7    138.0 5.875063e-12 5.875063e-12  0.22512314   2.2146495 0.13953488
-## hg19_GNLY    186.0 8.935760e-12 8.935760e-12  0.07220401   2.7782587 0.02325581
-## hg19_CCL5    124.0 2.418174e-11 2.418174e-11  1.04348029   3.7809281 0.37209302
-## hg19_GZMH    258.0 1.807873e-10 1.807873e-10  0.00000000   1.4711399 0.00000000
-## hg19_ITGB2   210.0 4.203966e-09 4.203966e-09  0.44185664   1.7346818 0.44186047
-## hg19_KLRD1   322.5 5.000482e-08 5.000482e-08  0.09327555   1.0358615 0.09302326
-## hg19_GZMA    284.5 5.732252e-08 5.732252e-08  0.32515702   1.5433119 0.18604651
-## hg19_ZEB2    387.0 7.878997e-08 7.878997e-08  0.00000000   0.8211807 0.00000000
-## hg19_CD99    274.0 1.679625e-07 1.679625e-07  0.58551572   1.5699157 0.46511628
-##            meanPct.2  meanDiff   pctDiff       name   group
-## hg19_NKG7  1.0000000 0.6976744 0.6976744  hg19_NKG7 control
-## hg19_CST7  0.8947368 0.7552020 0.7552020  hg19_CST7 control
-## hg19_GNLY  0.7894737 0.7662179 0.7662179  hg19_GNLY control
-## hg19_CCL5  1.0000000 0.6279070 0.6279070  hg19_CCL5 control
-## hg19_GZMH  0.6842105 0.6842105 0.6842105  hg19_GZMH control
-## hg19_ITGB2 0.8684211 0.4265606 0.4265606 hg19_ITGB2 control
-## hg19_KLRD1 0.6578947 0.5648715 0.5648715 hg19_KLRD1 control
-## hg19_GZMA  0.8157895 0.6297430 0.6297430  hg19_GZMA control
-## hg19_ZEB2  0.5263158 0.5263158 0.5263158  hg19_ZEB2 control
-## hg19_CD99  0.8947368 0.4296206 0.4296206  hg19_CD99 control
-## 
-## $ctcl
-##                stats.W         pval     p.adjust meanExprs.1 meanExprs.2
-## hg19_RPS26         0.0 1.087530e-14 1.087530e-14  1.42819970    5.072471
-## hg19_LTB         235.0 1.478865e-08 1.478865e-08  0.48566164    1.978730
-## hg19_SELL        298.5 3.618421e-08 3.618421e-08  0.10674144    1.152572
-## hg19_LEPROTL1    268.0 9.163954e-08 9.163954e-08  0.37427389    1.300745
-## hg19_NOSIP       306.0 2.589055e-07 2.589055e-07  0.23412389    1.157235
-## hg19_LINC02446   352.0 3.887845e-07 3.887845e-07  0.09889831    1.004083
-## hg19_FOS         353.5 5.438707e-07 5.438707e-07  0.14088922    1.125337
-## hg19_TMEM123     331.0 1.090629e-06 1.090629e-06  0.26112624    1.012034
-## hg19_LDHB        325.0 2.344648e-06 2.344648e-06  0.70148411    1.588459
-## hg19_NPM1        323.0 2.836125e-06 2.836125e-06  1.24903807    2.202268
-##                 meanPct.1 meanPct.2  meanDiff   pctDiff           name group
-## hg19_RPS26     0.84210526 1.0000000 0.1578947 0.1578947     hg19_RPS26  ctcl
-## hg19_LTB       0.28947368 0.9069767 0.6175031 0.6175031       hg19_LTB  ctcl
-## hg19_SELL      0.07894737 0.6976744 0.6187271 0.6187271      hg19_SELL  ctcl
-## hg19_LEPROTL1  0.28947368 0.9069767 0.6175031 0.6175031  hg19_LEPROTL1  ctcl
-## hg19_NOSIP     0.21052632 0.7674419 0.5569155 0.5569155     hg19_NOSIP  ctcl
-## hg19_LINC02446 0.07894737 0.6279070 0.5489596 0.5489596 hg19_LINC02446  ctcl
-## hg19_FOS       0.07894737 0.6511628 0.5722154 0.5722154       hg19_FOS  ctcl
-## hg19_TMEM123   0.23684211 0.7674419 0.5305998 0.5305998   hg19_TMEM123  ctcl
-## hg19_LDHB      0.50000000 0.8604651 0.3604651 0.3604651      hg19_LDHB  ctcl
-## hg19_NPM1      0.68421053 0.9534884 0.2692778 0.2692778      hg19_NPM1  ctcl</code></pre>
+<span class="no">de_res_filter</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/CiteFuse/man/selectDEgenes.html">selectDEgenes</a></span>(<span class="kw">de_res</span> <span class="kw">=</span> <span class="no">de_res</span>)
+<span class="no">de_res_filter</span>
+<span class="co">#&gt; $control</span>
+<span class="co">#&gt;             stats.W         pval     p.adjust meanExprs.1 meanExprs.2</span>
+<span class="co">#&gt; hg19_GNLY       0.0 2.301890e-18 2.301890e-18  0.07220401    5.193820</span>
+<span class="co">#&gt; hg19_EFHD2     67.0 9.718826e-17 9.718826e-17  0.02064028    1.810989</span>
+<span class="co">#&gt; hg19_CST7      41.0 1.063099e-16 1.063099e-16  0.22512314    2.884901</span>
+<span class="co">#&gt; hg19_NKG7      38.0 2.377913e-16 2.377913e-16  0.51066894    4.283951</span>
+<span class="co">#&gt; hg19_GZMB      78.0 4.247635e-16 4.247635e-16  0.11667246    2.646837</span>
+<span class="co">#&gt; hg19_PRF1     133.5 5.541530e-15 5.541530e-15  0.06473009    1.974489</span>
+<span class="co">#&gt; hg19_ITGB2    110.0 2.714691e-14 2.714691e-14  0.44185664    2.227816</span>
+<span class="co">#&gt; hg19_CYBA     101.0 2.944019e-14 2.944019e-14  1.22818319    2.575690</span>
+<span class="co">#&gt; hg19_FGFBP2   184.0 4.298063e-14 4.298063e-14  0.03101677    1.769919</span>
+<span class="co">#&gt; hg19_IFITM2   126.0 1.227095e-13 1.227095e-13  1.47843667    3.018231</span>
+<span class="co">#&gt;              meanPct.1 meanPct.2  meanDiff   pctDiff        name   group</span>
+<span class="co">#&gt; hg19_GNLY   0.02325581 1.0000000 0.9767442 0.9767442   hg19_GNLY control</span>
+<span class="co">#&gt; hg19_EFHD2  0.02325581 0.9423077 0.9190519 0.9190519  hg19_EFHD2 control</span>
+<span class="co">#&gt; hg19_CST7   0.13953488 1.0000000 0.8604651 0.8604651   hg19_CST7 control</span>
+<span class="co">#&gt; hg19_NKG7   0.30232558 1.0000000 0.6976744 0.6976744   hg19_NKG7 control</span>
+<span class="co">#&gt; hg19_GZMB   0.06976744 0.9615385 0.8917710 0.8917710   hg19_GZMB control</span>
+<span class="co">#&gt; hg19_PRF1   0.04651163 0.9038462 0.8573345 0.8573345   hg19_PRF1 control</span>
+<span class="co">#&gt; hg19_ITGB2  0.44186047 0.9615385 0.5196780 0.5196780  hg19_ITGB2 control</span>
+<span class="co">#&gt; hg19_CYBA   0.88372093 1.0000000 0.1162791 0.1162791   hg19_CYBA control</span>
+<span class="co">#&gt; hg19_FGFBP2 0.02325581 0.8461538 0.8228980 0.8228980 hg19_FGFBP2 control</span>
+<span class="co">#&gt; hg19_IFITM2 0.88372093 1.0000000 0.1162791 0.1162791 hg19_IFITM2 control</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $ctcl</span>
+<span class="co">#&gt;               stats.W         pval     p.adjust meanExprs.1 meanExprs.2</span>
+<span class="co">#&gt; hg19_RPS26          0 6.431902e-17 6.431902e-17  1.48598738    5.072471</span>
+<span class="co">#&gt; hg19_CD8B         160 6.208782e-16 6.208782e-16  0.01600345    1.618837</span>
+<span class="co">#&gt; hg19_LTB          157 1.064038e-14 1.064038e-14  0.16359138    1.978730</span>
+<span class="co">#&gt; hg19_IL7R         247 2.905360e-13 2.905360e-13  0.08949349    1.651591</span>
+<span class="co">#&gt; hg19_RPL36A       181 2.328401e-12 2.328401e-12  1.27615800    2.846750</span>
+<span class="co">#&gt; hg19_CD3D         300 2.399810e-12 2.399810e-12  0.08958797    1.222056</span>
+<span class="co">#&gt; hg19_RPL7         280 3.740249e-10 3.740249e-10  1.47545170    2.618403</span>
+<span class="co">#&gt; hg19_LEPROTL1     314 4.234225e-10 4.234225e-10  0.34891667    1.300745</span>
+<span class="co">#&gt; hg19_NPM1         291 5.346323e-10 5.346323e-10  1.00758312    2.202268</span>
+<span class="co">#&gt; hg19_TMEM123      368 5.569121e-10 5.569121e-10  0.15371329    1.012034</span>
+<span class="co">#&gt;                meanPct.1 meanPct.2  meanDiff   pctDiff          name group</span>
+<span class="co">#&gt; hg19_RPS26    0.86538462 1.0000000 0.1346154 0.1346154    hg19_RPS26  ctcl</span>
+<span class="co">#&gt; hg19_CD8B     0.01923077 0.8604651 0.8412343 0.8412343     hg19_CD8B  ctcl</span>
+<span class="co">#&gt; hg19_LTB      0.13461538 0.9069767 0.7723614 0.7723614      hg19_LTB  ctcl</span>
+<span class="co">#&gt; hg19_IL7R     0.07692308 0.8139535 0.7370304 0.7370304     hg19_IL7R  ctcl</span>
+<span class="co">#&gt; hg19_RPL36A   0.73076923 1.0000000 0.2692308 0.2692308   hg19_RPL36A  ctcl</span>
+<span class="co">#&gt; hg19_CD3D     0.03846154 0.7906977 0.7522361 0.7522361     hg19_CD3D  ctcl</span>
+<span class="co">#&gt; hg19_RPL7     0.82692308 1.0000000 0.1730769 0.1730769     hg19_RPL7  ctcl</span>
+<span class="co">#&gt; hg19_LEPROTL1 0.30769231 0.9069767 0.5992844 0.5992844 hg19_LEPROTL1  ctcl</span>
+<span class="co">#&gt; hg19_NPM1     0.65384615 0.9534884 0.2996422 0.2996422     hg19_NPM1  ctcl</span>
+<span class="co">#&gt; hg19_TMEM123  0.15384615 0.7674419 0.6135957 0.6135957  hg19_TMEM123  ctcl</span></pre></body></html></div>
 </div>
 <div id="read-data-from-10x-genomics" class="section level1">
 <h1 class="hasAnchor">
 <a href="#read-data-from-10x-genomics" class="anchor"></a>Read data from 10X Genomics</h1>
 <p>Readers unfamiliar with the workflow of converting a count matrix into a <code>SingleCellExperiment</code> object may use the <code>readFrom10X</code> function to convert count matrix from a 10X experiment into an object that can be used for all functions in CiteFuse.</p>
-<div class="sourceCode" id="cb93"><html><body><pre class="r"><span class="no">tmpdir</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html">tempdir</a></span>()
+<div class="sourceCode" id="cb53"><html><body><pre class="r"><span class="no">tmpdir</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html">tempdir</a></span>()
 <span class="fu"><a href="https://rdrr.io/r/utils/download.file.html">download.file</a></span>(<span class="st">"http://cf.10xgenomics.com/samples/cell-exp/3.1.0/connect_5k_pbmc_NGSC3_ch1/connect_5k_pbmc_NGSC3_ch1_filtered_feature_bc_matrix.tar.gz"</span>, <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="no">tmpdir</span>, <span class="st">"/5k_pbmc_NGSC3_ch1_filtered_feature_bc_matrix.tar.gz"</span>))
 <span class="fu"><a href="https://rdrr.io/r/utils/untar.html">untar</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="no">tmpdir</span>, <span class="st">"5k_pbmc_NGSC3_ch1_filtered_feature_bc_matrix.tar.gz"</span>),
       <span class="kw">exdir</span> <span class="kw">=</span> <span class="no">tmpdir</span>)
-<span class="no">sce_citeseq_10X</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/readFrom10X.html">readFrom10X</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="no">tmpdir</span>, <span class="st">"filtered_feature_bc_matrix/"</span>))
+<span class="no">sce_citeseq_10X</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/CiteFuse/man/readFrom10X.html">readFrom10X</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="no">tmpdir</span>, <span class="st">"filtered_feature_bc_matrix/"</span>))
 <span class="no">sce_citeseq_10X</span></pre></body></html></div>
 </div>
 <div id="sessioninfo" class="section level1">
 <h1 class="hasAnchor">
 <a href="#sessioninfo" class="anchor"></a>SessionInfo</h1>
-<div class="sourceCode" id="cb94"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span>()</pre></body></html></div>
-<pre><code>## R Under development (unstable) (2020-03-25 r78063)
-## Platform: x86_64-apple-darwin15.6.0 (64-bit)
-## Running under: macOS Catalina 10.15.4
-## 
-## Matrix products: default
-## BLAS:   /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRblas.0.dylib
-## LAPACK: /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRlapack.dylib
-## 
-## locale:
-## [1] en_AU.UTF-8/en_AU.UTF-8/en_AU.UTF-8/C/en_AU.UTF-8/en_AU.UTF-8
-## 
-## attached base packages:
-## [1] parallel  stats4    stats     graphics  grDevices utils     datasets 
-## [8] methods   base     
-## 
-## other attached packages:
-##  [1] mclust_5.4.6                gridExtra_2.3              
-##  [3] DT_0.13                     scater_1.15.29             
-##  [5] ggplot2_3.3.0               SingleCellExperiment_1.9.3 
-##  [7] SummarizedExperiment_1.17.5 DelayedArray_0.13.12       
-##  [9] matrixStats_0.56.0          Biobase_2.47.3             
-## [11] GenomicRanges_1.39.3        GenomeInfoDb_1.23.16       
-## [13] IRanges_2.21.8              S4Vectors_0.25.15          
-## [15] BiocGenerics_0.33.3         CiteFuse_0.99.7            
-## [17] BiocStyle_2.15.6           
-## 
-## loaded via a namespace (and not attached):
-##   [1] Rtsne_0.15               ggbeeswarm_0.6.0         colorspace_1.4-1        
-##   [4] ellipsis_0.3.0           ggridges_0.5.2           rprojroot_1.3-2         
-##   [7] XVector_0.27.2           BiocNeighbors_1.5.2      fs_1.4.1                
-##  [10] rstudioapi_0.11          farver_2.0.3             graphlayouts_0.6.0      
-##  [13] ggrepel_0.8.2            RSpectra_0.16-0          fansi_0.4.1             
-##  [16] splines_4.0.0            knitr_1.28               heatmap.plus_1.3        
-##  [19] polyclip_1.10-0          jsonlite_1.6.1           alluvial_0.1-2          
-##  [22] kernlab_0.9-29           uwot_0.1.8               pheatmap_1.0.12         
-##  [25] ggforce_0.3.1            ExPosition_2.8.23        BiocManager_1.30.10     
-##  [28] compiler_4.0.0           dqrng_0.2.1              prettyGraphs_2.1.6      
-##  [31] backports_1.1.6          assertthat_0.2.1         Matrix_1.2-18           
-##  [34] limma_3.43.5             cli_2.0.2                tweenr_1.0.1            
-##  [37] BiocSingular_1.3.2       htmltools_0.4.0          tools_4.0.0             
-##  [40] rsvd_1.0.3               igraph_1.2.5             gtable_0.3.0            
-##  [43] glue_1.4.0               GenomeInfoDbData_1.2.2   reshape2_1.4.4          
-##  [46] dplyr_0.8.5              Rcpp_1.0.4.6             pkgdown_1.5.1           
-##  [49] vctrs_0.2.4              crosstalk_1.1.0.1        DelayedMatrixStats_1.9.1
-##  [52] ggraph_2.0.2             xfun_0.12                stringr_1.4.0           
-##  [55] lifecycle_0.2.0          irlba_2.3.3              statmod_1.4.34          
-##  [58] edgeR_3.29.1             zlibbioc_1.33.1          MASS_7.3-51.5           
-##  [61] scales_1.1.0             tidygraph_1.1.2          rhdf5_2.31.10           
-##  [64] RColorBrewer_1.1-2       SNFtool_2.3.0            yaml_2.2.1              
-##  [67] memoise_1.1.0            segmented_1.1-0          stringi_1.4.6           
-##  [70] desc_1.2.0               randomForest_4.6-14      scran_1.15.26           
-##  [73] BiocParallel_1.21.2      rlang_0.4.5              pkgconfig_2.0.3         
-##  [76] bitops_1.0-6             evaluate_0.14            lattice_0.20-41         
-##  [79] purrr_0.3.3              Rhdf5lib_1.9.2           labeling_0.3            
-##  [82] htmlwidgets_1.5.1        cowplot_1.0.0            tidyselect_1.0.0        
-##  [85] plyr_1.8.6               magrittr_1.5             bookdown_0.18           
-##  [88] R6_2.4.1                 withr_2.1.2              pillar_1.4.3            
-##  [91] mixtools_1.2.0           survival_3.1-12          RCurl_1.98-1.1          
-##  [94] tibble_3.0.0             crayon_1.3.4             rmarkdown_2.1           
-##  [97] viridis_0.5.1            locfit_1.5-9.4           grid_4.0.0              
-## [100] FNN_1.1.3                propr_4.2.6              digest_0.6.25           
-## [103] tidyr_1.0.2              dbscan_1.1-5             munsell_0.5.0           
-## [106] beeswarm_0.2.3           viridisLite_0.3.0        vipor_0.4.5</code></pre>
+<div class="sourceCode" id="cb54"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span>()
+<span class="co">#&gt; R Under development (unstable) (2020-04-21 r78268)</span>
+<span class="co">#&gt; Platform: x86_64-pc-linux-gnu (64-bit)</span>
+<span class="co">#&gt; Running under: Ubuntu 14.04.5 LTS</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Matrix products: default</span>
+<span class="co">#&gt; BLAS:   /home/travis/R-bin/lib/R/lib/libRblas.so</span>
+<span class="co">#&gt; LAPACK: /home/travis/R-bin/lib/R/lib/libRlapack.so</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; locale:</span>
+<span class="co">#&gt;  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              </span>
+<span class="co">#&gt;  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    </span>
+<span class="co">#&gt;  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   </span>
+<span class="co">#&gt;  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 </span>
+<span class="co">#&gt;  [9] LC_ADDRESS=C               LC_TELEPHONE=C            </span>
+<span class="co">#&gt; [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; attached base packages:</span>
+<span class="co">#&gt; [1] parallel  stats4    stats     graphics  grDevices utils     datasets </span>
+<span class="co">#&gt; [8] methods   base     </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; other attached packages:</span>
+<span class="co">#&gt;  [1] mclust_5.4.6                gridExtra_2.3              </span>
+<span class="co">#&gt;  [3] DT_0.13                     scater_1.15.30             </span>
+<span class="co">#&gt;  [5] ggplot2_3.3.0               SingleCellExperiment_1.9.3 </span>
+<span class="co">#&gt;  [7] SummarizedExperiment_1.17.5 DelayedArray_0.13.12       </span>
+<span class="co">#&gt;  [9] matrixStats_0.56.0          Biobase_2.47.3             </span>
+<span class="co">#&gt; [11] GenomicRanges_1.39.3        GenomeInfoDb_1.23.17       </span>
+<span class="co">#&gt; [13] IRanges_2.21.8              S4Vectors_0.25.15          </span>
+<span class="co">#&gt; [15] BiocGenerics_0.33.3         CiteFuse_0.99.10           </span>
+<span class="co">#&gt; [17] BiocStyle_2.15.8           </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; loaded via a namespace (and not attached):</span>
+<span class="co">#&gt;   [1] Rtsne_0.15               ggbeeswarm_0.6.0         colorspace_1.4-1        </span>
+<span class="co">#&gt;   [4] ellipsis_0.3.0           ggridges_0.5.2           rprojroot_1.3-2         </span>
+<span class="co">#&gt;   [7] XVector_0.27.2           BiocNeighbors_1.5.5      fs_1.4.1                </span>
+<span class="co">#&gt;  [10] farver_2.0.3             graphlayouts_0.6.0       ggrepel_0.8.2           </span>
+<span class="co">#&gt;  [13] RSpectra_0.16-0          splines_4.1.0            knitr_1.28              </span>
+<span class="co">#&gt;  [16] heatmap.plus_1.3         polyclip_1.10-0          jsonlite_1.6.1          </span>
+<span class="co">#&gt;  [19] alluvial_0.1-2           kernlab_0.9-29           pheatmap_1.0.12         </span>
+<span class="co">#&gt;  [22] uwot_0.1.8               ggforce_0.3.1            ExPosition_2.8.23       </span>
+<span class="co">#&gt;  [25] BiocManager_1.30.10      compiler_4.1.0           dqrng_0.2.1             </span>
+<span class="co">#&gt;  [28] prettyGraphs_2.1.6       backports_1.1.6          assertthat_0.2.1        </span>
+<span class="co">#&gt;  [31] Matrix_1.2-18            limma_3.43.8             tweenr_1.0.1            </span>
+<span class="co">#&gt;  [34] BiocSingular_1.3.2       htmltools_0.4.0          tools_4.1.0             </span>
+<span class="co">#&gt;  [37] rsvd_1.0.3               igraph_1.2.5             gtable_0.3.0            </span>
+<span class="co">#&gt;  [40] glue_1.4.0               GenomeInfoDbData_1.2.3   reshape2_1.4.4          </span>
+<span class="co">#&gt;  [43] dplyr_0.8.5              Rcpp_1.0.4.6             pkgdown_1.5.1           </span>
+<span class="co">#&gt;  [46] vctrs_0.2.4              crosstalk_1.1.0.1        DelayedMatrixStats_1.9.1</span>
+<span class="co">#&gt;  [49] ggraph_2.0.2             xfun_0.13                stringr_1.4.0           </span>
+<span class="co">#&gt;  [52] lifecycle_0.2.0          irlba_2.3.3              statmod_1.4.34          </span>
+<span class="co">#&gt;  [55] edgeR_3.29.1             zlibbioc_1.33.1          MASS_7.3-51.5           </span>
+<span class="co">#&gt;  [58] scales_1.1.0             tidygraph_1.1.2          rhdf5_2.31.10           </span>
+<span class="co">#&gt;  [61] RColorBrewer_1.1-2       SNFtool_2.3.0            yaml_2.2.1              </span>
+<span class="co">#&gt;  [64] memoise_1.1.0            segmented_1.1-0          stringi_1.4.6           </span>
+<span class="co">#&gt;  [67] desc_1.2.0               randomForest_4.6-14      scran_1.15.29           </span>
+<span class="co">#&gt;  [70] BiocParallel_1.21.2      rlang_0.4.5              pkgconfig_2.0.3         </span>
+<span class="co">#&gt;  [73] bitops_1.0-6             evaluate_0.14            lattice_0.20-41         </span>
+<span class="co">#&gt;  [76] purrr_0.3.4              Rhdf5lib_1.9.3           labeling_0.3            </span>
+<span class="co">#&gt;  [79] htmlwidgets_1.5.1        cowplot_1.0.0            tidyselect_1.0.0        </span>
+<span class="co">#&gt;  [82] plyr_1.8.6               magrittr_1.5             bookdown_0.18           </span>
+<span class="co">#&gt;  [85] R6_2.4.1                 withr_2.2.0              pillar_1.4.3            </span>
+<span class="co">#&gt;  [88] mixtools_1.2.0           survival_3.1-12          RCurl_1.98-1.2          </span>
+<span class="co">#&gt;  [91] tibble_3.0.1             crayon_1.3.4             rmarkdown_2.1           </span>
+<span class="co">#&gt;  [94] viridis_0.5.1            locfit_1.5-9.4           grid_4.1.0              </span>
+<span class="co">#&gt;  [97] FNN_1.1.3                propr_4.2.6              digest_0.6.25           </span>
+<span class="co">#&gt; [100] tidyr_1.0.2              dbscan_1.1-5             munsell_0.5.0           </span>
+<span class="co">#&gt; [103] beeswarm_0.2.3           viridisLite_0.3.0        vipor_0.4.5</span></pre></body></html></div>
 </div>
   </div>
 
