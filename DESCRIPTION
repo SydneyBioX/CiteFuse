@@ -1,7 +1,7 @@
 Package: CiteFuse
 Type: Package
 Title: CiteFuse: multi-modal analysis of CITE-seq data
-Version: 0.99.9
+Version: 1.0.0
 Authors@R: c(
     person("Yingxin", "Lin", email = "yingxin.lin@sydney.edu.au", role = c("aut", "cre")
     ),
