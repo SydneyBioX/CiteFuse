@@ -88,14 +88,14 @@ ligandReceptorTest <- function(sce,
          the number of column of sce")
     }
 
-    cluster_level <- levels(as.factor(droplevels(cluster)))
+    cluster_level <- levels(as.factor(droplevels(factor(cluster))))
 
     keep <- ligandReceptor_list[, 1] %in% rownames(exprsMat1) &
         ligandReceptor_list[, 2] %in% rownames(exprsMat2)
     if (sum(keep) == 0) {
         stop("None of the ligand-receptor pairs are in the provided sce")
     }
-    ligandReceptor_list <- ligandReceptor_list[keep, ]
+    ligandReceptor_list <- as.matrix(ligandReceptor_list[keep, ])
 
 
     l_zeros <- vapply(cluster_level, function(x)
@@ -361,7 +361,7 @@ visLigandReceptor <- function(sce,
     pvalue_filter <- as.matrix(LRanalysis_results$LRanalysis_pvalue)
 
     cluster_level <- levels(factor(droplevels(
-        LRanalysis_results$LRanalysis_group)))
+        factor(LRanalysis_results$LRanalysis_group))))
 
 
 

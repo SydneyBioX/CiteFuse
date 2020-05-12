@@ -338,7 +338,7 @@ doWilcox <- function(exprsMat,
                         exprs_threshold) / sum(tmp_celltype == i)
         }))
 
-        meandiff <- meanPct[, 2] - meanPct[, 1]
+        meandiff <- meanExprs[, 2] - meanExprs[, 1]
 
         keep <- meanPct[, 2] > exprs_pct
 
