@@ -1,6 +1,6 @@
 language: R
 cache: packages
-R: bioc-devel
+R: bioc-release
 dist: trusty
 
 os:
