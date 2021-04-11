@@ -15,11 +15,10 @@ CiteFuse(
   K_knn = 20,
   K_knn_Aff = 30,
   sigma = 0.45,
-  t = 20,
+  t = 10,
   metadata_names = NULL,
   verbose = TRUE,
-  FDR = 0.05,
-  bio = 0.01
+  topN = 2000
 )
 }
 \arguments{
@@ -50,9 +49,7 @@ for RNA-seq to calcualte simlarity matrix using `scran` package}
 
 \item{verbose}{whether print out the process}
 
-\item{FDR}{false discovery rate threshold for highly variable gene selection}
-
-\item{bio}{biological component of the variance threshold for highly 
+\item{topN}{top highly variable genes are used 
 variable gene selection 
 (see `modelGeneVar` in `scran` package for more details)}
 }
