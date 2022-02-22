@@ -1,0 +1,21 @@
+citHeader("To cite CiteFuse in publications use:")
+citEntry(entry = "Article",
+  title        = "CiteFuse enables multi-modal analysis of CITE-seq data",
+  author       = personList(
+                   as.person("Hani Jieun Kim"),
+                   as.person("Yingxin Lin"),
+                   as.person("Thomas A. Geddes"),
+                   as.person("Pengyi Yang"),
+                   as.person("Jean Yee Hwa Yang")),
+  journal      = "Bioinformatics",
+  year         = "2020",
+  volume       = "36",
+  number       = "14",
+  pages        = "4137--4143",
+  url          = "https://doi.org/10.1093/bioinformatics/btaa282",
+  textVersion  =
+  paste("Kim, Hani Jieun and Lin, Yingxin and Geddes, Thomas A and Yang, Jean Yee Hwa and Yang, Pengyi. 2020.",
+        "CiteFuse enables multi-modal analysis of CITE-seq data.",
+        "Bioinformatics, 36(14), pp.4137-4143.",
+        "doi: https://doi.org/10.1093/bioinformatics/btaa282")
+)
