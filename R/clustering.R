@@ -495,13 +495,13 @@ visualiseDim <- function(sce,
 
 igraphClustering <- function(sce,
                              metadata = "SNF_W",
-                             method = c("louvain", "walktrap", "spinglass",
+                             method = c("louvain", "leiden", "walktrap", "spinglass",
                                         "optimal", "leading_eigen",
                                         "label_prop", "fast_greedy",
                                         "edge_betweenness"),
                              ...) {
     
-    method <- match.arg(method, c("louvain", "walktrap", "spinglass",
+    method <- match.arg(method, c("louvain", "leiden", "walktrap", "spinglass",
                                   "optimal", "leading_eigen",
                                   "label_prop", "fast_greedy",
                                   "edge_betweenness"))
@@ -530,6 +530,10 @@ igraphClustering <- function(sce,
     
     if (method == "louvain") {
         X <- igraph::cluster_louvain(g, ...)
+    }
+    
+    if (method == "leiden") {
+        X <- igraph::cluster_leiden(g, ...)
     }
     
     if (method == "walktrap") {

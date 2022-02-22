@@ -10,3 +10,4 @@ src/*.dll
 .DS_Store
 .git
 */.DS_Store
+CiteFuse.Rproj
