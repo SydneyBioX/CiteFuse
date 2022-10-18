@@ -33,3 +33,12 @@ You can find the vignette at our website: https://sydneybiox.github.io/CiteFuse/
 
 <img src="https://raw.githubusercontent.com/SydneyBioX/CiteFuse/master/inst/figures/CiteFuse_overview.png" align="center"/>
 
+
+## Citation
+
+<div class="oxford-citation-text">
+
+Hani Jieun Kim, Yingxin Lin, Thomas A Geddes, Jean Yee Hwa Yang, Pengyi Yang, CiteFuse enables multi-modal analysis of CITE-seq data, _Bioinformatics_, Volume 36, Issue 14, 15 July 2020, Pages 4137–4143, [https://doi.org/10.1093/bioinformatics/btaa282](https://doi.org/10.1093/bioinformatics/btaa282)
+
+</div>
+
