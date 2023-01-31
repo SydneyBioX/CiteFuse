@@ -21,7 +21,6 @@ Imports:
     gridExtra,
     grid,
     dbscan,
-    propr,
     uwot,
     Rtsne,
     S4Vectors (>= 0.24.0),
@@ -40,6 +39,8 @@ Imports:
     grDevices,
     rhdf5,
     rlang
+Remotes: 
+    tpq/propr
 RoxygenNote: 7.1.1
 Suggests: 
     knitr,
