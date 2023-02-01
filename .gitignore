@@ -11,3 +11,4 @@ src/*.dll
 .git
 */.DS_Store
 CiteFuse.Rproj
+.vscode/settings.json
