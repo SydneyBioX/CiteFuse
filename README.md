@@ -6,21 +6,17 @@ CiteFuse is a streamlined package consisting of a suite of tools for pre-process
 
 ## Installation
 
-Install CiteFuse required Bioconductor 3.10
+Install CiteFuse via Bioconductor 
 
 ```r
 library(BiocManager)
-install(version = "3.10")
+BiocManager::install("CiteFuse")
 ```
 
+Install github version CiteFuse
 
 ```r
-BiocManager::install(c("SummarizedExperiment", "S4Vectors", "SingleCellExperiment", "scater", "scran"))
-```
-
-```r
-library(devtools)
-devtools::install_github("SydneyBioX/CiteFuse")
+BiocManager::install("SydneyBioX/CiteFuse")
 ```
 
 ## Vignette
