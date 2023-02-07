@@ -1,7 +1,7 @@
 Package: CiteFuse
 Type: Package
 Title: CiteFuse: multi-modal analysis of CITE-seq data
-Version: 1.11.1
+Version: 1.11.2
 Authors@R: c(
     person("Yingxin", "Lin", email = "yingxin.lin@sydney.edu.au", role = c("aut", "cre")
     ),
@@ -38,9 +38,10 @@ Imports:
     ggraph,
     grDevices,
     rhdf5,
-    rlang
-Remotes: 
-    tpq/propr
+    rlang,
+    Rcpp,
+    compositions
+LinkingTo: Rcpp
 RoxygenNote: 7.2.3
 Suggests: 
     knitr,
