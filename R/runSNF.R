@@ -30,8 +30,9 @@
 #' @importFrom SingleCellExperiment SingleCellExperiment logcounts
 #' @importFrom Matrix rowSums
 #' @importFrom SummarizedExperiment SummarizedExperiment
-#' @importFrom propr propr
 #' @importFrom stats cor
+#' @useDynLib CiteFuse, .registration = TRUE
+#' @importFrom Rcpp sourceCpp
 #' 
 #' @references 
 #' 
@@ -87,12 +88,12 @@ CiteFuse <- function(sce,
             ADT_subset <- rownames(adt_mat)
         }
 
-        adt_dist <- suppressMessages(propr(as.matrix(adt_mat[ADT_subset, ])))
+        adt_dist <- clr_rho(as.matrix(adt_mat[ADT_subset, ]))
 
 
 
         if (dist_cal_ADT == "propr") {
-            dist_adt <- 1 - as.matrix(adt_dist@matrix)
+            dist_adt <- 1 - as.matrix(adt_dist)
         }
 
         if (verbose) {

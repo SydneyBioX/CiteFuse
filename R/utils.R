@@ -25,3 +25,21 @@ cite_colorPal <- function(n) {
 cite_shapePal <- function(n) {
     return(c(16, 17, 15, 3, 6, 8, 1, 0, 5)[seq_len(n)])
 }
+
+#' @importFrom compositions clr
+clr_rho <- function(counts){
+  # Adapting from the propr package
+  
+  zeros <- counts == 0
+  counts[zeros] <- min(counts[!zeros])
+  # Calculate proportionality
+  lr <- compositions::clr(counts)
+  mat <- lr2rho(lr)
+  
+  colnames(mat) <- colnames(counts)
+  rownames(mat) <- colnames(counts)
+  
+  
+  
+  return(mat)
+}
