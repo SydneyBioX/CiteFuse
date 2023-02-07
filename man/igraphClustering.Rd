@@ -7,7 +7,7 @@
 igraphClustering(
   sce,
   metadata = "SNF_W",
-  method = c("louvain", "walktrap", "spinglass", "optimal", "leading_eigen",
+  method = c("louvain", "leiden", "walktrap", "spinglass", "optimal", "leading_eigen",
     "label_prop", "fast_greedy", "edge_betweenness"),
   ...
 )

@@ -38,10 +38,11 @@ Imports:
     ggraph,
     grDevices,
     rhdf5,
-    rlang
-Remotes: 
-    tpq/propr
-RoxygenNote: 7.1.1
+    rlang,
+    Rcpp,
+    compositions
+LinkingTo: Rcpp
+RoxygenNote: 7.2.3
 Suggests: 
     knitr,
     rmarkdown,
